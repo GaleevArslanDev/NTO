@@ -24,7 +24,7 @@ public class Vacuum : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, vacuumRadius, itemLayer))
             {
                 itemLoockingAt = hit.collider.gameObject.GetComponent<CollectableItem>();
                 if (itemLoockingAt != null)

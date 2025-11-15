@@ -14,10 +14,21 @@ public class PlayerController : MonoBehaviour
     public Transform playerCamera;
     public float maxLookAngle = 90f;
 
+    [Header("Crouch Settings")]
+    public float crouchHeight = 1f;
+    public float crouchSpeed = 3f;
+    public float crouchTransitionSpeed = 5f;
+
     private CharacterController characterController;
     private Vector3 velocity;
     private float xRotation = 0f;
     private bool isGrounded;
+
+    // Приседание
+    private bool isCrouching = false;
+    private float standingHeight;
+    private Vector3 standingCameraPosition;
+    private float currentSpeed;
 
     private void Awake()
     {
@@ -29,12 +40,17 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        
+        standingHeight = characterController.height;
+        if (playerCamera != null)
+            standingCameraPosition = playerCamera.localPosition;
     }
 
     private void Update()
     {
         HandleMovement();
         HandleCamera();
+        HandleCrouch();
     }
 
     void HandleMovement()
@@ -45,13 +61,20 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        if (isCrouching)
+            currentSpeed = crouchSpeed;
+        else
+            currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 
         Vector3 move = transform.right * x + transform.forward * z;
         characterController.Move(move * currentSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
+            if (isCrouching)
+            {
+                StopCrouch();
+            }
             velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
         }
 
@@ -71,5 +94,61 @@ public class PlayerController : MonoBehaviour
 
         playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    void HandleCrouch()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.C))
+        {
+            if (!isCrouching)
+            {
+                StartCrouch();
+            }
+            else
+            {
+                StopCrouch();
+            }
+        }
+
+        if (isCrouching)
+        {
+            characterController.height = Mathf.Lerp(characterController.height, crouchHeight, crouchTransitionSpeed * Time.deltaTime);
+            
+            if (playerCamera != null)
+            {
+                Vector3 targetCameraPos = standingCameraPosition;
+                targetCameraPos.y = crouchHeight - 0.5f;
+                playerCamera.localPosition = Vector3.Lerp(playerCamera.localPosition, targetCameraPos, crouchTransitionSpeed * Time.deltaTime);
+            }
+        }
+        else
+        {
+            characterController.height = Mathf.Lerp(characterController.height, standingHeight, crouchTransitionSpeed * Time.deltaTime);
+            
+            if (playerCamera != null)
+            {
+                playerCamera.localPosition = Vector3.Lerp(playerCamera.localPosition, standingCameraPosition, crouchTransitionSpeed * Time.deltaTime);
+            }
+        }
+    }
+
+    void StartCrouch()
+    {
+        isCrouching = true;
+    }
+
+    void StopCrouch()
+    {
+        if (!CanStandUp()) return;
+        
+        isCrouching = false;
+    }
+
+    bool CanStandUp()
+    {
+        float raycastDistance = standingHeight - crouchHeight + 0.1f;
+        Vector3 raycastOrigin = transform.position + Vector3.up * crouchHeight;
+        
+        return !Physics.Raycast(raycastOrigin, Vector3.up, raycastDistance);
     }
 }
