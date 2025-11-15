@@ -15,3 +15,6 @@ MonoBehaviour:
   Type: 4
   ParticleColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
   Icon: {fileID: 21300000, guid: 3e181e11137c065448d6c2fc5d6ac9f3, type: 3}
+  BreakTime: 10
+  ShakeIntensity: 0.3
+  FloatHeight: 0.5

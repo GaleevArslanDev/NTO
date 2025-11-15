@@ -4,50 +4,100 @@ using UnityEngine;
 
 public class Vacuum : MonoBehaviour
 {
+    public static Vacuum Instance;
+    
     [Header("Vacuum Settings")]
     [SerializeField] private float vacuumRadius = 5f;
     [SerializeField] private LayerMask itemLayer = 1;
     [SerializeField] private ParticleSystem vacuumParticles;
-    [SerializeField] private KeyCode vacuumKey = KeyCode.E;
     
     [Header("Animation")]
     [SerializeField] private float collectionDelay = 0.1f;
     
     private bool isVacuuming = false;
-    private CollectableItem itemLoockingAt;
+    private CollectableItem currentTargetItem;
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     
     void Update()
     {
-        // Активация пылесоса
-        if (Input.GetKeyDown(vacuumKey) && !isVacuuming)
+        HandleItemTargeting();
+    }
+    
+    private void HandleItemTargeting()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        
+        CollectableItem newTarget = null;
+        
+        if (Physics.Raycast(ray, out hit, vacuumRadius, itemLayer))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            
-            if (Physics.Raycast(ray, out hit, vacuumRadius, itemLayer))
+            newTarget = hit.collider.gameObject.GetComponent<CollectableItem>();
+        }
+        
+        // Если цель изменилась
+        if (newTarget != currentTargetItem)
+        {
+            // Останавливаем ломание предыдущей цели
+            if (currentTargetItem != null)
             {
-                itemLoockingAt = hit.collider.gameObject.GetComponent<CollectableItem>();
-                if (itemLoockingAt != null)
-                    StartCoroutine(VacuumRoutine());
+                currentTargetItem.StopBreaking();
+            }
+            
+            currentTargetItem = newTarget;
+        }
+        
+        // Управление ломанием предмета
+        if (currentTargetItem != null && !currentTargetItem.CanBeCollected)
+        {
+            if (Input.GetMouseButton(1)) // Зажата ПКМ
+            {
+                if (!currentTargetItem.IsBeingBroken)
+                {
+                    currentTargetItem.StartBreaking();
+                }
+            }
+            else if (Input.GetMouseButtonUp(1))
+            {
+                currentTargetItem.StopBreaking();
             }
         }
     }
     
-    private IEnumerator VacuumRoutine()
+    private IEnumerator VacuumRoutine(CollectableItem item)
     {
         isVacuuming = true;
-        
+    
         // Настройка цвета частиц в зависимости от предмета
-        SetParticleColor(itemLoockingAt.Data.ParticleColor);
+        SetParticleColor(item.Data.ParticleColor);
         vacuumParticles.Play();
-                
+            
         // Запуск сбора предмета
-        itemLoockingAt.StartCollection(transform);
-                
+        item.StartCollection(transform);
+            
         // Задержка между сбором предметов
         yield return new WaitForSeconds(collectionDelay);
-        
+    
         isVacuuming = false;
+    }
+    
+    public void StartVacuuming(CollectableItem item)
+    {
+        if (!isVacuuming)
+        {
+            StartCoroutine(VacuumRoutine(item));
+        }
     }
     
     private void SetParticleColor(Color color)
