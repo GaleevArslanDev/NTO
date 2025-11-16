@@ -8,9 +8,14 @@ public class ItemData : ScriptableObject
     public Sprite Icon;
     
     [Header("Breaking Settings")]
-    public float BreakTime = 2f; // Время необходимое для "ломания"
-    public float ShakeIntensity = 0.3f; // Интенсивность тряски
-    public float FloatHeight = 0.5f; // Высота подъема при ломании
+    public float BreakTime = 2f;
+    public float ShakeIntensity = 0.3f;
+    public float FloatHeight = 0.5f;
+    
+    [Header("Enemy Spawn Settings")]
+    [Range(0f, 1f)]
+    public float enemySpawnChance = 0.1f;
+    public int maxSpawnCount = 2;
 }
 
 public enum ItemType
