@@ -159,9 +159,9 @@ public class CollectableItem : MonoBehaviour
         }
 
         // Сразу начинаем сбор после завершения ломания
-        if (Vacuum.Instance != null)
+        if (MTB.Instance != null)
         {
-            Vacuum.Instance.StartVacuuming(this);
+            MTB.Instance.StartVacuuming(this);
         }
     }
     
