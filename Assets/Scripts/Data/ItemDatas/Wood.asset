@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 3
   ParticleColor: {r: 0.4113207, g: 0.30045518, b: 0.1730651, a: 1}
-  Prefab: {fileID: 7784561427362063879, guid: 3c12217d9bb801e4081fa16d05842834, type: 3}
+  Icon: {fileID: 0}
+  BreakTime: 0.5
+  ShakeIntensity: 0.3
+  FloatHeight: 0.5
