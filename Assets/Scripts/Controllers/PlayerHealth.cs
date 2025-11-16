@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -7,9 +8,14 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
     
+    [Header("Respawn Settings")]
+    public Transform respawnPoint;
+    public float fadeDuration = 1.5f;
+    
     [Header("UI References")]
     public Slider healthSlider;
     public Image healthFill;
+    public Image deathScreen;
     public Color fullHealthColor = Color.green;
     public Color lowHealthColor = Color.red;
     
@@ -19,11 +25,22 @@ public class PlayerHealth : MonoBehaviour
     
     private AudioSource audioSource;
     private bool isDead = false;
-    
+    private PlayerController playerController;
+    private CharacterController characterController;
+
     void Start()
     {
         currentHealth = maxHealth;
         audioSource = GetComponent<AudioSource>();
+        playerController = GetComponent<PlayerController>();
+        characterController = GetComponent<CharacterController>();
+        
+        // Настройка экрана смерти
+        if (deathScreen != null)
+        {
+            deathScreen.color = new Color(0, 0, 0, 0);
+            deathScreen.gameObject.SetActive(false);
+        }
         
         UpdateHealthUI();
     }
@@ -35,14 +52,12 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         
-        // Эффекты получения урона
         if (damageSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(damageSound);
         }
         
         StartCoroutine(DamageEffect());
-        
         UpdateHealthUI();
         
         if (currentHealth <= 0)
@@ -51,11 +66,8 @@ public class PlayerHealth : MonoBehaviour
         }
     }
     
-    private System.Collections.IEnumerator DamageEffect()
+    private IEnumerator DamageEffect()
     {
-        // Можно добавить мигание экрана или другие эффекты
-        // Например, временное изменение цвета UI здоровья
-        
         if (healthFill != null)
         {
             Color originalColor = healthFill.color;
@@ -84,17 +96,65 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
         
-        // Отключаем управление
-        PlayerController playerController = GetComponent<PlayerController>();
+        // Отключаем управление и физику
         if (playerController != null)
-        {
             playerController.enabled = false;
+        
+        if (characterController != null)
+            characterController.enabled = false;
+        
+        StartCoroutine(DeathSequence());
+    }
+    
+    private IEnumerator DeathSequence()
+    {
+        // Плавное затемнение
+        if (deathScreen != null)
+        {
+            deathScreen.gameObject.SetActive(true);
+            yield return StartCoroutine(FadeScreen(0f, 1f, fadeDuration));
         }
         
-        // Показываем экран смерти или перезапускаем уровень
-        Debug.Log("Игрок умер!");
+        // Перемещение на точку спавна
+        if (respawnPoint != null)
+        {
+            transform.position = respawnPoint.position;
+            transform.rotation = respawnPoint.rotation;
+        }
         
-        // Здесь можно добавить перезагрузку уровня или меню смерти
+        // Восстановление здоровья
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+        
+        yield return new WaitForSeconds(0.5f); // Пауза между затемнением и осветлением
+        
+        // Плавное осветление
+        if (deathScreen != null)
+        {
+            yield return StartCoroutine(FadeScreen(1f, 0f, fadeDuration));
+            deathScreen.gameObject.SetActive(false);
+        }
+        
+        // Включаем обратно компоненты
+        if (characterController != null)
+            characterController.enabled = true;
+        
+        if (playerController != null)
+            playerController.enabled = true;
+        
+        isDead = false;
+    }
+    
+    private IEnumerator FadeScreen(float fromAlpha, float toAlpha, float duration)
+    {
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float alpha = Mathf.Lerp(fromAlpha, toAlpha, timer / duration);
+            deathScreen.color = new Color(0, 0, 0, alpha);
+            yield return null;
+        }
     }
     
     public void Heal(float healAmount)
@@ -102,5 +162,11 @@ public class PlayerHealth : MonoBehaviour
         currentHealth += healAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateHealthUI();
+    }
+
+    // Метод для изменения точки спавна (можно вызывать из других скриптов)
+    public void SetRespawnPoint(Transform newRespawnPoint)
+    {
+        respawnPoint = newRespawnPoint;
     }
 }

@@ -74,7 +74,7 @@ NavMeshProjectSettings:
   - serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
-    agentHeight: 1
+    agentHeight: 0.76
     agentSlope: 43.7
     agentClimb: 0.27
     ledgeDropHeight: 0
