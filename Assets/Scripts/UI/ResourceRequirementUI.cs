@@ -4,20 +4,21 @@ using TMPro;
 
 public class ResourceRequirementUI : MonoBehaviour
 {
-    [SerializeField] private Image _icon;
-    [SerializeField] private TextMeshProUGUI _amountText;
-    [SerializeField] private Color _hasEnoughColor = Color.white;
-    [SerializeField] private Color _notEnoughColor = Color.red;
+    [SerializeField] private Image icon;
+    [SerializeField] private TextMeshProUGUI amountText;
+    [SerializeField] private Color hasEnoughColor = Color.white;
+    [SerializeField] private Color notEnoughColor = Color.red;
+    [SerializeField] private ItemDatabase itemDatabase;
 
     public void Set(ItemType type, int amount)
     {
         // Здесь можно добавить получение иконки по типу предмета
-        // _icon.sprite = GetIconForType(type);
+        icon.sprite = itemDatabase.GetItemIcon(type);
         
-        _amountText.text = $"{amount}";
+        amountText.text = $"{itemDatabase.GetItemData(type).name} x{amount}";
         
         // Проверяем достаточно ли ресурсов и меняем цвет
         bool hasEnough = Inventory.Instance.GetItemCount(type) >= amount;
-        _amountText.color = hasEnough ? _hasEnoughColor : _notEnoughColor;
+        amountText.color = hasEnough ? hasEnoughColor : notEnoughColor;
     }
 }

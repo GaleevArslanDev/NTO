@@ -1,100 +1,66 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private int _maxLevel = 3;
+    [Header("Building Settings")]
+    [SerializeField] private string _buildingId; // Уникальный ID для идентификации
+    [SerializeField] private string _buildingName;
     [SerializeField] private BuildingLevel[] _levels;
-    [SerializeField] private GameObject _buildingModel;
-    
-    [Header("Events")]
-    public UnityEvent OnUpgradeStarted;
-    public UnityEvent OnUpgradeCompleted;
     
     private int _currentLevel = 0;
-    private bool _isUpgrading = false;
 
     [System.Serializable]
     public class BuildingLevel
     {
-        public ItemCost[] RequiredResources;
-        public float UpgradeTime = 0f;
         public GameObject LevelModel;
+        public string Description; // Описание улучшения
     }
 
-    [System.Serializable]
-    public class ItemCost
+    void Start()
     {
-        public ItemType Type;
-        public int Amount;
-    }
-
-    public void Upgrade()
-    {
-        if (_isUpgrading || !CanUpgrade()) return;
-
-        _isUpgrading = true;
-        SpendResources();
-        OnUpgradeStarted?.Invoke();
-
-        if (_levels[_currentLevel].UpgradeTime > 0)
-            Invoke(nameof(CompleteUpgrade), _levels[_currentLevel].UpgradeTime);
-        else
-            CompleteUpgrade();
-    }
-
-    // Сделал метод публичным
-    public bool CanUpgrade()
-    {
-        if (_currentLevel >= _maxLevel) return false;
-        if (_currentLevel >= _levels.Length) return false;
-
-        foreach (var cost in _levels[_currentLevel].RequiredResources)
+        // Регистрируем здание в менеджере
+        if (BuildingManager.Instance != null)
         {
-            if (Inventory.Instance.GetItemCount(cost.Type) < cost.Amount)
-                return false;
+            BuildingManager.Instance.RegisterBuilding(this);
         }
-        return true;
+        
+        // Инициализируем начальный уровень
+        SetLevel(0);
     }
 
-    private void SpendResources()
+    void OnDestroy()
     {
-        foreach (var cost in _levels[_currentLevel].RequiredResources)
+        // Отменяем регистрацию при уничтожении
+        if (BuildingManager.Instance != null)
         {
-            Inventory.Instance.RemoveItem(cost.Type, cost.Amount);
+            BuildingManager.Instance.UnregisterBuilding(this);
         }
     }
 
-    private void CompleteUpgrade()
+    public void SetLevel(int level)
     {
-        // Отключаем предыдущую модель
-        if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
-            _levels[_currentLevel - 1].LevelModel.SetActive(false);
+        if (level < 0 || level >= _levels.Length) return;
 
-        _currentLevel++;
-        _isUpgrading = false;
-        UpdateVisualModel();
-        OnUpgradeCompleted?.Invoke();
+        // Отключаем все модели
+        foreach (var buildingLevel in _levels)
+        {
+            if (buildingLevel.LevelModel != null)
+                buildingLevel.LevelModel.SetActive(false);
+        }
+
+        _currentLevel = level;
+        
+        // Включаем модель текущего уровня
+        if (_levels[_currentLevel].LevelModel != null)
+            _levels[_currentLevel].LevelModel.SetActive(true);
     }
 
-    private void UpdateVisualModel()
-    {
-        if (_buildingModel != null)
-            _buildingModel.SetActive(false);
-
-        if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
-            _levels[_currentLevel - 1].LevelModel.SetActive(true);
+    public int GetCurrentLevel() => _currentLevel;
+    public int GetMaxLevel() => _levels.Length;
+    public string GetBuildingId() => _buildingId;
+    public string GetLevelDescription(int level) 
+    { 
+        return (level >= 0 && level < _levels.Length) ? _levels[level].Description : ""; 
     }
-
-    // Добавил метод для получения стоимости текущего уровня улучшения
-    public ItemCost[] GetCurrentLevelCosts()
-    {
-        if (_currentLevel >= _levels.Length) return null;
-        return _levels[_currentLevel].RequiredResources;
-    }
-
-    public int GetCurrentLevel() => _currentLevel + 1;
-    public int GetMaxLevel() => _maxLevel;
-    public bool IsMaxLevel() => _currentLevel >= _maxLevel;
+    public string GetBuildingName() => _buildingName;
 }

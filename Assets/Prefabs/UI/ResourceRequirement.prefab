@@ -299,7 +299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de49b3707504c42a61e1277bc34dac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _icon: {fileID: 4977574971084328051}
-  _amountText: {fileID: 5003405856409015016}
-  _hasEnoughColor: {r: 1, g: 1, b: 1, a: 1}
-  _notEnoughColor: {r: 1, g: 0, b: 0, a: 1}
+  icon: {fileID: 4977574971084328051}
+  amountText: {fileID: 5003405856409015016}
+  hasEnoughColor: {r: 1, g: 1, b: 1, a: 1}
+  notEnoughColor: {r: 1, g: 0, b: 0, a: 1}
+  itemDatabase: {fileID: 11400000, guid: 91636b76ec7e30d4384ba250d9f454c0, type: 2}

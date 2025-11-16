@@ -69,7 +69,7 @@ public class Inventory : MonoBehaviour
         return GetItemCount(type) >= count;
     }
 
-    public bool HasResources(System.Collections.Generic.List<Building.ItemCost> requiredResources)
+    public bool HasResources(System.Collections.Generic.List<ResourceCost> requiredResources)
     {
         foreach (var resource in requiredResources)
         {
