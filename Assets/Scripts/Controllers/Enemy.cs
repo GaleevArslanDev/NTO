@@ -16,6 +16,7 @@ public abstract class Enemy : MonoBehaviour
     [Header("Emergence Settings")]
     public float emergenceTime = 1.5f;
     public float emergenceHeight = 2f;
+    public GameObject emergeEffect;
     
     [Header("Audio")]
     public AudioClip attackSound;
@@ -129,6 +130,8 @@ public abstract class Enemy : MonoBehaviour
     {
         // Сохраняем целевую позицию
         targetPosition = transform.position;
+        var spawnedParticleSystem = Instantiate(emergeEffect, targetPosition, Quaternion.identity).GetComponent<ParticleSystem>();
+        spawnedParticleSystem.Play();
     
         // Начинаем под землей
         Vector3 startPosition = targetPosition - Vector3.up * emergenceHeight;
@@ -149,6 +152,10 @@ public abstract class Enemy : MonoBehaviour
         while (elapsedTime < emergenceTime)
         {
             float progress = elapsedTime / emergenceTime;
+            if (progress >= 0.9)
+            {
+                spawnedParticleSystem.Stop();
+            }
             // Используем более плавную интерполяцию
             float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
             transform.position = Vector3.Lerp(startPosition, targetPosition, smoothProgress);
@@ -169,6 +176,8 @@ public abstract class Enemy : MonoBehaviour
             // Важно: установить позицию для NavMeshAgent
             agent.Warp(targetPosition);
         }
+
+        Destroy(spawnedParticleSystem.gameObject);
     
         OnEmergenceComplete();
     }

@@ -527,6 +527,7 @@ MonoBehaviour:
   acceleration: 8
   emergenceTime: 1.5
   emergenceHeight: 2
+  emergeEffect: {fileID: 2090661487910953883, guid: ebc00f5635502ef4284bd7ae21dc4189, type: 3}
   attackSound: {fileID: 0}
   damageSound: {fileID: 0}
   deathSound: {fileID: 0}
