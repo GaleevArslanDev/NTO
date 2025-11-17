@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   ParticleColor: {r: 0.007422447, g: 0, b: 1, a: 1}
-  Prefab: {fileID: 7784561427362063879, guid: 3c12217d9bb801e4081fa16d05842834, type: 3}
+  Icon: {fileID: 0}
+  BreakTime: 2
+  ShakeIntensity: 0.3
+  FloatHeight: 0.5
+  enemySpawnChance: 1
+  maxSpawnCount: 1

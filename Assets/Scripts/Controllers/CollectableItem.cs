@@ -175,30 +175,36 @@ public class CollectableItem : MonoBehaviour
         StartCoroutine(CollectionRoutine(target));
     }
     
+    // В метод CollectionRoutine, перед уничтожением предмета, добавить:
     private IEnumerator CollectionRoutine(Transform target)
     {
         float duration = 0.7f;
         float time = 0;
         Vector3 startPos = transform.position;
         Vector3 startScale = transform.localScale;
-        
+    
         Vector3 randomOffset = Random.insideUnitSphere * 0.1f;
-        
+    
         while (time < duration)
         {
             float progress = time / duration;
             Vector3 targetPos = target.position + randomOffset;
             transform.position = Vector3.Lerp(startPos, targetPos, progress);
-            
+        
             float scaleFactor = Mathf.SmoothStep(1f, 0f, progress);
             transform.localScale = startScale * scaleFactor;
-            
+        
             transform.Rotate(0, 180 * Time.deltaTime, 0);
-            
+        
             time += Time.deltaTime;
             yield return null;
         }
-        
+    
+        if (EnemySpawnManager.Instance != null && Data != null)
+        {
+            EnemySpawnManager.Instance.TrySpawnEnemy(Data, startPos);
+        }
+    
         if (Inventory.Instance != null)
         {
             Inventory.Instance.AddItem(Data.Type);
@@ -207,7 +213,7 @@ public class CollectableItem : MonoBehaviour
         {
             Debug.LogWarning("Inventory instance not found!");
         }
-        
+    
         Destroy(gameObject);
     }
     

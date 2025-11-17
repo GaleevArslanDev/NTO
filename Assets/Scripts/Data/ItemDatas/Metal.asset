@@ -18,3 +18,5 @@ MonoBehaviour:
   BreakTime: 10
   ShakeIntensity: 0.3
   FloatHeight: 0.5
+  enemySpawnChance: 0.1
+  maxSpawnCount: 1

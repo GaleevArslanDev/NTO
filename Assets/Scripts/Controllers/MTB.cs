@@ -74,9 +74,10 @@ public class MTB : MonoBehaviour
     
     void Update()
     {
+        UpdateReloadIndicator();
+        if (Cursor.lockState == CursorLockMode.None) return;
         HandleItemTargeting();
         HandleWeapon();
-        UpdateReloadIndicator();
     }
     
     private void UpdateReloadIndicator()
@@ -166,17 +167,17 @@ public class MTB : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        
+    
         // Визуализация лазерного луча
         ShowLaserBeam();
-        
+    
         if (Physics.Raycast(ray, out hit, weaponRange, enemyLayer))
         {
-            // Наносим урон врагу
+            // Наносим урон врагу с передачей точки попадания
             Enemy enemy = hit.collider.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(weaponDamage);
+                enemy.TakeDamage(weaponDamage, hit.point);
                 Debug.Log($"Попали во врага! Нанесено урона: {weaponDamage}");
             }
         }
