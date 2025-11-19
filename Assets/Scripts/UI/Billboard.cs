@@ -8,7 +8,6 @@ public class Billboard : MonoBehaviour
     {
         mainCamera = Camera.main;
         
-        // Если Camera.main не найдена, ищем камеру вручную
         if (mainCamera == null)
         {
             mainCamera = FindObjectOfType<Camera>();
@@ -19,7 +18,6 @@ public class Billboard : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            // Поворачиваем Canvas к камере
             transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward,
                 mainCamera.transform.rotation * Vector3.up);
         }

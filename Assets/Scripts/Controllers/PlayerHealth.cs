@@ -35,7 +35,6 @@ public class PlayerHealth : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         characterController = GetComponent<CharacterController>();
         
-        // Настройка экрана смерти
         if (deathScreen != null)
         {
             deathScreen.color = new Color(0, 0, 0, 0);
@@ -96,7 +95,6 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
         
-        // Отключаем управление и физику
         if (playerController != null)
             playerController.enabled = false;
         
@@ -108,34 +106,29 @@ public class PlayerHealth : MonoBehaviour
     
     private IEnumerator DeathSequence()
     {
-        // Плавное затемнение
         if (deathScreen != null)
         {
             deathScreen.gameObject.SetActive(true);
             yield return StartCoroutine(FadeScreen(0f, 1f, fadeDuration));
         }
         
-        // Перемещение на точку спавна
         if (respawnPoint != null)
         {
             transform.position = respawnPoint.position;
             transform.rotation = respawnPoint.rotation;
         }
         
-        // Восстановление здоровья
         currentHealth = maxHealth;
         UpdateHealthUI();
         
-        yield return new WaitForSeconds(0.5f); // Пауза между затемнением и осветлением
+        yield return new WaitForSeconds(0.5f);
         
-        // Плавное осветление
         if (deathScreen != null)
         {
             yield return StartCoroutine(FadeScreen(1f, 0f, fadeDuration));
             deathScreen.gameObject.SetActive(false);
         }
         
-        // Включаем обратно компоненты
         if (characterController != null)
             characterController.enabled = true;
         
@@ -164,7 +157,6 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthUI();
     }
 
-    // Метод для изменения точки спавна (можно вызывать из других скриптов)
     public void SetRespawnPoint(Transform newRespawnPoint)
     {
         respawnPoint = newRespawnPoint;

@@ -1,0 +1,21 @@
+﻿public enum Trait
+{
+    None,
+    Honest,
+    Deceptive,
+    Kind, 
+    Friendly,
+    Aggressive,
+    Lazy,
+    Ambitious,
+    Romantic,
+    Materialistic,
+    Spiritual,
+    Pragmatic,
+    Shy,
+    Outgoing,
+    Patient,
+    Impulsive,
+    Generous,
+    Greedy
+}

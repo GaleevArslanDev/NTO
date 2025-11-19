@@ -23,7 +23,6 @@ public abstract class Enemy : MonoBehaviour
     public AudioClip damageSound;
     public AudioClip deathSound;
     
-    // Компоненты
     protected Transform player;
     protected NavMeshAgent agent;
     protected Animator animator;
@@ -31,22 +30,18 @@ public abstract class Enemy : MonoBehaviour
     protected Collider enemyCollider;
     protected EnemyHealth enemyHealth;
     
-    // Состояния
     protected bool isEmerging = true;
     protected bool isDead = false;
     protected bool canAttack = true;
     
-    // Таймеры
     protected float lastAttackTime;
     protected Vector3 targetPosition;
     
-    // Анимационные хэши
     protected readonly int emergeHash = Animator.StringToHash("Emerge");
     protected readonly int moveHash = Animator.StringToHash("Move");
     protected readonly int attackHash = Animator.StringToHash("Attack");
     protected readonly int dieHash = Animator.StringToHash("Die");
     
-    // Свойства
     public bool IsDead => isDead;
     public bool IsEmerging => isEmerging;
     
@@ -65,11 +60,10 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void Start()
     {
-        // Начинаем появление из-под земли
         if (player == null)
         {
             Debug.LogError("Player not found! Make sure player has 'Player' tag.");
-            // Попробуем найти игрока снова
+
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
     
@@ -83,7 +77,6 @@ public abstract class Enemy : MonoBehaviour
             enemyHealth.maxHealth = health;
             enemyHealth.currentHealth = health;
             
-            // Подписываемся на события здоровья
             enemyHealth.OnEnemyDied += OnHealthDepleted;
             enemyHealth.OnHealthChanged += OnHealthChanged;
         }
@@ -104,13 +97,12 @@ public abstract class Enemy : MonoBehaviour
             agent.speed = movementSpeed;
             agent.acceleration = acceleration;
             agent.stoppingDistance = attackRange - 0.5f;
-            agent.enabled = false; // Включится после появления
+            agent.enabled = false;
         }
     }
     
     protected virtual void OnEnable()
     {
-        // Сброс состояний при повторном использовании объекта
         isDead = false;
         isEmerging = true;
         canAttack = true;
@@ -121,33 +113,27 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void OnDisable()
     {
-        // Останавливаем все корутины при отключении
         StopAllCoroutines();
         CancelInvoke();
     }
     
     protected virtual IEnumerator EmergeFromGround()
     {
-        // Сохраняем целевую позицию
         targetPosition = transform.position;
         var spawnedParticleSystem = Instantiate(emergeEffect, targetPosition, Quaternion.identity).GetComponent<ParticleSystem>();
         spawnedParticleSystem.Play();
     
-        // Начинаем под землей
         Vector3 startPosition = targetPosition - Vector3.up * emergenceHeight;
         transform.position = startPosition;
     
-        // Отключаем коллайдер на время появления
         if (enemyCollider != null)
             enemyCollider.enabled = false;
     
-        // Запускаем анимацию появления
         if (animator != null)
         {
             animator.SetTrigger(emergeHash);
         }
     
-        // Плавно поднимаемся
         float elapsedTime = 0f;
         while (elapsedTime < emergenceTime)
         {
@@ -156,7 +142,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 spawnedParticleSystem.Stop();
             }
-            // Используем более плавную интерполяцию
+            
             float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
             transform.position = Vector3.Lerp(startPosition, targetPosition, smoothProgress);
             elapsedTime += Time.deltaTime;
@@ -166,14 +152,12 @@ public abstract class Enemy : MonoBehaviour
         transform.position = targetPosition;
         isEmerging = false;
     
-        // Включаем коллайдер и NavMeshAgent после появления
         if (enemyCollider != null)
             enemyCollider.enabled = true;
     
         if (agent != null)
         {
             agent.enabled = true;
-            // Важно: установить позицию для NavMeshAgent
             agent.Warp(targetPosition);
         }
 
@@ -184,7 +168,7 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void OnEmergenceComplete()
     {
-        // Можно переопределить в наследниках
+        
     }
     
     protected virtual void UpdateEnemyBehavior()
@@ -207,22 +191,18 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void HandleAttackBehavior()
     {
-        // Останавливаем движение
         if (agent != null && agent.enabled)
         {
             agent.isStopped = true;
         }
         
-        // Смотрим на игрока
         FacePlayer();
         
-        // Атакуем, если можно
         if (canAttack && Time.time - lastAttackTime >= attackCooldown)
         {
             Attack();
         }
         
-        // Обновляем анимацию
         if (animator != null)
         {
             animator.SetBool(moveHash, false);
@@ -231,14 +211,12 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void HandleChaseBehavior()
     {
-        // Возобновляем движение
         if (agent != null && agent.enabled)
         {
             agent.isStopped = false;
             agent.SetDestination(player.position);
         }
         
-        // Обновляем анимацию
         if (animator != null)
         {
             animator.SetBool(moveHash, true);
@@ -247,13 +225,11 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void HandleIdleBehavior()
     {
-        // Останавливаемся
         if (agent != null && agent.enabled)
         {
             agent.isStopped = true;
         }
         
-        // Обновляем анимацию
         if (animator != null)
         {
             animator.SetBool(moveHash, false);
@@ -276,28 +252,25 @@ public abstract class Enemy : MonoBehaviour
     {
         lastAttackTime = Time.time;
     
-        // Запускаем анимацию атаки
         if (animator != null)
         {
             animator.SetTrigger(attackHash);
         }
     
-        // Воспроизводим звук атаки
         if (attackSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(attackSound);
         }
-    
-        // Наносим урон игроку
+        
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        Debug.Log($"Distance to player: {distanceToPlayer}, Attack range: {attackRange}");
+        //Debug.Log($"Distance to player: {distanceToPlayer}, Attack range: {attackRange}");
     
         if (distanceToPlayer <= attackRange)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                Debug.Log($"Dealing {damage} damage to player");
+                //Debug.Log($"Dealing {damage} damage to player");
                 playerHealth.TakeDamage(damage);
             }
             else
@@ -315,14 +288,12 @@ public abstract class Enemy : MonoBehaviour
     {
         if (isDead || isEmerging) return;
         
-        // Используем систему здоровья для обработки урона
         if (enemyHealth != null)
         {
             enemyHealth.TakeDamage(damageAmount, hitPoint);
         }
         else
         {
-            // Резервный вариант, если системы здоровья нет
             health -= damageAmount;
             
             if (health <= 0)
@@ -331,7 +302,6 @@ public abstract class Enemy : MonoBehaviour
             }
         }
         
-        // Воспроизводим звук получения урона
         if (damageSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(damageSound);
@@ -340,7 +310,6 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void OnHealthChanged(float currentHealth)
     {
-        // Обновляем локальную переменную здоровья
         health = currentHealth;
     }
     
@@ -354,19 +323,16 @@ public abstract class Enemy : MonoBehaviour
         if (isDead) return;
         isDead = true;
         
-        // Воспроизводим звук смерти
         if (deathSound != null && audioSource != null)
         {
             AudioSource.PlayClipAtPoint(deathSound, transform.position);
         }
         
-        // Уведомляем менеджер спавна
         if (EnemySpawnManager.Instance != null)
         {
             EnemySpawnManager.Instance.RemoveEnemy(this);
         }
         
-        // Запускаем мгновенную смерть с партиклами
         EnemyDeath enemyDeath = GetComponent<EnemyDeath>();
         if (enemyDeath != null)
         {
@@ -374,7 +340,6 @@ public abstract class Enemy : MonoBehaviour
         }
         else
         {
-            // Если компонента смерти нет, просто уничтожаем
             Destroy(gameObject);
         }
         
@@ -383,13 +348,12 @@ public abstract class Enemy : MonoBehaviour
     
     protected virtual void OnDeath()
     {
-        // Можно переопределить в наследниках
+        
     }
     
-    // Метод для анимации атаки (вызывается из Animation Event)
     public virtual void OnAttackAnimationEvent()
     {
-        // Дополнительная логика атаки
+        
     }
     
     protected virtual void OnDrawGizmosSelected()

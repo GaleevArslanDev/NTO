@@ -11,7 +11,7 @@ public class TownHall : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnUpgradeStarted;
     public UnityEvent OnUpgradeCompleted;
-    public UnityEvent<int> OnLevelChanged; // Новый уровень
+    public UnityEvent<int> OnLevelChanged;
     
     private int _currentLevel = 0;
     private bool _isUpgrading = false;
@@ -20,7 +20,7 @@ public class TownHall : MonoBehaviour
     public class TownHallLevel
     {
         [Header("Requirements")]
-        public ResourceCost[] RequiredResources; // Заменили ItemCost на ResourceCost
+        public ResourceCost[] RequiredResources;
         public float UpgradeTime = 0f;
     
         [Header("Visuals")]
@@ -33,8 +33,8 @@ public class TownHall : MonoBehaviour
     [System.Serializable]
     public class BuildingUpgrade
     {
-        public string BuildingId; // Уникальный идентификатор здания
-        public int NewLevel; // Новый уровень для этого здания
+        public string BuildingId;
+        public int NewLevel;
     }
 
     public void Upgrade()
@@ -74,16 +74,13 @@ public class TownHall : MonoBehaviour
 
     private void CompleteUpgrade()
     {
-        // Отключаем предыдущую модель
         if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
             _levels[_currentLevel - 1].LevelModel.SetActive(false);
 
         _currentLevel++;
         
-        // Включаем новую модель
         UpdateVisualModel();
         
-        // Применяем улучшения к другим зданиям
         ApplyBuildingUpgrades();
         
         _isUpgrading = false;

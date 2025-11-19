@@ -36,7 +36,6 @@ public class TownHallInteractor : MonoBehaviour
             }
         }
 
-        // ESC для закрытия диалога
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             _townHallUI.HideDialog();

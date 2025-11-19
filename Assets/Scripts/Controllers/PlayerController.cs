@@ -24,17 +24,28 @@ public class PlayerController : MonoBehaviour
     private float xRotation = 0f;
     private bool isGrounded;
 
-    // Приседание
     private bool isCrouching = false;
     private float standingHeight;
     private Vector3 standingCameraPosition;
     private float currentSpeed;
+    public static PlayerController Instance { get; private set; }
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         characterController = GetComponent<CharacterController>();
         if (playerCamera == null)
             playerCamera = Camera.main?.transform;
+    }
+    
+    public void SetControlEnabled(bool enabled)
+    {
+        this.enabled = enabled;
+        if (characterController != null)
+            characterController.enabled = enabled;
     }
 
     private void Start()

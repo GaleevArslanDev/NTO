@@ -25,7 +25,7 @@ public class BuildingManager : MonoBehaviour
         if (!string.IsNullOrEmpty(id) && !_buildings.ContainsKey(id))
         {
             _buildings.Add(id, building);
-            Debug.Log($"Зарегистрировано здание: {id}");
+            //Debug.Log($"Зарегистрировано здание: {id}");
         }
     }
 

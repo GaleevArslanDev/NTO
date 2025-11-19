@@ -20,7 +20,7 @@ public class TownHallUI : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private string _titleFormat = "Ратуша (Уровень {0})";
     [SerializeField] private string _descriptionFormat = "Улучшение ратуши до уровня {0} откроет новые возможности для вашего поселения.";
-    [SerializeField] private string[] _levelDescriptions; // Описания для каждого уровня
+    [SerializeField] private string[] _levelDescriptions;
 
     private TownHall _townHall;
 
@@ -53,7 +53,6 @@ public class TownHallUI : MonoBehaviour
         int currentLevel = _townHall.GetCurrentLevel();
         int nextLevel = currentLevel + 1;
     
-        // Заголовок и описание
         _titleText.text = string.Format(_titleFormat, currentLevel);
     
         string description = nextLevel <= _townHall.GetMaxLevel() && nextLevel - 1 < _levelDescriptions.Length 
@@ -63,11 +62,9 @@ public class TownHallUI : MonoBehaviour
     
         _levelText.text = $"Текущий уровень: {currentLevel} / {_townHall.GetMaxLevel()}";
 
-        // Очищаем контейнеры
         ClearContainer(_requirementsContainer);
         ClearContainer(_upgradesContainer);
 
-        // Показываем требования для улучшения
         if (!_townHall.IsMaxLevel())
         {
             var costs = _townHall.GetCurrentLevelCosts();
@@ -80,7 +77,6 @@ public class TownHallUI : MonoBehaviour
                 }
             }
 
-            // Показываем какие здания будут улучшены
             ShowBuildingUpgrades(nextLevel);
         }
         else
@@ -96,8 +92,6 @@ public class TownHallUI : MonoBehaviour
 
     private void ShowBuildingUpgrades(int nextLevel)
     {
-        // Здесь нужно получить информацию о том, какие здания будут улучшены
-        // Это можно сделать через BuildingManager или напрямую из TownHall
         var buildings = BuildingManager.Instance.GetAllBuildings();
         
         foreach (var building in buildings)
@@ -124,7 +118,6 @@ public class TownHallUI : MonoBehaviour
     private void OnUpgradeButtonClicked()
     {
         _townHall?.Upgrade();
-        // Обновляем диалог после улучшения
         Invoke(nameof(UpdateDialog), 0.1f);
     }
 }
