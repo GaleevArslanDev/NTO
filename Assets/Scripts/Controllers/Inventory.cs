@@ -64,6 +64,21 @@ public class Inventory : MonoBehaviour
         return existingSlot?.Count ?? 0;
     }
     
+    public bool HasItems(ItemType type, int count)
+    {
+        return GetItemCount(type) >= count;
+    }
+
+    public bool HasResources(System.Collections.Generic.List<ResourceCost> requiredResources)
+    {
+        foreach (var resource in requiredResources)
+        {
+            if (GetItemCount(resource.Type) < resource.Amount)
+                return false;
+        }
+        return true;
+    }
+    
     public List<InventorySlot> GetAllItems()
     {
         return new List<InventorySlot>(items);
