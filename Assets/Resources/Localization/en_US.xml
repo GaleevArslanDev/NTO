@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Main Menu -->
+    <string name="menu_play">Play</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_quit">Quit</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Language</string>
+    <string name="settings_volume">Volume</string>
+
+    <!-- Game Texts -->
+    <string name="game_pickup_item">Picked up: {0}</string>
+    <string name="game_inventory">Inventory</string>
+    <string name="game_collected">Collected: {0} {1}</string>
+
+    <!-- Variant Phrases -->
+    <string name="npc_greeting">Greetings, traveler!</string>
+    <string name="npc_greeting_1">Welcome!</string>
+    <string name="npc_greeting_2">Good to see you!</string>
+
+    <!-- Items -->
+    <string name="item_crystal_red">Red Crystal</string>
+    <string name="item_crystal_blue">Blue Crystal</string>
+    <string name="item_stone">Stone</string>
+    <string name="item_wood">Wood</string>
+    <string name="item_metal">Metal</string>
+</resources>
