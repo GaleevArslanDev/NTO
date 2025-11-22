@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb20bb89cd7a204ca4f87adf55eef5f, type: 3}
+  m_Name: ForgeTechTree
+  m_EditorClassIdentifier: 
+  treeName: "\u041A\u0443\u0437\u043D\u0438\u0446\u0430"
+  description: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0434\u043B\u044F
+    \u0432\u0430\u0448\u0435\u0433\u043E MTB"
+  nodes:
+  - nodeId: damage_1
+    nodeName: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0443\u0440\u043E\u043D
+      I"
+    description: "+10% \u043A \u0443\u0440\u043E\u043D\u0443"
+    tier: 1
+    unlockCost:
+    - Type: 0
+      Amount: 1
+    prerequisiteNodes: []
+    isUnlocked: 1
+    effects:
+    - effectType: 1
+      floatValue: 1.1
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: -500, y: 0}
+    icon: {fileID: 0}
+  - nodeId: damage_2
+    nodeName: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0443\u0440\u043E\u043D
+      II"
+    description: "+20% \u043A \u0443\u0440\u043E\u043D\u0443"
+    tier: 1
+    unlockCost:
+    - Type: 3
+      Amount: 1
+    prerequisiteNodes:
+    - damage_1
+    isUnlocked: 0
+    effects:
+    - effectType: 1
+      floatValue: 1.2
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: -500, y: 200}
+    icon: {fileID: 0}
+  - nodeId: mining_speed_1
+    nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
+      I"
+    description: "+15% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
+    tier: 1
+    unlockCost:
+    - Type: 1
+      Amount: 1
+    prerequisiteNodes: []
+    isUnlocked: 1
+    effects:
+    - effectType: 2
+      floatValue: 1.15
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: 500, y: 0}
+    icon: {fileID: 0}
+  - nodeId: inventory_100
+    nodeName: "\u0423\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u044B\u0439
+      \u0438\u043D\u0432\u0435\u043D\u0442\u0430\u0440\u044C"
+    description: "\u0412\u043C\u0435\u0441\u0442\u0438\u043C\u043E\u0441\u0442\u044C
+      100 \u0435\u0434\u0438\u043D\u0438\u0446"
+    tier: 2
+    unlockCost:
+    - Type: 2
+      Amount: 1
+    prerequisiteNodes: []
+    isUnlocked: 0
+    effects:
+    - effectType: 3
+      floatValue: 0
+      intValue: 100
+      stringValue: 
+    graphPosition: {x: 300, y: 200}
+    icon: {fileID: 0}
+  - nodeId: collection_range_1
+    nodeName: "\u0414\u0430\u043B\u044C\u043D\u0438\u0439 \u0441\u0431\u043E\u0440
+      I"
+    description: "+20% \u043A \u0434\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
+      \u0441\u0431\u043E\u0440\u0430"
+    tier: 1
+    unlockCost:
+    - Type: 4
+      Amount: 1
+    prerequisiteNodes: []
+    isUnlocked: 0
+    effects:
+    - effectType: 4
+      floatValue: 1.2
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: 0, y: 0}
+    icon: {fileID: 0}
+  maxTier: 5

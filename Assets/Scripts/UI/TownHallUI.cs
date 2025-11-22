@@ -23,6 +23,7 @@ public class TownHallUI : MonoBehaviour
     [SerializeField] private string[] _levelDescriptions; // Описания для каждого уровня
 
     private TownHall _townHall;
+    public bool isUiOpen = false;
 
     void Start()
     {
@@ -35,6 +36,7 @@ public class TownHallUI : MonoBehaviour
     public void ShowDialog(TownHall townHall)
     {
         Cursor.lockState = CursorLockMode.None;
+        isUiOpen = true;
         _townHall = townHall;
         UpdateDialog();
         _dialogPanel.SetActive(true);
@@ -42,13 +44,14 @@ public class TownHallUI : MonoBehaviour
 
     public void HideDialog()
     {
+        isUiOpen = false;
         Cursor.lockState = CursorLockMode.Locked;
         _dialogPanel.SetActive(false);
     }
 
     private void UpdateDialog()
     {
-        if (_townHall == null) return;
+        if (_townHall == null) {Debug.Log("no town hall");return;}
 
         int currentLevel = _townHall.GetCurrentLevel();
         int nextLevel = currentLevel + 1;

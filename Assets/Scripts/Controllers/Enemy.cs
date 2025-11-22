@@ -378,6 +378,8 @@ public abstract class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
         
+        QuestSystem.Instance.ReportEnemyKill(this.GetType().Name);
+        
         OnDeath();
     }
     

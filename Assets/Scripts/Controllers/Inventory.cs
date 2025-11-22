@@ -6,6 +6,8 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory Instance { get; private set; }
     
+    private int _capacity = 50;
+    
     [System.Serializable]
     public class InventorySlot
     {
@@ -36,6 +38,7 @@ public class Inventory : MonoBehaviour
         if (existingSlot != null)
         {
             existingSlot.Count += count;
+            if (existingSlot.Count > _capacity) existingSlot.Count = _capacity;
         }
         else
         {
@@ -78,6 +81,13 @@ public class Inventory : MonoBehaviour
         }
         return true;
     }
+    
+    public void UpdateCapacity(int newCapacity)
+    {
+        _capacity = newCapacity;
+    }
+    
+    public int GetCapacity() => _capacity;
     
     public List<InventorySlot> GetAllItems()
     {

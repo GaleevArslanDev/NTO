@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class TownHall : MonoBehaviour
 {
+    public static TownHall Instance { get; private set; }
+    
     [Header("Town Hall Settings")]
     [SerializeField] private int _maxLevel = 5;
     [SerializeField] private TownHallLevel[] _levels;
@@ -11,16 +13,17 @@ public class TownHall : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnUpgradeStarted;
     public UnityEvent OnUpgradeCompleted;
-    public UnityEvent<int> OnLevelChanged; // Новый уровень
+    public UnityEvent<int> OnLevelChanged;
     
     private int _currentLevel = 0;
     private bool _isUpgrading = false;
+    private int _unlockedTier = 1;
 
     [System.Serializable]
     public class TownHallLevel
     {
         [Header("Requirements")]
-        public ResourceCost[] RequiredResources; // Заменили ItemCost на ResourceCost
+        public ResourceCost[] RequiredResources;
         public float UpgradeTime = 0f;
     
         [Header("Visuals")]
@@ -28,13 +31,32 @@ public class TownHall : MonoBehaviour
     
         [Header("Unlocks")]
         public BuildingUpgrade[] BuildingUpgrades;
+        public int UnlocksTechTier = 1; // Какой тир технологий открывает этот уровень
     }
 
     [System.Serializable]
     public class BuildingUpgrade
     {
-        public string BuildingId; // Уникальный идентификатор здания
-        public int NewLevel; // Новый уровень для этого здания
+        public string BuildingId;
+        public int NewLevel;
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        // Регистрируем начальный уровень
+        UpdateVisualModel();
     }
 
     public void Upgrade()
@@ -80,6 +102,12 @@ public class TownHall : MonoBehaviour
 
         _currentLevel++;
         
+        // Обновляем открытый тир
+        if (_currentLevel - 1 < _levels.Length)
+        {
+            _unlockedTier = Mathf.Max(_unlockedTier, _levels[_currentLevel - 1].UnlocksTechTier);
+        }
+        
         // Включаем новую модель
         UpdateVisualModel();
         
@@ -93,7 +121,15 @@ public class TownHall : MonoBehaviour
 
     private void UpdateVisualModel()
     {
-        if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
+        // Отключаем все модели
+        for (int i = 0; i < _levels.Length; i++)
+        {
+            if (_levels[i].LevelModel != null)
+                _levels[i].LevelModel.SetActive(false);
+        }
+        
+        // Включаем модель текущего уровня
+        if (_currentLevel > 0 && _currentLevel - 1 < _levels.Length && _levels[_currentLevel - 1].LevelModel != null)
             _levels[_currentLevel - 1].LevelModel.SetActive(true);
     }
 
@@ -119,4 +155,12 @@ public class TownHall : MonoBehaviour
     public int GetCurrentLevel() => _currentLevel;
     public int GetMaxLevel() => _maxLevel;
     public bool IsMaxLevel() => _currentLevel >= _maxLevel;
+    
+    // Новый метод для системы прокачки
+    public int GetUnlockedTechTier() => _unlockedTier;
+    
+    public void UnlockUpgradeTier(int tier)
+    {
+        _unlockedTier = Mathf.Max(_unlockedTier, tier);
+    }
 }
