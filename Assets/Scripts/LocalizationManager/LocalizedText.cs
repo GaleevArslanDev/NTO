@@ -1,38 +1,117 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections;
 
-// public class
-// localized text
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class LocalizedText : MonoBehaviour
 {
-
-    // localization manager 
-    [Header("Components:")]
-    [Tooltip("Reference to localization manager")]
-    [SerializeField] private LocalizationManager localizationManager;
-
-    // text
-    [Tooltip("Reference to text field for output")]
-    [SerializeField] private Text text;
-
-    // name in localization file
-    [Header("Parameters:")]
-    [Tooltip("String name in localization file")]
-    [SerializeField] private string name;
-
-    private void Awake(){
-        // if no localization manager, find it on scene
-        if(this.localizationManager == null){
-            this.localizationManager = FindObjectOfType<LocalizationManager>();
-            Debug.LogWarning("Preferably set link to localization manager before starting the game.");
+    [Header("Localization")]
+    [SerializeField] private string localizationKey;
+    [SerializeField] private bool useRandomVariants = false;
+    [SerializeField] private bool updateOnLanguageChange = true;
+    
+    [Header("Dynamic Values")]
+    [SerializeField] private bool hasDynamicValues = false;
+    
+    private TextMeshProUGUI textComponent;
+    private object[] dynamicValues;
+    
+    private void Awake()
+    {
+        textComponent = GetComponent<TextMeshProUGUI>();
+        
+        if (updateOnLanguageChange && LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
         }
     }
-
-    private void Start(){
-        // get localizated text
-        string str = this.localizationManager.GetValue(this.name);
-        // set text
-        this.text.text = str;
+    
+    private void Start()
+    {
+        UpdateText();
     }
-
+    
+    private void OnDestroy()
+    {
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+        }
+    }
+    
+    public void SetDynamicValues(params object[] values)
+    {
+        dynamicValues = values;
+        UpdateText();
+    }
+    
+    public void UpdateDynamicValue(int index, object value)
+    {
+        if (dynamicValues != null && index < dynamicValues.Length)
+        {
+            dynamicValues[index] = value;
+            UpdateText();
+        }
+    }
+    
+    private void OnLanguageChanged(string languageCode)
+    {
+        UpdateText();
+    }
+    
+    private void UpdateText()
+    {
+        if (LocalizationManager.Instance == null || string.IsNullOrEmpty(localizationKey))
+            return;
+        
+        string localizedText;
+        
+        if (useRandomVariants)
+        {
+            localizedText = LocalizationManager.Instance.GetRandomString(localizationKey);
+        }
+        else
+        {
+            localizedText = LocalizationManager.Instance.GetString(localizationKey);
+        }
+        
+        // Применяем динамические значения если есть
+        if (hasDynamicValues && dynamicValues != null && dynamicValues.Length > 0)
+        {
+            try
+            {
+                localizedText = string.Format(localizedText, dynamicValues);
+            }
+            catch (System.FormatException)
+            {
+                Debug.LogWarning($"Format error in localized text: {localizationKey}");
+            }
+        }
+        
+        textComponent.text = localizedText;
+        
+        // Автоматическая подстройка шрифта под язык
+        AdjustFontForLanguage();
+    }
+    
+    private void AdjustFontForLanguage()
+    {
+        var currentLang = LocalizationManager.Instance.GetCurrentLanguage();
+        
+        // Пример: для русского языка используем другой шрифт если нужно
+        if (currentLang == "ru-RU")
+        {
+            // Можно загрузить кириллический шрифт
+            // textComponent.font = Resources.Load<TMP_FontAsset>("Fonts/RussianFont");
+        }
+    }
+    
+    // Метод для смены ключа во время выполнения
+    public void SetKey(string newKey, bool updateImmediately = true)
+    {
+        localizationKey = newKey;
+        if (updateImmediately)
+            UpdateText();
+    }
 }

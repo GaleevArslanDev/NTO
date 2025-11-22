@@ -1,123 +1,207 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using Structs;
+using System.Globalization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using String = Structs.String;
+using Structs;
 
-// public class
-// localization manager
 public class LocalizationManager : MonoBehaviour
 {
-    // default localization code
-    [Header("Parameters:")] [Tooltip("Localization Code (ru-Ru, en-US, ...)")]
-    public string localizationCode;
-
-    // player prefs key
-    [Tooltip("PlayerPrefs Key")] [SerializeField]
-    private string saveLocalizationCodeKey;
-
-    // localisations
-    [Tooltip("Available Localizations")] [SerializeField]
-    private List<Localization> localizations;
-
-    // strings
-    [Tooltip("Loaded Strings For Selcted Localization")] [SerializeField]
-    private List<String> strings;
-
+    public static LocalizationManager Instance { get; private set; }
+    
+    [Header("Settings")]
+    [SerializeField] private string defaultLanguage = "ru-RU";
+    [SerializeField] private string saveKey = "SelectedLanguage";
+    
+    [Header("Available Languages")]
+    [SerializeField] private List<Localization> availableLanguages = new List<Localization>
+    {
+        new Localization { LocalizationCode = "ru-RU", StringsFileName = "ru_RU" },
+        new Localization { LocalizationCode = "en-US", StringsFileName = "en_US" }
+    };
+    
+    private Dictionary<string, Dictionary<string, string>> localizationData = new Dictionary<string, Dictionary<string, string>>();
+    private string currentLanguage;
+    
+    // Событие при смене языка
+    public event Action<string> OnLanguageChanged;
+    
     private void Awake()
     {
-        // if player prefs was, get it
-        if (PlayerPrefs.HasKey(saveLocalizationCodeKey))
-            localizationCode = PlayerPrefs.GetString(saveLocalizationCodeKey);
-
-        // if localization not exist, log error
-        if (localizations.Exists(l => l.LocalizationCode == localizationCode) == false)
-            throw new Exception(
-                "Localization in localization list not found. Please, check this localization code: " +
-                localizationCode + ". It isn`t correct!");
-
-        // setting vars
-        var localization = localizations.Find(l => l.LocalizationCode == localizationCode);
-        var resourceName = "Values/" + localization.StringsFileName;
-        var xml = Resources.Load<TextAsset>(resourceName);
-
-        var doc_txt = "";
-
-        // if xml var not set, check for mods
-        if (xml)
+        if (Instance == null)
         {
-            doc_txt = xml.text;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            Initialize();
         }
         else
         {
-            throw new Exception("Localization file not found. Please, check this file: " + resourceName);
+            Destroy(gameObject);
         }
-
-        var document = XDocument.Parse(doc_txt);
-        var elements = document.Root.Elements("string").ToList();
-
-        // if elements not found, log error
-        if (elements.Count == 0)
-            throw new Exception("String tags are not found. Check \"Resources/" + resourceName +
-                                "\" file again. (Examle of string tag: <string name=\"str_name\">String value</string>");
-
-        foreach (var element in elements)
+    }
+    
+    private void Initialize()
+    {
+        // Загрузка сохраненного языка или использование языка системы
+        currentLanguage = PlayerPrefs.GetString(saveKey, GetSystemLanguage());
+        
+        if (!availableLanguages.Exists(lang => lang.LocalizationCode == currentLanguage))
         {
-            if (element.Attribute("name") == null)
-                throw new Exception(
-                    "Incorrect format of values. Please, check the format of \"string\" tags. They have to include name attribute. Example: <string name=\"str_name\">String value</string>");
-
-            strings.Add(new String
-            {
-                Name = element.Attribute("name").Value,
-                Value = element.Value
-            });
+            currentLanguage = defaultLanguage;
+        }
+        
+        LoadLanguage(currentLanguage);
+    }
+    
+    private string GetSystemLanguage()
+    {
+        switch (Application.systemLanguage)
+        {
+            case SystemLanguage.Russian: return "ru-RU";
+            case SystemLanguage.English: return "en-US";
+            default: return defaultLanguage;
         }
     }
-
-    private void OnDestroy()
+    
+    public void LoadLanguage(string languageCode)
     {
-        PlayerPrefs.SetString(saveLocalizationCodeKey, localizationCode);
+        if (!availableLanguages.Exists(lang => lang.LocalizationCode == languageCode))
+        {
+            Debug.LogError($"Language {languageCode} not found!");
+            return;
+        }
+        
+        // Если язык уже загружен, просто переключаемся
+        if (localizationData.ContainsKey(languageCode))
+        {
+            currentLanguage = languageCode;
+            PlayerPrefs.SetString(saveKey, languageCode);
+            OnLanguageChanged?.Invoke(languageCode);
+            return;
+        }
+        
+        // Загрузка нового языка
+        var localization = availableLanguages.Find(lang => lang.LocalizationCode == languageCode);
+        var xml = Resources.Load<TextAsset>($"Localization/{localization.StringsFileName}");
+        
+        if (xml == null)
+        {
+            Debug.LogError($"Localization file for {languageCode} not found!");
+            return;
+        }
+        
+        try
+        {
+            var document = System.Xml.Linq.XDocument.Parse(xml.text);
+            var stringElements = document.Root.Elements("string");
+            
+            var languageDict = new Dictionary<string, string>();
+            
+            foreach (var element in stringElements)
+            {
+                string name = element.Attribute("name")?.Value;
+                string value = element.Value;
+                
+                if (!string.IsNullOrEmpty(name))
+                {
+                    languageDict[name] = value;
+                }
+            }
+            
+            localizationData[languageCode] = languageDict;
+            currentLanguage = languageCode;
+            PlayerPrefs.SetString(saveKey, languageCode);
+            OnLanguageChanged?.Invoke(languageCode);
+            
+            Debug.Log($"Language {languageCode} loaded successfully with {languageDict.Count} strings");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error loading language {languageCode}: {e.Message}");
+        }
     }
-
-    private void OnApplicationPause(bool pause)
+    
+    public string GetString(string key, params object[] args)
     {
-        if (Application.platform == RuntimePlatform.Android)
-            PlayerPrefs.SetString(saveLocalizationCodeKey, localizationCode);
+        if (localizationData.TryGetValue(currentLanguage, out var languageDict))
+        {
+            if (languageDict.TryGetValue(key, out var value))
+            {
+                // Поддержка плейсхолдеров {0}, {1}, etc.
+                if (args.Length > 0)
+                {
+                    try
+                    {
+                        return string.Format(value, args);
+                    }
+                    catch (FormatException)
+                    {
+                        Debug.LogWarning($"Format error in localized string: {key}");
+                        return value;
+                    }
+                }
+                return value;
+            }
+        }
+        
+        Debug.LogWarning($"Localization key not found: {key} in language {currentLanguage}");
+        return $"[{key}]";
     }
-
-    public void SetLocalization(string code)
+    
+    // Метод для вариативности фраз (случайный выбор из доступных вариантов)
+    public string GetRandomString(string baseKey)
     {
-        localizationCode = code;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (localizationData.TryGetValue(currentLanguage, out var languageDict))
+        {
+            // Ищем варианты: baseKey, baseKey_1, baseKey_2, etc.
+            var variants = new List<string>();
+            
+            // Основной ключ
+            if (languageDict.TryGetValue(baseKey, out var mainVariant))
+            {
+                variants.Add(mainVariant);
+            }
+            
+            // Дополнительные варианты
+            int index = 1;
+            while (languageDict.TryGetValue($"{baseKey}_{index}", out var variant))
+            {
+                variants.Add(variant);
+                index++;
+            }
+            
+            if (variants.Count > 0)
+            {
+                return variants[UnityEngine.Random.Range(0, variants.Count)];
+            }
+        }
+        
+        return $"[{baseKey}]";
     }
-
-    public string GetLocalization()
+    
+    // Получение списка доступных языков
+    public List<Localization> GetAvailableLanguages()
     {
-        return localizationCode;
+        return new List<Localization>(availableLanguages);
     }
-
-    public List<Localization> GetLocalizations()
+    
+    public string GetCurrentLanguage()
     {
-        return localizations;
+        return currentLanguage;
     }
-
-    public string GetValue(string name)
+    
+    public void SetLanguage(string languageCode)
     {
-        if (name == "") return "";
-
-        var str = strings.Find(s => s.Name == name);
-
-        return str.Value;
+        LoadLanguage(languageCode);
     }
-
-    private string ReadTextFile(string filePath)
+    
+    // Получение отображаемого имени языка
+    public string GetLanguageDisplayName(string languageCode)
     {
-        var inpStm = new StreamReader(filePath);
-        return inpStm.ReadToEnd();
+        switch (languageCode)
+        {
+            case "ru-RU": return "Русский";
+            case "en-US": return "English";
+            default: return languageCode;
+        }
     }
-}
+} 
