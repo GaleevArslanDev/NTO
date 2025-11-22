@@ -15,10 +15,8 @@ public class InventoryUI : MonoBehaviour
     
     void Start()
     {
-        // Подписываемся на событие изменения инвентаря
         Inventory.Instance.OnInventoryChanged += UpdateItemDisplay;
         
-        // Инициализируем отображение
         InitializeUI();
     }
     
@@ -30,14 +28,12 @@ public class InventoryUI : MonoBehaviour
     
     private void InitializeUI()
     {
-        // Очищаем контейнер
         foreach (Transform child in itemsContainer)
         {
             Destroy(child.gameObject);
         }
         slotUIs.Clear();
         
-        // Создаем слоты для всех существующих предметов
         var allItems = Inventory.Instance.GetAllItems();
         foreach (var item in allItems)
         {
@@ -51,19 +47,16 @@ public class InventoryUI : MonoBehaviour
         {
             if (count <= 0)
             {
-                // Удаляем слот если предметов нет
                 Destroy(slotUIs[itemType].gameObject);
                 slotUIs.Remove(itemType);
             }
             else
             {
-                // Обновляем существующий слот
                 slotUIs[itemType].UpdateCount(count);
             }
         }
         else if (count > 0)
         {
-            // Создаем новый слот
             CreateSlotUI(itemType, count);
         }
     }
@@ -75,7 +68,6 @@ public class InventoryUI : MonoBehaviour
         
         if (slotUI != null && itemDatabase != null)
         {
-            // Получаем данные из базы
             ItemData itemData = itemDatabase.GetItemData(itemType);
             Sprite icon = itemData?.Icon;
             Color color = itemData?.ParticleColor ?? Color.white;

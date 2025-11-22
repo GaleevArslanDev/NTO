@@ -96,22 +96,13 @@ public class TownHall : MonoBehaviour
 
     private void CompleteUpgrade()
     {
-        // Отключаем предыдущую модель
         if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
             _levels[_currentLevel - 1].LevelModel.SetActive(false);
 
         _currentLevel++;
         
-        // Обновляем открытый тир
-        if (_currentLevel - 1 < _levels.Length)
-        {
-            _unlockedTier = Mathf.Max(_unlockedTier, _levels[_currentLevel - 1].UnlocksTechTier);
-        }
-        
-        // Включаем новую модель
         UpdateVisualModel();
         
-        // Применяем улучшения к другим зданиям
         ApplyBuildingUpgrades();
         
         _isUpgrading = false;

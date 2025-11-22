@@ -32,7 +32,6 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (itemData == null) return;
         
-        // Проверяем шанс спавна врага для этого типа предмета
         if (Random.value <= itemData.enemySpawnChance)
         {
             SpawnBeetleEnemies(itemData, spawnPosition);
@@ -41,12 +40,11 @@ public class EnemySpawnManager : MonoBehaviour
     
     private void SpawnBeetleEnemies(ItemData itemData, Vector3 spawnPosition)
     {
-        // Определяем количество врагов для спавна (не больше максимального)
         int enemyCount = Random.Range(1, Mathf.Min(itemData.maxSpawnCount, maxEnemiesPerSpawn) + 1);
         
         for (int i = 0; i < enemyCount; i++)
         {
-            StartCoroutine(SpawnBeetleWithDelay(spawnPosition, i * 0.3f)); // Задержка между спавнами
+            StartCoroutine(SpawnBeetleWithDelay(spawnPosition, i * 0.3f));
         }
     }
     
@@ -60,11 +58,9 @@ public class EnemySpawnManager : MonoBehaviour
             yield break;
         }
         
-        // Вычисляем позицию спавна в радиусе от позиции предмета
         Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
         Vector3 spawnPoint = spawnPosition + new Vector3(randomCircle.x, spawnHeight, randomCircle.y);
         
-        // Проверяем, чтобы точка была на навмеше
         if (UnityEngine.AI.NavMesh.SamplePosition(spawnPoint, out UnityEngine.AI.NavMeshHit hit, spawnRadius, UnityEngine.AI.NavMesh.AllAreas))
         {
             spawnPoint = hit.position;
@@ -78,8 +74,7 @@ public class EnemySpawnManager : MonoBehaviour
             activeEnemies.Add(enemy);
         }
         
-        // Эффект появления (можно добавить частицы)
-        Debug.Log($"Beetle spawned at {spawnPoint}");
+        //Debug.Log($"Beetle spawned at {spawnPoint}");
     }
     
     public void RemoveEnemy(Enemy enemy)
