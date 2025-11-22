@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Главное меню -->
+    <string name="menu_play">Играть</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_quit">Выход</string>
+
+    <!-- Настройки -->
+    <string name="settings_language">Язык</string>
+    <string name="settings_volume">Громкость</string>
+
+    <!-- Игровые тексты -->
+    <string name="game_pickup_item">Подобран: {0}</string>
+    <string name="game_inventory">Инвентарь</string>
+    <string name="game_collected">Собрано: {0} {1}</string>
+
+    <!-- Вариативные фразы -->
+    <string name="npc_greeting">Приветствую, путник!</string>
+    <string name="npc_greeting_1">Добро пожаловать!</string>
+    <string name="npc_greeting_2">Рад видеть тебя!</string>
+
+    <!-- Предметы -->
+    <string name="item_crystal_red">Красный кристалл</string>
+    <string name="item_crystal_blue">Синий кристалл</string>
+    <string name="item_stone">Камень</string>
+    <string name="item_wood">Дерево</string>
+    <string name="item_metal">Металл</string>
+</resources>
