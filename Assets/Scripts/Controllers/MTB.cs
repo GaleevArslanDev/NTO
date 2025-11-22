@@ -11,6 +11,7 @@ public class MTB : MonoBehaviour
     [SerializeField] private float vacuumRadius = 5f;
     [SerializeField] private LayerMask itemLayer = 1;
     [SerializeField] private ParticleSystem vacuumParticles;
+    [SerializeField] private float vacuumSpeed = 10f;
     
     [Header("Animation")]
     [SerializeField] private float collectionDelay = 0.1f;
@@ -37,6 +38,10 @@ public class MTB : MonoBehaviour
     private CollectableItem currentTargetItem;
     private float nextFireTime;
     private bool isReloading = false;
+    private float baseWeaponDamage;
+    private float baseVacuumRadius;
+    private float baseWeaponFireRate;
+    private float baseVacuumSpeed;
     
     void Awake()
     {
@@ -52,6 +57,11 @@ public class MTB : MonoBehaviour
     
     void Start()
     {
+        baseWeaponDamage = weaponDamage;
+        baseWeaponFireRate = fireRate;
+        baseVacuumRadius = vacuumRadius;
+        baseVacuumSpeed = vacuumSpeed;
+        
         // Настройка лазерного луча
         if (laserBeam != null)
         {
@@ -226,6 +236,14 @@ public class MTB : MonoBehaviour
         }
         
         laserBeam.enabled = false;
+    }
+    
+    public void UpdateStats(float damageMult, float miningSpeedMult, float collectionRangeMult, float weaponFireRateMult)
+    {
+        weaponDamage = baseWeaponDamage * damageMult;
+        fireRate = baseWeaponFireRate * weaponFireRateMult;
+        vacuumRadius = baseVacuumRadius * collectionRangeMult;
+        vacuumSpeed = baseVacuumSpeed * miningSpeedMult;
     }
     
     private IEnumerator VacuumRoutine(CollectableItem item)

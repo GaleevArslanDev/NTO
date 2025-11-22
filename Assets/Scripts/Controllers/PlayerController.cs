@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private float standingHeight;
     private Vector3 standingCameraPosition;
     private float currentSpeed;
+    private TechTreeUI techTree;
+    private QuestBoardUI questBoard;
+    private TownHallUI townHall;
 
     private void Awake()
     {
@@ -39,6 +42,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        techTree = FindObjectOfType<TechTreeUI>();
+        questBoard = FindObjectOfType<QuestBoardUI>();
+        townHall = FindObjectOfType<TownHallUI>();
         Cursor.lockState = CursorLockMode.Locked;
         
         standingHeight = characterController.height;
@@ -48,9 +54,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsAnyUIOpen()) return;
+        
         HandleMovement();
         HandleCamera();
         HandleCrouch();
+    }
+    
+    private bool IsAnyUIOpen()
+    {
+        return (techTree != null && techTree.isUIOpen) ||
+             (questBoard != null && questBoard.isUIOpen) ||
+             (townHall != null && townHall.isUiOpen);
     }
 
     void HandleMovement()
@@ -85,7 +100,6 @@ public class PlayerController : MonoBehaviour
     void HandleCamera()
     {
         if (playerCamera == null) return;
-        if (Cursor.lockState == CursorLockMode.None) return;
         
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
