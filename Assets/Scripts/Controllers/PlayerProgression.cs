@@ -46,26 +46,26 @@ public class PlayerProgression : MonoBehaviour
     {
         TechNode node = techTree.nodes.Find(n => n.nodeId == nodeId);
         if (node == null) return false;
-        
-        // Проверяем уровень ратуши (тир технологий)
+    
+        // Проверяем уровень ратуши
         int currentTier = TownHall.Instance.GetUnlockedTechTier();
         if (node.tier > currentTier)
         {
             Debug.Log($"Для этой технологии требуется уровень ратуши, открывающий {node.tier} тир");
             return false;
         }
-        
+    
         // Проверяем пройдены ли пререквизиты
         foreach (string prereq in node.prerequisiteNodes)
         {
-            if (!unlockedTechs.ContainsKey(prereq) || !unlockedTechs[prereq])
+            if (!IsTechUnlocked(prereq))
                 return false;
         }
-        
+    
         // Проверяем хватает ли ресурсов
         if (!Inventory.Instance.HasResources(node.unlockCost))
             return false;
-        
+    
         return true;
     }
     
@@ -161,6 +161,22 @@ public class PlayerProgression : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+    
+    public void UnlockFarmPlot(string plotId, ItemType resourceType, float productionRate)
+    {
+        if (FarmManager.Instance != null)
+        {
+            FarmManager.Instance.UnlockFarmPlot(plotId, resourceType, productionRate);
+        }
+    }
+
+    public void UpgradeFarmPlot(string plotId, float newProductionRate)
+    {
+        if (FarmManager.Instance != null)
+        {
+            FarmManager.Instance.UpgradeFarmPlot(plotId, newProductionRate);
         }
     }
     

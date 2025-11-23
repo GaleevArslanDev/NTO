@@ -27,10 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool isCrouching = false;
     private float standingHeight;
     private Vector3 standingCameraPosition;
-    private float currentSpeed;
-    private TechTreeUI techTree;
-    private QuestBoardUI questBoard;
-    private TownHallUI townHall;
+    private float currentSpeed; 
     public static PlayerController Instance { get; private set; }
 
     private void Awake()
@@ -53,9 +50,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        techTree = FindObjectOfType<TechTreeUI>();
-        questBoard = FindObjectOfType<QuestBoardUI>();
-        townHall = FindObjectOfType<TownHallUI>();
         Cursor.lockState = CursorLockMode.Locked;
         
         standingHeight = characterController.height;
@@ -74,9 +68,7 @@ public class PlayerController : MonoBehaviour
     
     private bool IsAnyUIOpen()
     {
-        return (techTree != null && techTree.isUIOpen) ||
-             (questBoard != null && questBoard.isUIOpen) ||
-             (townHall != null && townHall.isUiOpen);
+        return UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen();
     }
 
     void HandleMovement()

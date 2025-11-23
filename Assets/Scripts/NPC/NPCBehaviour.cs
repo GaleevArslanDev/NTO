@@ -24,21 +24,18 @@ public class NPCBehaviour : MonoBehaviour
         relationshipManager = FindObjectOfType<RelationshipManager>();
         interaction = GetComponent<NPCInteraction>();
         
-        // Настройка из NPCDataConfig
-        if (npcDataConfig != null)
+        // Настройка NPCInteraction из NPCDataConfig
+        if (npcDataConfig != null && interaction != null)
         {
+            // Создаем runtime данные для взаимодействия
+            interaction.NPCData = CreateRuntimeNPCData();
+            interaction.dialogueTrees = npcDataConfig.dialogueTrees;
+            interaction.portrait = npcDataConfig.portrait;
+            interaction.defaultVoice = npcDataConfig.defaultVoice;
+            
             if (agent != null)
             {
                 agent.speed = npcDataConfig.movementSpeed;
-            }
-            
-            // Настройка NPCInteraction
-            if (interaction != null)
-            {
-                interaction.NPCData = CreateRuntimeNPCData();
-                interaction.dialogueTrees = npcDataConfig.dialogueTrees;
-                interaction.portrait = npcDataConfig.portrait;
-                interaction.defaultVoice = npcDataConfig.defaultVoice;
             }
         }
     }

@@ -81,19 +81,19 @@ public class DialogueUI : MonoBehaviour
     {
         dialoguePanel.SetActive(true);
         StartCoroutine(FadeIn());
-        
-        Cursor.lockState = CursorLockMode.None;
-        if (PlayerController.Instance != null)
-            PlayerController.Instance.SetControlEnabled(false);
-    }
     
+        // Используем UIManager
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIOpen();
+    }
+
     public void HideDialogue()
     {
         StartCoroutine(FadeOut());
-        
-        Cursor.lockState = CursorLockMode.Locked;
-        if (PlayerController.Instance != null)
-            PlayerController.Instance.SetControlEnabled(true);
+    
+        // Используем UIManager
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIClose();
     }
     
     private IEnumerator FadeIn()

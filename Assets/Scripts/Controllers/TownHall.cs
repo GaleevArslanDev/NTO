@@ -6,6 +6,9 @@ public class TownHall : MonoBehaviour
 {
     public static TownHall Instance { get; private set; }
     
+    [Header("Tech Tree")]
+    public TechTree townHallTechTree;
+    
     [Header("Town Hall Settings")]
     [SerializeField] private int _maxLevel = 5;
     [SerializeField] private TownHallLevel[] _levels;
@@ -32,6 +35,26 @@ public class TownHall : MonoBehaviour
         [Header("Unlocks")]
         public BuildingUpgrade[] BuildingUpgrades;
         public int UnlocksTechTier = 1; // Какой тир технологий открывает этот уровень
+    }
+    
+    [System.Serializable]
+    public class TownHallLevelUnlock
+    {
+        public int level;
+        public string[] unlockedBuildings;
+        public int unlockedTechTier;
+    }
+    
+    public TownHallLevelUnlock[] levelUnlocks;
+    
+    public TownHallLevelUnlock GetUnlocksForLevel(int level)
+    {
+        foreach (var unlock in levelUnlocks)
+        {
+            if (unlock.level == level)
+                return unlock;
+        }
+        return null;
     }
 
     [System.Serializable]

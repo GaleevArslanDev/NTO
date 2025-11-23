@@ -161,72 +161,74 @@ public class DialogueManager : MonoBehaviour
     }
     
     private void ApplyOptionConsequences(DialogueOption option)
-{
-    var npcData = currentNPC.NPCData;
-    var playerData = PlayerData.Instance;
-    
-    // ОТЛАДКА: Выводим информацию о выборе
-    Debug.Log($"   Обработка выбора диалога:");
-    Debug.Log($"   NPC: {npcData.npcName} (ID: {npcData.npcID})");
-    Debug.Log($"   Опция: '{option.optionText}'");
-    Debug.Log($"   Изменение отношений: {option.relationshipChange}");
-    
-    // Изменяем отношения
-    if (option.relationshipChange != 0)
     {
-        int finalChange = CalculateRelationshipImpact(npcData, option, playerData);
-        Debug.Log($"   Финальное изменение: {finalChange} (с учетом личности)");
+        if (currentNPC == null) return;
         
-        RelationshipManager.Instance.ModifyRelationship(npcData.npcID, playerData.playerID, finalChange);
+        var npcData = currentNPC.NPCData;
+        var playerData = PlayerData.Instance;
         
-        // Проверяем результат
-        int newRelationship = RelationshipManager.Instance.GetRelationshipWithPlayer(npcData.npcID);
-        Debug.Log($"   Новые отношения: {newRelationship}/100");
-    }
-    else
-    {
-        Debug.Log($"   Изменение отношений равно 0!");
-    }
-    
-    // Добавляем память - ИСПРАВЛЕННЫЙ ВЫЗОВ (3 параметра)
-    if (!string.IsNullOrEmpty(option.memoryToAdd))
-    {
-        RelationshipManager.Instance.AddMemory(
-            npcData.npcID, 
-            option.memoryToAdd, 
-            option.relationshipChange
-        );
-        Debug.Log($"   Добавлена память: {option.memoryToAdd}");
-    }
-    
-    // Запускаем квест
-    if (!string.IsNullOrEmpty(option.questToStart))
-    {
-        QuestManager.Instance?.StartQuest(option.questToStart);
-        Debug.Log($"   Запущен квест: {option.questToStart}");
-    }
-    
-    // Устанавливаем флаги
-    if (option.setFlags != null && option.setFlags.Length > 0)
-    {
-        foreach (string flag in option.setFlags)
+        // ОТЛАДКА: Выводим информацию о выборе
+        Debug.Log($"   Обработка выбора диалога:");
+        Debug.Log($"   NPC: {npcData.npcName} (ID: {npcData.npcID})");
+        Debug.Log($"   Опция: '{option.optionText}'");
+        Debug.Log($"   Изменение отношений: {option.relationshipChange}");
+        
+        // Изменяем отношения
+        if (option.relationshipChange != 0)
         {
-            playerData.SetDialogueFlag(npcData.npcID, flag);
-            Debug.Log($"   Установлен флаг: {flag}");
+            int finalChange = CalculateRelationshipImpact(npcData, option, playerData);
+            Debug.Log($"   Финальное изменение: {finalChange} (с учетом личности)");
+            
+            RelationshipManager.Instance.ModifyRelationship(npcData.npcID, playerData.playerID, finalChange);
+            
+            // Проверяем результат
+            int newRelationship = RelationshipManager.Instance.GetRelationshipWithPlayer(npcData.npcID);
+            Debug.Log($"   Новые отношения: {newRelationship}/100");
         }
+        else
+        {
+            Debug.Log($"   Изменение отношений равно 0!");
+        }
+        
+        // Добавляем память
+        if (!string.IsNullOrEmpty(option.memoryToAdd))
+        {
+            RelationshipManager.Instance.AddMemory(
+                npcData.npcID, 
+                option.memoryToAdd, 
+                option.relationshipChange
+            );
+            Debug.Log($"   Добавлена память: {option.memoryToAdd}");
+        }
+        
+        // Запускаем квест
+        if (!string.IsNullOrEmpty(option.questToStart))
+        {
+            QuestManager.Instance?.StartQuest(option.questToStart);
+            Debug.Log($"   Запущен квест: {option.questToStart}");
+        }
+        
+        // Устанавливаем флаги
+        if (option.setFlags != null && option.setFlags.Length > 0)
+        {
+            foreach (string flag in option.setFlags)
+            {
+                playerData.SetDialogueFlag(npcData.npcID, flag);
+                Debug.Log($"   Установлен флаг: {flag}");
+            }
+        }
+        
+        // Сохраняем историю диалога
+        playerData.RecordDialogueChoice(
+            npcData.npcID, 
+            currentTree.treeName, 
+            currentNode.nodeID, 
+            option.optionText,
+            option.setFlags
+        );
+        
+        Debug.Log($"   Выбор обработан");
     }
-    
-    // Сохраняем историю диалога
-    playerData.RecordDialogueChoice(
-        npcData.npcID, 
-        currentTree.treeName, 
-        currentNode.nodeID, 
-        option.optionText,
-        option.setFlags
-    );
-    
-    Debug.Log($"   Выбор обработан");
-}
     
     private int CalculateRelationshipImpact(NPCData npc, DialogueOption option, PlayerData player)
     {

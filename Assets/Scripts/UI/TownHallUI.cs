@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class TownHallUI : MonoBehaviour
 {
+    public static TownHallUI Instance { get; private set; }
+    
     [Header("UI References")]
     [SerializeField] private GameObject _dialogPanel;
     [SerializeField] private TextMeshProUGUI _titleText;
@@ -25,6 +27,18 @@ public class TownHallUI : MonoBehaviour
     private TownHall _townHall;
     public bool isUiOpen = false;
 
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         _upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
@@ -35,18 +49,24 @@ public class TownHallUI : MonoBehaviour
 
     public void ShowDialog(TownHall townHall)
     {
-        Cursor.lockState = CursorLockMode.None;
         isUiOpen = true;
         _townHall = townHall;
         UpdateDialog();
         _dialogPanel.SetActive(true);
+
+        // Используем UIManager
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIOpen();
     }
 
     public void HideDialog()
     {
         isUiOpen = false;
-        Cursor.lockState = CursorLockMode.Locked;
         _dialogPanel.SetActive(false);
+
+        // Используем UIManager
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIClose();
     }
 
     private void UpdateDialog()

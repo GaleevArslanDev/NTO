@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class QuestEntryUI : MonoBehaviour
 {
@@ -9,12 +10,12 @@ public class QuestEntryUI : MonoBehaviour
     public TMP_Text descriptionText;
     public TMP_Text progressText;
     public TMP_Text rewardsText;
-    public Button acceptButton;
-    public Button completeButton;
+    public Button selectButton;
     
     private QuestSystem.Quest quest;
+    public event Action<QuestSystem.Quest> OnQuestSelected;
     
-    public void Initialize(QuestSystem.Quest quest, bool showProgress)
+    public void Initialize(QuestSystem.Quest quest, bool showProgress, bool isNPCMode)
     {
         this.quest = quest;
         
@@ -39,21 +40,21 @@ public class QuestEntryUI : MonoBehaviour
         }
         rewardsText.text = rewardsString;
         
-        // Настраиваем кнопки
-        acceptButton.gameObject.SetActive(!quest.isActive && !quest.isCompleted);
-        completeButton.gameObject.SetActive(quest.isActive && !quest.isCompleted);
+        // Настраиваем кнопку выбора (только в режиме NPC)
+        selectButton.gameObject.SetActive(isNPCMode);
+        selectButton.onClick.AddListener(OnSelectClicked);
         
-        acceptButton.onClick.AddListener(OnAcceptClicked);
-        completeButton.onClick.AddListener(OnCompleteClicked);
+        // Добавляем обработчик клика на всю запись для режима просмотра
+        if (!isNPCMode)
+        {
+            Button entryButton = GetComponent<Button>();
+            if (entryButton == null) entryButton = gameObject.AddComponent<Button>();
+            entryButton.onClick.AddListener(OnSelectClicked);
+        }
     }
     
-    private void OnAcceptClicked()
+    private void OnSelectClicked()
     {
-        QuestSystem.Instance.AcceptQuest(quest.questId);
-    }
-    
-    private void OnCompleteClicked()
-    {
-        QuestSystem.Instance.CompleteQuest(quest.questId);
+        OnQuestSelected?.Invoke(quest);
     }
 }
