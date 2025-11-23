@@ -56,6 +56,12 @@ public class PlayerHealth : MonoBehaviour
             audioSource.PlayOneShot(damageSound);
         }
         
+        // Проверяем низкое здоровье
+        if (currentHealth < maxHealth * 0.3f)
+        {
+            AIAssistant.Instance?.OnPlayerLowHealth();
+        }
+        
         StartCoroutine(DamageEffect());
         UpdateHealthUI();
         

@@ -128,6 +128,8 @@ public class TownHall : MonoBehaviour
         
         ApplyBuildingUpgrades();
         
+        AIAssistant.Instance.OnBuildingUpgraded("TownHall");
+        
         _isUpgrading = false;
         OnUpgradeCompleted?.Invoke();
         OnLevelChanged?.Invoke(_currentLevel);

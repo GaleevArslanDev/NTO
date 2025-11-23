@@ -144,6 +144,11 @@ public class CollectableItem : MonoBehaviour
         {
             breakProgressUI.SetActive(false);
         }
+        
+        if (AIAssistant.Instance != null && Data != null)
+        {
+            AIAssistant.Instance.OnResourceCollected(Data.Type, 1);
+        }
 
         if (MTB.Instance != null)
         {

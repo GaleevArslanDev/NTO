@@ -333,6 +333,11 @@ public abstract class Enemy : MonoBehaviour
             EnemySpawnManager.Instance.RemoveEnemy(this);
         }
         
+        if (AIAssistant.Instance != null)
+        {
+            AIAssistant.Instance.OnEnemyKilled(this.GetType().Name);
+        }
+        
         EnemyDeath enemyDeath = GetComponent<EnemyDeath>();
         if (enemyDeath != null)
         {

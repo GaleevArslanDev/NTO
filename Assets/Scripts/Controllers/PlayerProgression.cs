@@ -92,7 +92,13 @@ public class PlayerProgression : MonoBehaviour
         SaveTechProgress();
     
         Debug.Log($"Технология разблокирована: {node.nodeName}");
-        return true; // Возвращаем true при успешной разблокировке
+        
+        if (AIAssistant.Instance != null)
+        {
+            AIAssistant.Instance.OnTechUnlocked(node.nodeName);
+        }
+        
+        return true;
     }
     
     private void ApplyTechEffects(TechNode node)
