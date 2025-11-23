@@ -18,7 +18,6 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     
     public void UpdateCount(int newCount)
     {
-        // Обновляем описание с новым количеством
         description = description.Substring(0, description.LastIndexOf('\n') + 1) + $"Count: {newCount}";
         
         if (currentTooltip != null)
@@ -43,7 +42,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             currentTooltip = Instantiate(tooltipPrefab, transform);
             currentTooltip.transform.SetAsLastSibling();
-            currentTooltip.transform.localPosition = new Vector3(0, 60, 0); // Смещаем немного выше
+            currentTooltip.transform.localPosition = new Vector3(0, 60, 0);
             UpdateTooltipText();
         }
     }

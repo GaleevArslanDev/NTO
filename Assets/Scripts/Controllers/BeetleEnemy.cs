@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class BeetleEnemy : Enemy
 {
+    // Beetle Specific Settings
     [Header("Beetle Specific Settings")]
     public float chargeDamageMultiplier = 1.5f;
     public float chargeSpeedMultiplier = 1.5f;
     public float chargeCooldown = 5f;
     public float chargeWindupTime = 0.5f;
     
+    // State Variables
     private bool isCharging = false;
     private float lastChargeTime;
     private float originalSpeed;
     private float originalDamage;
     
-    // Анимационные хэши для специфичных анимаций жука
+    // Animator Hashes
     private readonly int chargeHash = Animator.StringToHash("Charge");
     private readonly int chargeAttackHash = Animator.StringToHash("ChargeAttack");
     
@@ -22,16 +24,15 @@ public class BeetleEnemy : Enemy
     {
         base.Awake();
         
-        // Сохраняем оригинальные значения
         originalSpeed = movementSpeed;
         originalDamage = damage;
     }
+    
     
     protected override void UpdateEnemyBehavior()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         
-        // Проверяем возможность заряда
         if (!isCharging && !isEmerging && !isDead && 
             Time.time - lastChargeTime >= chargeCooldown &&
             distanceToPlayer <= detectionRange && distanceToPlayer > attackRange)
@@ -58,7 +59,6 @@ public class BeetleEnemy : Enemy
     {
         if (isCharging)
         {
-            // Во время заряда просто продолжаем движение к игроку
             if (agent != null && agent.enabled)
             {
                 agent.isStopped = false;
@@ -78,22 +78,19 @@ public class BeetleEnemy : Enemy
         isCharging = true;
         lastChargeTime = Time.time;
     
-        // Увеличиваем скорость и урон
         if (agent != null && agent.enabled)
         {
             agent.speed = originalSpeed * chargeSpeedMultiplier;
-            agent.acceleration = acceleration * 2f; // Увеличиваем ускорение для заряда
+            agent.acceleration = acceleration * 2f;
         }
         damage = originalDamage * chargeDamageMultiplier;
     
-        // Запускаем анимацию заряда
         if (animator != null)
         {
             animator.SetTrigger(chargeHash);
             animator.SetBool(moveHash, true);
         }
     
-        // Завершаем заряд через время или при достижении цели
         StartCoroutine(ChargeRoutine());
     }
     
@@ -121,7 +118,6 @@ public class BeetleEnemy : Enemy
         
         isCharging = false;
         
-        // Восстанавливаем оригинальные значения
         if (agent != null)
         {
             agent.speed = originalSpeed;
@@ -131,9 +127,6 @@ public class BeetleEnemy : Enemy
     
     private void HandleChargeAttack()
     {
-        // Во время заряда атака происходит при столкновении
-        // Базовая логика движения уже обрабатывается в HandleChaseBehavior
-        
         if (animator != null)
         {
             animator.SetBool(moveHash, true);
@@ -142,12 +135,10 @@ public class BeetleEnemy : Enemy
         FacePlayer();
     }
     
-    // Переопределяем метод TakeDamage для прерывания заряда при получении урона
     public override void TakeDamage(float damageAmount, Vector3 hitPoint = default(Vector3))
     {
         base.TakeDamage(damageAmount, hitPoint);
         
-        // Прерываем заряд при получении урона
         if (isCharging)
         {
             EndCharge();
@@ -156,27 +147,20 @@ public class BeetleEnemy : Enemy
     
     protected override void OnDeath()
     {
-        // Останавливаем все инвоки
         CancelInvoke();
-        
-        // Специфичные эффекты смерти жука
-        // Например, разлет хитина или что-то подобное
     }
     
-    // Специфичная атака жука при заряде
     public void OnChargeAttackAnimationEvent()
     {
         if (!isCharging) return;
         
-        // Дополнительный урон или эффекты при атаке во время заряда
         if (Vector3.Distance(transform.position, player.position) <= attackRange * 1.5f)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(damage * 1.2f); // Дополнительный множитель
+                playerHealth.TakeDamage(damage * 1.2f);
                 
-                // Можно добавить отталкивание игрока
                 Rigidbody playerRb = player.GetComponent<Rigidbody>();
                 if (playerRb != null)
                 {

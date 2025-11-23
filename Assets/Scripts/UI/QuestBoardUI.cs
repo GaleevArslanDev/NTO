@@ -5,7 +5,10 @@ using TMPro;
 
 public class QuestBoardUI : MonoBehaviour
 {
+    public static QuestBoardUI Instance;
+    
     [Header("UI References")]
+    public GameObject questPanel;
     public GameObject questBoardPanel;
     public Transform availableQuestsContainer;
     public Transform activeQuestsContainer;
@@ -15,7 +18,28 @@ public class QuestBoardUI : MonoBehaviour
     [Header("Input Settings")]
     public KeyCode toggleKey = KeyCode.Q;
     
+    [Header("NPC Mode")]
+    public GameObject npcModePanel;
+    public Button acceptButton;
+    public Button completeButton;
+    public Button closeButton;
+    public TMP_Text npcModeTitle;
+    
+    private QuestSystem.Quest selectedQuest;
+    private bool isNPCMode = false;
     public bool isUIOpen = false;
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        
+        closeButton.onClick.AddListener(CloseQuestUI);
+        acceptButton.onClick.AddListener(AcceptSelectedQuest);
+        completeButton.onClick.AddListener(CompleteSelectedQuest);
+    }
     
     void Start()
     {
@@ -24,8 +48,8 @@ public class QuestBoardUI : MonoBehaviour
             QuestSystem.Instance.OnQuestsUpdated += RefreshQuestsUI;
         }
         
-        // Скрываем панель при старте
         questBoardPanel.SetActive(false);
+        npcModePanel.SetActive(false);
         
         RefreshQuestsUI();
     }
@@ -40,24 +64,59 @@ public class QuestBoardUI : MonoBehaviour
     
     void Update()
     {
-        // Обработка клавиши для открытия/закрытия
-        if (Input.GetKeyDown(toggleKey))
+        // Горячая клавиша для просмотра (только если не у NPC)
+        if (Input.GetKeyDown(toggleKey) && !isNPCMode && !isUIOpen)
         {
             ToggleQuestBoard();
         }
         
-        // ESC для закрытия
         if (isUIOpen && Input.GetKeyDown(KeyCode.Escape))
         {
-            CloseQuestBoard();
+            CloseQuestUI();
         }
     }
     
-    public void RefreshQuestsUI()
+    public void ShowQuestUI(bool npcMode = false, string npcName = "NPC")
     {
-        if (QuestSystem.Instance == null) return;
-        
+        isNPCMode = npcMode;
+        questPanel.SetActive(true);
+        npcModePanel.SetActive(npcMode);
+
+        if (npcMode && npcModeTitle != null)
+        {
+            npcModeTitle.text = $"Квесты - {npcName}";
+        }
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIOpen();
+
+        isUIOpen = true;
+        RefreshQuestsUI();
+    }
+    
+    public void CloseQuestUI()
+    {
+        questPanel.SetActive(false);
+        npcModePanel.SetActive(false);
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIClose();
+
+        isUIOpen = false;
+        isNPCMode = false;
+    }
+    
+    private void RefreshQuestsUI()
+    {
+        UpdateQuestsList();
+        UpdateActionButtons();
+    }
+    
+    private void UpdateQuestsList()
+    {
         ClearContainers();
+        
+        if (QuestSystem.Instance == null) return;
         
         // Доступные квесты
         foreach (var quest in QuestSystem.Instance.GetAvailableQuests())
@@ -78,13 +137,55 @@ public class QuestBoardUI : MonoBehaviour
         }
     }
     
+    private void AcceptSelectedQuest()
+    {
+        if (selectedQuest != null && !selectedQuest.isActive && isNPCMode)
+        {
+            QuestSystem.Instance.AcceptQuest(selectedQuest.questId);
+            RefreshQuestsUI();
+        }
+    }
+    
+    private void CompleteSelectedQuest()
+    {
+        if (selectedQuest != null && selectedQuest.isActive && isNPCMode)
+        {
+            QuestSystem.Instance.CompleteQuest(selectedQuest.questId);
+            RefreshQuestsUI();
+        }
+    }
+    
+    public void OnQuestSelected(QuestSystem.Quest quest)
+    {
+        selectedQuest = quest;
+        UpdateActionButtons();
+    }
+    
+    private void UpdateActionButtons()
+    {
+        if (selectedQuest != null && isNPCMode)
+        {
+            acceptButton.interactable = !selectedQuest.isActive && !selectedQuest.isCompleted;
+            completeButton.interactable = selectedQuest.isActive && !selectedQuest.isCompleted;
+            
+            acceptButton.GetComponentInChildren<TMP_Text>().text = 
+                selectedQuest.isCompleted ? "Завершено" : "Принять";
+        }
+        else
+        {
+            acceptButton.interactable = false;
+            completeButton.interactable = false;
+        }
+    }
+    
     private void CreateQuestEntry(QuestSystem.Quest quest, Transform container, bool showProgress)
     {
         GameObject entry = Instantiate(questEntryPrefab, container);
         QuestEntryUI entryUI = entry.GetComponent<QuestEntryUI>();
         if (entryUI != null)
         {
-            entryUI.Initialize(quest, showProgress);
+            entryUI.Initialize(quest, showProgress, isNPCMode);
+            entryUI.OnQuestSelected += OnQuestSelected;
         }
     }
     
@@ -121,12 +222,12 @@ public class QuestBoardUI : MonoBehaviour
     {
         questBoardPanel.SetActive(true);
         isUIOpen = true;
-        
-        // Разблокируем курсор
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        
-        // Обновляем квесты при открытии
+        isNPCMode = false;
+        npcModePanel.SetActive(false);
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIOpen();
+
         RefreshQuestsUI();
     }
     
@@ -134,9 +235,8 @@ public class QuestBoardUI : MonoBehaviour
     {
         questBoardPanel.SetActive(false);
         isUIOpen = false;
-        
-        // Возвращаем курсор в игровой режим
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIClose();
     }
 }

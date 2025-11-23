@@ -73,7 +73,6 @@ public class MTB : MonoBehaviour
             laserBeam.enabled = false;
         }
         
-        // Настройка индикатора перезарядки
         if (reloadSlider != null)
         {
             reloadSlider.gameObject.SetActive(true);
@@ -98,14 +97,12 @@ public class MTB : MonoBehaviour
         
         if (Time.time < nextFireTime)
         {
-            // Идет перезарядка
             float timeSinceLastShot = Time.time - (nextFireTime - fireRate);
             reloadProgress = timeSinceLastShot / fireRate;
             isReloading = true;
         }
         else
         {
-            // Готов к стрельбе
             reloadProgress = 1f;
             isReloading = false;
         }
@@ -134,10 +131,8 @@ public class MTB : MonoBehaviour
             newTarget = hit.collider.gameObject.GetComponent<CollectableItem>();
         }
         
-        // Если цель изменилась
         if (newTarget != currentTargetItem)
         {
-            // Останавливаем ломание предыдущей цели
             if (currentTargetItem != null)
             {
                 currentTargetItem.StopBreaking();
@@ -146,10 +141,9 @@ public class MTB : MonoBehaviour
             currentTargetItem = newTarget;
         }
         
-        // Управление ломанием предмета (ПКМ)
         if (currentTargetItem != null && !currentTargetItem.CanBeCollected)
         {
-            if (Input.GetMouseButton(1)) // Зажата ПКМ
+            if (Input.GetMouseButton(1))
             {
                 if (!currentTargetItem.IsBeingBroken)
                 {
@@ -165,7 +159,6 @@ public class MTB : MonoBehaviour
     
     private void HandleWeapon()
     {
-        // Стрельба по ЛКМ
         if (Input.GetMouseButtonDown(0) && Time.time >= nextFireTime && !isReloading)
         {
             Shoot();
@@ -178,22 +171,20 @@ public class MTB : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
     
-        // Визуализация лазерного луча
         ShowLaserBeam();
     
         if (Physics.Raycast(ray, out hit, weaponRange, enemyLayer))
         {
-            // Наносим урон врагу с передачей точки попадания
             Enemy enemy = hit.collider.GetComponent<Enemy>();
             if (enemy != null)
             {
                 enemy.TakeDamage(weaponDamage, hit.point);
-                Debug.Log($"Попали во врага! Нанесено урона: {weaponDamage}");
+                //Debug.Log($"Попали во врага! Нанесено урона: {weaponDamage}");
             }
         }
         else
         {
-            Debug.Log("Выстрел, но не попали в цель");
+            //Debug.Log("Выстрел, но не попали в цель");
         }
     }
     
@@ -212,9 +203,8 @@ public class MTB : MonoBehaviour
         
         while (elapsedTime < laserDuration)
         {
-            // Каждый кадр обновляем позиции луча
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 startPoint = transform.position; // Текущая позиция MTB
+            Vector3 startPoint = transform.position;
             Vector3 endPoint;
             
             RaycastHit hit;
@@ -227,12 +217,11 @@ public class MTB : MonoBehaviour
                 endPoint = ray.origin + ray.direction * weaponRange;
             }
             
-            // Обновляем позиции луча
             laserBeam.SetPosition(0, startPoint);
             laserBeam.SetPosition(1, endPoint);
             
             elapsedTime += Time.deltaTime;
-            yield return null; // Ждем следующий кадр
+            yield return null;
         }
         
         laserBeam.enabled = false;
@@ -250,14 +239,11 @@ public class MTB : MonoBehaviour
     {
         isVacuuming = true;
     
-        // Настройка цвета частиц в зависимости от предмета
         SetParticleColor(item.Data.ParticleColor);
         vacuumParticles.Play();
             
-        // Запуск сбора предмета
         item.StartCollection(transform);
             
-        // Задержка между сбором предметов
         yield return new WaitForSeconds(collectionDelay);
     
         isVacuuming = false;

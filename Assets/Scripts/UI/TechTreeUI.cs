@@ -5,6 +5,8 @@ using TMPro;
 
 public class TechTreeUI : MonoBehaviour
 {
+    public static TechTreeUI Instance;
+    
     [Header("UI References")]
     public GameObject techTreePanel;
     public Transform nodesContainer;
@@ -30,13 +32,39 @@ public class TechTreeUI : MonoBehaviour
     public Color lockedConnectionColor = Color.gray;
     public float connectionThickness = 6f;
     
+    [Header("Mode Settings")]
+    public GameObject upgradeModePanel;
+    public TMP_Text upgradeModeText;
+    public Button unlockButton;
+    
     [Header("Input Settings")]
     public KeyCode toggleKey = KeyCode.T;
+    
+    [Header("Access Control")]
+    public bool allowAllTrees = false;
+    public bool allowUnlock = false;
+    private TechTree forcedTree;
     
     private TechTree currentTree;
     private Dictionary<string, GameObject> nodeObjects = new Dictionary<string, GameObject>();
     private Dictionary<string, UILineConnection> connectionObjects = new Dictionary<string, UILineConnection>();
     public bool isUIOpen = false;
+    private bool isUpgradeMode = false;
+    private TechNode selectedNode;
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        
+        if (unlockButton != null)
+            unlockButton.onClick.AddListener(OnUnlockButtonClicked);
+            
+        techTreePanel.SetActive(false);
+        //ShowTechTree(forgeTree);
+    }
     
     void Start()
     {
@@ -47,42 +75,118 @@ public class TechTreeUI : MonoBehaviour
         if (nodePrefab == null) Debug.LogError("NodePrefab is not assigned!");
         if (connectionPrefab == null) Debug.LogError("ConnectionPrefab is not assigned!");
         
-        forgeTab.onClick.AddListener(() => ShowTechTree(forgeTree));
-        farmTab.onClick.AddListener(() => ShowTechTree(farmTree));
-        generalTab.onClick.AddListener(() => ShowTechTree(generalTree));
+        forgeTab.onClick.AddListener(() =>
+        {
+            CloseTechTree();
+            ShowTechTree(forgeTree);
+        });
+        farmTab.onClick.AddListener(() =>
+        {
+            CloseTechTree();
+            ShowTechTree(farmTree);
+        });
+        generalTab.onClick.AddListener(() =>
+        {
+            CloseTechTree();
+            ShowTechTree(generalTree);
+        });
         
         techTreePanel.SetActive(false);
-        ShowTechTree(forgeTree);
+        CloseTechTree();
+        //ShowTechTree(forgeTree);
     }
     
     void Update()
     {
-        if (Input.GetKeyDown(toggleKey))
-        {
-            ToggleTechTree();
+        if (Input.GetKeyDown(toggleKey) && !isUpgradeMode)
+        { 
+            ShowTechTreeForViewing();
         }
-        
+    
         if (isUIOpen && Input.GetKeyDown(KeyCode.Escape))
         {
             CloseTechTree();
         }
     }
     
-    public void ShowTechTree(TechTree tree)
+    public void ShowTechTree(TechTree tree, bool upgradeMode = false)
     {
-        if (tree == null)
+        ClearTree();
+        // Проверяем доступ
+        if (forcedTree != null && tree != forcedTree)
         {
-            Debug.LogError("TechTree is null!");
+            Debug.LogWarning($"Попытка открыть недоступное дерево для этого NPC");
             return;
         }
-        
+
         currentTree = tree;
-        treeNameText.text = tree.treeName;
-        treeDescriptionText.text = tree.description;
-        
-        ClearTree();
+        isUpgradeMode = upgradeMode && allowUnlock;
+
+        techTreePanel.SetActive(true);
+        isUIOpen = true;
+
+        if (upgradeModePanel != null)
+            upgradeModePanel.SetActive(isUpgradeMode);
+
+        if (isUpgradeMode && upgradeModeText != null)
+        {
+            string npcName = GetNPCNameForTree(tree);
+            upgradeModeText.text = $"Режим прокачки - {npcName}";
+        }
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIOpen();
+
         GenerateTreeUI();
-        UpdateConnectionColors();
+    }
+    
+    private string GetNPCNameForTree(TechTree tree)
+    {
+        if (tree == forgeTree) return "Брук (Кузница)";
+        if (tree == farmTree) return "Горк (Ферма)";
+        if (tree == generalTree) return "Зол (Ратуша)";
+        return "Прокачка";
+    }
+    
+    public void ShowTechTreeForViewing()
+    {
+        allowAllTrees = true;
+        allowUnlock = false;
+        forcedTree = null;
+
+        // Показываем все деревья в режиме просмотра
+        ShowTechTree(currentTree, false);
+
+        // Скрываем панель NPC режима
+        if (upgradeModePanel != null)
+            upgradeModePanel.SetActive(false);
+    
+        // Показываем табы переключения
+        if (forgeTab != null) forgeTab.gameObject.SetActive(true);
+        if (farmTab != null) farmTab.gameObject.SetActive(true);
+        if (generalTab != null) generalTab.gameObject.SetActive(true);
+    }
+    
+    public void ShowTechTreeForNPC(TechTree tree, string npcName)
+    {
+        forcedTree = tree;
+        allowAllTrees = false;
+        allowUnlock = true; // ← Разрешаем прокачку только у NPC
+
+        // Показываем только указанное дерево в режиме прокачки
+        ShowTechTree(tree, true); // ← true = режим прокачки
+
+        // Обновляем UI для режима NPC
+        if (upgradeModePanel != null)
+        {
+            upgradeModePanel.SetActive(true);
+            upgradeModeText.text = $"Услуги {npcName}";
+        }
+
+        // Скрываем табы переключения деревьев
+        if (forgeTab != null) forgeTab.gameObject.SetActive(false);
+        if (farmTab != null) farmTab.gameObject.SetActive(false);
+        if (generalTab != null) generalTab.gameObject.SetActive(false);
     }
     
     private void GenerateTreeUI()
@@ -118,20 +222,12 @@ public class TechTreeUI : MonoBehaviour
         if (node == null || nodePrefab == null) return;
         
         GameObject nodeObj = Instantiate(nodePrefab, nodesContainer);
-        if (nodeObj == null)
-        {
-            Debug.LogError("Failed to instantiate node prefab");
-            return;
-        }
+        if (nodeObj == null) return;
         
         nodeObjects[node.nodeId] = nodeObj;
         
         RectTransform rect = nodeObj.GetComponent<RectTransform>();
-        if (rect == null)
-        {
-            Debug.LogError("Node prefab doesn't have RectTransform component");
-            return;
-        }
+        if (rect == null) return;
         
         rect.anchoredPosition = node.graphPosition;
         
@@ -140,10 +236,44 @@ public class TechTreeUI : MonoBehaviour
         {
             nodeUI.Initialize(node, currentTree);
             nodeUI.OnNodeUnlocked += OnNodeUnlocked;
+            nodeUI.OnNodeSelected += OnNodeSelected;
+            
+            if (!isUpgradeMode)
+            {
+                nodeUI.SetViewMode();
+            }
         }
-        else
+    }
+    
+    private void OnNodeSelected(TechNode node)
+    {
+        selectedNode = node;
+        
+        if (isUpgradeMode)
         {
-            Debug.LogError("Node prefab doesn't have TechNodeUI component");
+            UpdateUnlockButton();
+        }
+    }
+    
+    private void UpdateUnlockButton()
+    {
+        if (selectedNode != null)
+        {
+            bool canUnlock = PlayerProgression.Instance.CanUnlockTech(selectedNode.nodeId, currentTree);
+            unlockButton.interactable = canUnlock && !selectedNode.isUnlocked;
+            
+            if (canUnlock && !selectedNode.isUnlocked)
+            {
+                unlockButton.GetComponentInChildren<TMP_Text>().text = "Изучить";
+            }
+            else if (selectedNode.isUnlocked)
+            {
+                unlockButton.GetComponentInChildren<TMP_Text>().text = "Изучено";
+            }
+            else
+            {
+                unlockButton.GetComponentInChildren<TMP_Text>().text = "Недоступно";
+            }
         }
     }
     
@@ -281,6 +411,22 @@ public class TechTreeUI : MonoBehaviour
         connectionObjects.Clear();
     }
     
+    public void OnUnlockButtonClicked()
+    {
+        if (selectedNode != null && isUpgradeMode)
+        {
+            PlayerProgression.Instance.UnlockTech(selectedNode.nodeId, currentTree);
+            UpdateUnlockButton();
+            RefreshTreeUI();
+        }
+    }
+    
+    private void RefreshTreeUI()
+    {
+        ClearTree();
+        GenerateTreeUI();
+    }
+    
     public void ToggleTechTree()
     {
         if (isUIOpen)
@@ -304,9 +450,17 @@ public class TechTreeUI : MonoBehaviour
     
     public void CloseTechTree()
     {
-        techTreePanel.SetActive(false);
+        ClearTree();
         isUIOpen = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        techTreePanel.SetActive(false);
+
+        // Используем UIManager вместо прямого управления
+        if (UIManager.Instance != null)
+            UIManager.Instance.RegisterUIClose();
+
+        if (isUpgradeMode)
+        {
+            isUpgradeMode = false;
+        }
     }
 }

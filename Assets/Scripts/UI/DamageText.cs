@@ -31,7 +31,6 @@ public class DamageText : MonoBehaviour
         initialPosition = transform.position;
         initialScale = transform.localScale;
         
-        // Начальный масштаб - 0 для эффекта появления
         transform.localScale = Vector3.zero;
     }
     
@@ -43,7 +42,6 @@ public class DamageText : MonoBehaviour
         {
             damageText.text = $"-{damage:F0}";
             
-            // Цвет в зависимости от урона
             if (damage > 20)
             {
                 damageText.color = Color.red;
@@ -67,7 +65,6 @@ public class DamageText : MonoBehaviour
     {
         float elapsedTime = 0f;
         
-        // Анимация появления (увеличение масштаба)
         while (elapsedTime < scaleDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -82,35 +79,29 @@ public class DamageText : MonoBehaviour
         transform.localScale = initialScale;
         elapsedTime = 0f;
         
-        // Анимация всплывания и исчезновения
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / duration;
             
-            // Поднимаем текст вверх
             float floatHeight = floatSpeed * progress;
             transform.position = initialPosition + Vector3.up * floatHeight;
             
-            // Плавное исчезновение
             if (damageText != null)
             {
                 float alpha = alphaCurve.Evaluate(progress);
                 damageText.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
             }
             
-            // Небольшое раскачивание для натуральности
             float sway = Mathf.Sin(elapsedTime * 5f) * 0.1f;
             transform.position += Vector3.right * sway;
             
-            // Постепенное уменьшение масштаба в конце
             if (progress > 0.7f)
             {
                 float shrinkProgress = (progress - 0.7f) / 0.3f;
                 transform.localScale = initialScale * (1f - shrinkProgress * 0.5f);
             }
             
-            // Всегда смотрим на камеру
             transform.LookAt(2 * transform.position - Camera.main.transform.position);
             
             yield return null;

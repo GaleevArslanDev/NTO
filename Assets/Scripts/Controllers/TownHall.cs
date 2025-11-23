@@ -6,6 +6,9 @@ public class TownHall : MonoBehaviour
 {
     public static TownHall Instance { get; private set; }
     
+    [Header("Tech Tree")]
+    public TechTree townHallTechTree;
+    
     [Header("Town Hall Settings")]
     [SerializeField] private int _maxLevel = 5;
     [SerializeField] private TownHallLevel[] _levels;
@@ -32,6 +35,26 @@ public class TownHall : MonoBehaviour
         [Header("Unlocks")]
         public BuildingUpgrade[] BuildingUpgrades;
         public int UnlocksTechTier = 1; // Какой тир технологий открывает этот уровень
+    }
+    
+    [System.Serializable]
+    public class TownHallLevelUnlock
+    {
+        public int level;
+        public string[] unlockedBuildings;
+        public int unlockedTechTier;
+    }
+    
+    public TownHallLevelUnlock[] levelUnlocks;
+    
+    public TownHallLevelUnlock GetUnlocksForLevel(int level)
+    {
+        foreach (var unlock in levelUnlocks)
+        {
+            if (unlock.level == level)
+                return unlock;
+        }
+        return null;
     }
 
     [System.Serializable]
@@ -96,22 +119,13 @@ public class TownHall : MonoBehaviour
 
     private void CompleteUpgrade()
     {
-        // Отключаем предыдущую модель
         if (_currentLevel > 0 && _levels[_currentLevel - 1].LevelModel != null)
             _levels[_currentLevel - 1].LevelModel.SetActive(false);
 
         _currentLevel++;
         
-        // Обновляем открытый тир
-        if (_currentLevel - 1 < _levels.Length)
-        {
-            _unlockedTier = Mathf.Max(_unlockedTier, _levels[_currentLevel - 1].UnlocksTechTier);
-        }
-        
-        // Включаем новую модель
         UpdateVisualModel();
         
-        // Применяем улучшения к другим зданиям
         ApplyBuildingUpgrades();
         
         _isUpgrading = false;

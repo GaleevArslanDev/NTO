@@ -73,7 +73,6 @@ public class CollectableItem : MonoBehaviour
             breakProgressUI.SetActive(false);
         }
         
-        // Плавно возвращаем на место
         StopAllCoroutines();
         StartCoroutine(ReturnToOriginalPosition());
     }
@@ -97,14 +96,12 @@ public class CollectableItem : MonoBehaviour
         
         if (isBeingBroken && currentBreakProgress >= 1f)
         {
-            // Предмет полностью сломан - готов к сбору
             CompleteBreaking();
         }
     }
     
     private void UpdateBreakingEffects()
     {
-        // Тряска с увеличением интенсивности
         float shakeProgress = currentBreakProgress;
         float shakeIntensity = shakeProgress * Data.ShakeIntensity;
         
@@ -114,7 +111,6 @@ public class CollectableItem : MonoBehaviour
             Mathf.PerlinNoise(Time.time * 10f, Time.time * 10f) * 2f - 1f
         ) * shakeIntensity;
         
-        // Подъем с прогрессом
         float floatProgress = Mathf.Pow(currentBreakProgress, 2f); // Квадрат для более плавного подъема
         float currentFloatHeight = floatProgress * Data.FloatHeight;
         
@@ -149,7 +145,6 @@ public class CollectableItem : MonoBehaviour
             breakProgressUI.SetActive(false);
         }
 
-        // Сразу начинаем сбор после завершения ломания
         if (MTB.Instance != null)
         {
             MTB.Instance.StartVacuuming(this);
@@ -166,7 +161,6 @@ public class CollectableItem : MonoBehaviour
         StartCoroutine(CollectionRoutine(target));
     }
     
-    // В метод CollectionRoutine, перед уничтожением предмета, добавить:
     private IEnumerator CollectionRoutine(Transform target)
     {
         float duration = 0.7f;

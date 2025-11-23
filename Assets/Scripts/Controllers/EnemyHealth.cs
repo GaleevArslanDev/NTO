@@ -41,7 +41,6 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
         enemyDeath = GetComponent<EnemyDeath>();
         
-        // Сохраняем оригинальные материалы и цвета
         if (enemyRenderer != null)
         {
             originalMaterials = enemyRenderer.materials;
@@ -52,7 +51,6 @@ public class EnemyHealth : MonoBehaviour
             }
         }
         
-        // Если точка спавна текста не задана, используем сам объект
         if (damageTextSpawnPoint == null)
         {
             damageTextSpawnPoint = transform;

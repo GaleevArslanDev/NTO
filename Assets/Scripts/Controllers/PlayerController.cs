@@ -24,27 +24,32 @@ public class PlayerController : MonoBehaviour
     private float xRotation = 0f;
     private bool isGrounded;
 
-    // Приседание
     private bool isCrouching = false;
     private float standingHeight;
     private Vector3 standingCameraPosition;
-    private float currentSpeed;
-    private TechTreeUI techTree;
-    private QuestBoardUI questBoard;
-    private TownHallUI townHall;
+    private float currentSpeed; 
+    public static PlayerController Instance { get; private set; }
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         characterController = GetComponent<CharacterController>();
         if (playerCamera == null)
             playerCamera = Camera.main?.transform;
     }
+    
+    public void SetControlEnabled(bool enabled)
+    {
+        this.enabled = enabled;
+        if (characterController != null)
+            characterController.enabled = enabled;
+    }
 
     private void Start()
     {
-        techTree = FindObjectOfType<TechTreeUI>();
-        questBoard = FindObjectOfType<QuestBoardUI>();
-        townHall = FindObjectOfType<TownHallUI>();
         Cursor.lockState = CursorLockMode.Locked;
         
         standingHeight = characterController.height;
@@ -63,9 +68,7 @@ public class PlayerController : MonoBehaviour
     
     private bool IsAnyUIOpen()
     {
-        return (techTree != null && techTree.isUIOpen) ||
-             (questBoard != null && questBoard.isUIOpen) ||
-             (townHall != null && townHall.isUiOpen);
+        return UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen();
     }
 
     void HandleMovement()

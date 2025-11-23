@@ -17,7 +17,6 @@ public class Inventory : MonoBehaviour
     
     [SerializeField] private List<InventorySlot> items = new List<InventorySlot>();
     
-    // Событие для обновления UI
     public UnityAction<ItemType, int> OnInventoryChanged;
     
     void Awake()
