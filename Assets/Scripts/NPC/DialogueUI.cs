@@ -36,7 +36,7 @@ public class DialogueUI : MonoBehaviour
     private bool isTyping = false;
     private Coroutine typingCoroutine;
     
-    private void Awake()
+    private void Start()
     {
         if (Instance == null)
         {
