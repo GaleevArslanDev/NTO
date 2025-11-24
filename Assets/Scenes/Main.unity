@@ -4225,7 +4225,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1580834209}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999997
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7100,7 +7100,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1782883629}
   m_HandleRect: {fileID: 1782883628}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9430,6 +9430,7 @@ MonoBehaviour:
     \u0440\u0430\u0442\u0443\u0448\u0430"
   - "\u0421\u043E\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u0440\u0430\u0442\u0443\u0448\u0430"
   - "\u0420\u0430\u0442\u0443\u0448\u0430 \u0431\u0443\u0434\u0443\u0449\u0435\u0433\u043E"
+  isUiOpen: 0
 --- !u!114 &487532534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13765,6 +13766,34 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4659466963820198761, guid: 5d005e4a4e9b98b4db4f2be304b66a8e, type: 3}
+--- !u!1 &704842699 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2239539092822204371, guid: ce4c90fb10c62f949a4779a9b601f2c0, type: 3}
+  m_PrefabInstance: {fileID: 1175177436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &704842706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704842699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63bd86aee7b54360870e21f42bbeec4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  respawnPoint: {fileID: 0}
+  fadeDuration: 1.5
+  healthSlider: {fileID: 769783707}
+  healthFill: {fileID: 1138518943}
+  deathScreen: {fileID: 311398019}
+  fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
+  lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  damageSound: {fileID: 0}
+  damageEffectDuration: 0.3
 --- !u!1001 &707900218
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19674,7 +19703,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1246005285}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999997
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -22747,7 +22776,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2239539092822204371, guid: ce4c90fb10c62f949a4779a9b601f2c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 704842706}
   m_SourcePrefab: {fileID: 100100000, guid: ce4c90fb10c62f949a4779a9b601f2c0, type: 3}
 --- !u!1 &1180701600
 GameObject:
