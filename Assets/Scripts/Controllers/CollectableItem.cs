@@ -30,14 +30,7 @@ public class CollectableItem : MonoBehaviour
             breakProgressUI.SetActive(false);
         }
         
-        if (Data != null && Data.Type.ToString().Contains("Crystal"))
-        {
-            var renderer = GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.color = Data.ParticleColor;
-            }
-        }
+       
     }
     
     void Update()
