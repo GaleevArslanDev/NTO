@@ -13,7 +13,7 @@ namespace Gameplay.Items
     
         [Header("UI References")]
         [SerializeField] private GameObject breakProgressUI;
-        [SerializeField] private Slider breakProgressSlider;
+        [SerializeField] private CollectableSlider breakProgressSlider;
         [SerializeField] private Canvas breakCanvas;
         
         private bool _isCollected;
@@ -58,7 +58,7 @@ namespace Gameplay.Items
             if (breakProgressUI != null)
             {
                 breakProgressUI.SetActive(true);
-                breakProgressSlider.value = 0;
+                breakProgressSlider.UpdateSlider(0);
             }
         
             StartCoroutine(BreakingRoutine());
@@ -91,7 +91,7 @@ namespace Gameplay.Items
             
                 if (breakProgressSlider != null)
                 {
-                    breakProgressSlider.value = _currentBreakProgress;
+                    breakProgressSlider.UpdateSlider(_currentBreakProgress);
                 }
             
                 yield return null;
