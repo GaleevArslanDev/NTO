@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   particleColor: {r: 0, g: 0.035513878, b: 1, a: 1}
-  icon: {fileID: 0}
+  icon: {fileID: 1117528983, guid: cd2fa64b6aa64a14cae01c216e8001a9, type: 3}
   breakTime: 2
   shakeIntensity: 0.3
   floatHeight: 0.5

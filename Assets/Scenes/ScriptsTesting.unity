@@ -4563,6 +4563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 341736151}
   - component: {fileID: 341736152}
+  - component: {fileID: 341736153}
   m_Layer: 6
   m_Name: Slider
   m_TagString: Untagged
@@ -4642,6 +4643,22 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &341736153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341736150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717b3eec2f5b36340b90f80816e98d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxValue: 0
+  minValue: 0
+  divisionCount: 0
+  divisions: []
 --- !u!1 &348147425
 GameObject:
   m_ObjectHideFlags: 0
@@ -7459,7 +7476,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 482048778}
   m_HandleRect: {fileID: 482048777}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -17151,6 +17168,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1573358286}
   - {fileID: 1721376817}
   - {fileID: 1717672462}
   - {fileID: 1172866329}
@@ -17165,7 +17183,6 @@ Transform:
   - {fileID: 404981562}
   - {fileID: 625950650}
   - {fileID: 2123716446}
-  - {fileID: 1573358286}
   - {fileID: 1687444433}
   - {fileID: 1695088679}
   - {fileID: 769015032}
@@ -20431,7 +20448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 1551861452}
-  breakProgressSlider: {fileID: 0}
+  breakProgressSlider: {fileID: 2000182375}
   breakCanvas: {fileID: 1551861457}
 --- !u!65 &1573358288
 BoxCollider:
@@ -23225,7 +23242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 127982139}
-  breakProgressSlider: {fileID: 0}
+  breakProgressSlider: {fileID: 341736153}
   breakCanvas: {fileID: 127982143}
 --- !u!65 &1721376814
 BoxCollider:
@@ -23585,7 +23602,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 65574486}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999997
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -30622,6 +30639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2000182373}
   - component: {fileID: 2000182374}
+  - component: {fileID: 2000182375}
   m_Layer: 6
   m_Name: Slider
   m_TagString: Untagged
@@ -30701,6 +30719,22 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2000182375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000182372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717b3eec2f5b36340b90f80816e98d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxValue: 0
+  minValue: 0
+  divisionCount: 0
+  divisions: []
 --- !u!1 &2008064233
 GameObject:
   m_ObjectHideFlags: 0
@@ -31549,7 +31583,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 939028621}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999997
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
