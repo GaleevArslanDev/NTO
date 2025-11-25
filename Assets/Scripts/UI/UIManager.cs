@@ -1,66 +1,71 @@
-﻿using UnityEngine;
+﻿using Gameplay.Characters.Player;
+using Gameplay.Dialogue;
+using UnityEngine;
 
-public class UIManager : MonoBehaviour
+namespace UI
 {
-    public static UIManager Instance;
-    
-    private int openUICount = 0;
-    
-    void Awake()
+    public class UIManager : MonoBehaviour
     {
-        if (Instance == null)
+        public static UIManager Instance;
+    
+        private int _openUICount;
+
+        private void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-        else
+    
+        public void RegisterUIOpen()
         {
-            Destroy(gameObject);
+            _openUICount++;
+            UpdateCursorState();
         }
-    }
     
-    public void RegisterUIOpen()
-    {
-        openUICount++;
-        UpdateCursorState();
-    }
-    
-    public void RegisterUIClose()
-    {
-        openUICount--;
-        if (openUICount < 0) openUICount = 0;
-        UpdateCursorState();
-    }
-    
-    private void UpdateCursorState()
-    {
-        if (openUICount > 0)
+        public void RegisterUIClose()
         {
-            // Есть открытые UI - разблокируем курсор
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            _openUICount--;
+            if (_openUICount < 0) _openUICount = 0;
+            UpdateCursorState();
+        }
+    
+        private void UpdateCursorState()
+        {
+            if (_openUICount > 0)
+            {
+                // Есть открытые UI - разблокируем курсор
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             
-            // Блокируем управление игроком
-            if (PlayerController.Instance != null)
-                PlayerController.Instance.SetControlEnabled(false);
-        }
-        else
-        {
-            // Нет открытых UI - блокируем курсор
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+                // Блокируем управление игроком
+                if (PlayerController.Instance != null)
+                    PlayerController.Instance.SetControlEnabled(false);
+            }
+            else
+            {
+                // Нет открытых UI - блокируем курсор
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             
-            // Разблокируем управление игроком
-            if (PlayerController.Instance != null)
-                PlayerController.Instance.SetControlEnabled(true);
+                // Разблокируем управление игроком
+                if (PlayerController.Instance != null)
+                    PlayerController.Instance.SetControlEnabled(true);
+            }
         }
-    }
     
-    public bool IsAnyUIOpen()
-    {
-        return openUICount > 0 || 
-               (TechTreeUI.Instance != null && TechTreeUI.Instance.isUIOpen) ||
-               (TownHallUI.Instance != null && TownHallUI.Instance.isUiOpen) ||
-               (QuestBoardUI.Instance != null && QuestBoardUI.Instance.isUIOpen) ||
-               (DialogueManager.Instance != null && DialogueManager.Instance.IsInDialogue);
+        public bool IsAnyUIOpen()
+        {
+            return _openUICount > 0 || 
+                   (TechTreeUI.Instance != null && TechTreeUI.Instance.isUIOpen) ||
+                   (TownHallUI.Instance != null && TownHallUI.Instance.isUiOpen) ||
+                   (QuestBoardUI.Instance != null && QuestBoardUI.Instance.isUIOpen) ||
+                   (DialogueManager.Instance != null && DialogueManager.Instance.IsInDialogue);
+        }
     }
 }

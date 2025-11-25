@@ -493,6 +493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7e8626dba0c4b129905b8193eb363c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingNameText: {fileID: 5870274931666778971}
-  _levelText: {fileID: 7583207965610400920}
-  _descriptionText: {fileID: 6647074337720015054}
+  buildingNameText: {fileID: 5870274931666778971}
+  levelText: {fileID: 7583207965610400920}
+  descriptionText: {fileID: 6647074337720015054}

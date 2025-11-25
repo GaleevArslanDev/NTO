@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cb7497e00563d54c9c156b71671a5f2, type: 3}
+  m_Name: Metal
+  m_EditorClassIdentifier: 
+  type: 4
+  particleColor: {r: 1, g: 0.6640479, b: 0, a: 1}
+  icon: {fileID: 0}
+  breakTime: 4
+  shakeIntensity: 0.3
+  floatHeight: 0.5
+  enemySpawnChance: 0.1
+  maxSpawnCount: 1

@@ -1,53 +1,55 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using TMPro;
-using System.Collections.Generic;
+using UnityEngine;
 
-public class LanguageSelector : MonoBehaviour
+namespace LocalizationManager
 {
-    [SerializeField] private TMP_Dropdown languageDropdown;
-    
-    private void Start()
+    public class LanguageSelector : MonoBehaviour
     {
-        InitializeDropdown();
-        
-        if (languageDropdown != null)
-        {
-            languageDropdown.onValueChanged.AddListener(OnLanguageSelected);
-        }
-    }
+        [SerializeField] private TMP_Dropdown languageDropdown;
     
-    private void InitializeDropdown()
-    {
-        if (languageDropdown == null) return;
-        
-        languageDropdown.ClearOptions();
-        
-        var languages = LocalizationManager.Instance.GetAvailableLanguages();
-        var options = new List<TMP_Dropdown.OptionData>();
-        int currentIndex = 0;
-        
-        for (int i = 0; i < languages.Count; i++)
+        private void Start()
         {
-            string displayName = LocalizationManager.Instance.GetLanguageDisplayName(languages[i].LocalizationCode);
-            options.Add(new TMP_Dropdown.OptionData(displayName));
-            if (languages[i].LocalizationCode == LocalizationManager.Instance.GetCurrentLanguage())
+            InitializeDropdown();
+        
+            if (languageDropdown != null)
             {
-                currentIndex = i;
+                languageDropdown.onValueChanged.AddListener(OnLanguageSelected);
             }
         }
-        
-        languageDropdown.options = options;
-        languageDropdown.value = currentIndex;
-        languageDropdown.RefreshShownValue();
-    }
     
-    private void OnLanguageSelected(int index)
-    {
-        var languages = LocalizationManager.Instance.GetAvailableLanguages();
-        if (index < languages.Count)
+        private void InitializeDropdown()
         {
-            LocalizationManager.Instance.SetLanguage(languages[index].LocalizationCode);
+            if (languageDropdown == null) return;
+        
+            languageDropdown.ClearOptions();
+        
+            var languages = LocalizationManager.Instance.GetAvailableLanguages();
+            var options = new List<TMP_Dropdown.OptionData>();
+            var currentIndex = 0;
+        
+            for (var i = 0; i < languages.Count; i++)
+            {
+                var displayName = LocalizationManager.GetLanguageDisplayName(languages[i].localizationCode);
+                options.Add(new TMP_Dropdown.OptionData(displayName));
+                if (languages[i].localizationCode == LocalizationManager.Instance.GetCurrentLanguage())
+                {
+                    currentIndex = i;
+                }
+            }
+        
+            languageDropdown.options = options;
+            languageDropdown.value = currentIndex;
+            languageDropdown.RefreshShownValue();
+        }
+    
+        private void OnLanguageSelected(int index)
+        {
+            var languages = LocalizationManager.Instance.GetAvailableLanguages();
+            if (index < languages.Count)
+            {
+                LocalizationManager.Instance.SetLanguage(languages[index].localizationCode);
+            }
         }
     }
 }

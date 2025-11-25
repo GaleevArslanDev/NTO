@@ -1,127 +1,128 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using Gameplay.Buildings;
 using TMPro;
-using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class TownHallUI : MonoBehaviour
+namespace UI
 {
-    public static TownHallUI Instance { get; private set; }
-    
-    [Header("UI References")]
-    [SerializeField] private GameObject _dialogPanel;
-    [SerializeField] private TextMeshProUGUI _titleText;
-    [SerializeField] private TextMeshProUGUI _descriptionText;
-    [SerializeField] private TextMeshProUGUI _levelText;
-    [SerializeField] private Button _upgradeButton;
-    [SerializeField] private Button _closeButton;
-    [SerializeField] private Transform _requirementsContainer;
-    [SerializeField] private GameObject _resourceRequirementPrefab;
-    [SerializeField] private Transform _upgradesContainer;
-    [SerializeField] private GameObject _upgradeInfoPrefab;
-
-    [Header("Texts")]
-    [SerializeField] private string _titleFormat = "Ратуша (Уровень {0})";
-    [SerializeField] private string _descriptionFormat = "Улучшение ратуши до уровня {0} откроет новые возможности для вашего поселения.";
-    [SerializeField] private string[] _levelDescriptions;
-
-    private TownHall _townHall;
-    public bool isUiOpen = false;
-
-    void Awake()
+    public class TownHallUI : MonoBehaviour
     {
-        if (Instance == null)
+        public static TownHallUI Instance { get; private set; }
+    
+        [Header("UI References")]
+        [SerializeField] private GameObject dialogPanel;
+        [SerializeField] private TextMeshProUGUI titleText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
+        [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private Button upgradeButton;
+        [SerializeField] private Button closeButton;
+        [SerializeField] private Transform requirementsContainer;
+        [SerializeField] private GameObject resourceRequirementPrefab;
+        [SerializeField] private Transform upgradesContainer;
+        [SerializeField] private GameObject upgradeInfoPrefab;
+
+        [Header("Texts")]
+        [SerializeField] private string titleFormat = "Ратуша (Уровень {0})";
+        [SerializeField] private string descriptionFormat = "Улучшение ратуши до уровня {0} откроет новые возможности для вашего поселения.";
+        [SerializeField] private string[] levelDescriptions;
+
+        private TownHall _townHall;
+        public bool isUiOpen;
+
+        private void Awake()
         {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    void Start()
-    {
-        _upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
-        _closeButton.onClick.AddListener(HideDialog);
-        
-        HideDialog();
-    }
-
-    public void ShowDialog(TownHall townHall)
-    {
-        isUiOpen = true;
-        _townHall = townHall;
-        UpdateDialog();
-        _dialogPanel.SetActive(true);
-
-        // Используем UIManager
-        if (UIManager.Instance != null)
-            UIManager.Instance.RegisterUIOpen();
-    }
-
-    public void HideDialog()
-    {
-        isUiOpen = false;
-        _dialogPanel.SetActive(false);
-
-        // Используем UIManager
-        if (UIManager.Instance != null)
-            UIManager.Instance.RegisterUIClose();
-    }
-
-    private void UpdateDialog()
-    {
-        if (_townHall == null) {Debug.Log("no town hall");return;}
-
-        int currentLevel = _townHall.GetCurrentLevel();
-        int nextLevel = currentLevel + 1;
-    
-        _titleText.text = string.Format(_titleFormat, currentLevel);
-    
-        string description = nextLevel <= _townHall.GetMaxLevel() && nextLevel - 1 < _levelDescriptions.Length 
-            ? _levelDescriptions[nextLevel - 1] 
-            : "Максимальный уровень достигнут.";
-        _descriptionText.text = description;
-    
-        _levelText.text = $"Текущий уровень: {currentLevel} / {_townHall.GetMaxLevel()}";
-
-        ClearContainer(_requirementsContainer);
-        ClearContainer(_upgradesContainer);
-
-        if (!_townHall.IsMaxLevel())
-        {
-            var costs = _townHall.GetCurrentLevelCosts();
-            if (costs != null)
+            if (Instance == null)
             {
-                foreach (var cost in costs)
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
+            closeButton.onClick.AddListener(HideDialog);
+        
+            HideDialog();
+        }
+
+        public void ShowDialog(TownHall townHall)
+        {
+            isUiOpen = true;
+            _townHall = townHall;
+            UpdateDialog();
+            dialogPanel.SetActive(true);
+
+            // Используем UIManager
+            if (UIManager.Instance != null)
+                UIManager.Instance.RegisterUIOpen();
+        }
+
+        public void HideDialog()
+        {
+            isUiOpen = false;
+            dialogPanel.SetActive(false);
+
+            // Используем UIManager
+            if (UIManager.Instance != null)
+                UIManager.Instance.RegisterUIClose();
+        }
+
+        private void UpdateDialog()
+        {
+            if (_townHall == null) {Debug.Log("no town hall");return;}
+
+            var currentLevel = _townHall.GetCurrentLevel();
+            var nextLevel = currentLevel + 1;
+    
+            titleText.text = string.Format(titleFormat, currentLevel);
+    
+            var description = nextLevel <= _townHall.GetMaxLevel() && nextLevel - 1 < levelDescriptions.Length 
+                ? levelDescriptions[nextLevel - 1] 
+                : "Максимальный уровень достигнут.";
+            descriptionText.text = description;
+    
+            levelText.text = $"Текущий уровень: {currentLevel} / {_townHall.GetMaxLevel()}";
+
+            ClearContainer(requirementsContainer);
+            ClearContainer(upgradesContainer);
+
+            if (!_townHall.IsMaxLevel())
+            {
+                var costs = _townHall.GetCurrentLevelCosts();
+                if (costs != null)
                 {
-                    var requirement = Instantiate(_resourceRequirementPrefab, _requirementsContainer);
-                    requirement.GetComponent<ResourceRequirementUI>().Set(cost.Type, cost.Amount);
+                    foreach (var cost in costs)
+                    {
+                        var requirement = Instantiate(resourceRequirementPrefab, requirementsContainer);
+                        requirement.GetComponent<ResourceRequirementUI>().Set(cost.type, cost.amount);
+                    }
                 }
+
+                ShowBuildingUpgrades(nextLevel);
+            }
+            else
+            {
+                var text = Instantiate(resourceRequirementPrefab, requirementsContainer);
+                text.GetComponentInChildren<TextMeshProUGUI>().text = "Максимальный уровень достигнут";
             }
 
-            ShowBuildingUpgrades(nextLevel);
+            upgradeButton.interactable = _townHall.CanUpgrade() && !_townHall.IsMaxLevel();
+            upgradeButton.GetComponentInChildren<TextMeshProUGUI>().text = 
+                _townHall.IsMaxLevel() ? "Макс. уровень" : $"Улучшить до уровня {nextLevel}";
         }
-        else
+
+        private void ShowBuildingUpgrades(int nextLevel)
         {
-            var text = Instantiate(_resourceRequirementPrefab, _requirementsContainer);
-            text.GetComponentInChildren<TextMeshProUGUI>().text = "Максимальный уровень достигнут";
-        }
-
-        _upgradeButton.interactable = _townHall.CanUpgrade() && !_townHall.IsMaxLevel();
-        _upgradeButton.GetComponentInChildren<TextMeshProUGUI>().text = 
-            _townHall.IsMaxLevel() ? "Макс. уровень" : $"Улучшить до уровня {nextLevel}";
-    }
-
-    private void ShowBuildingUpgrades(int nextLevel)
-    {
-        var buildings = BuildingManager.Instance.GetAllBuildings();
+            var buildings = BuildingManager.Instance.GetAllBuildings();
         
-        foreach (var building in buildings)
-        {
-            if (building.GetCurrentLevel() < nextLevel && nextLevel <= building.GetMaxLevel())
+            foreach (var building in buildings)
             {
-                var upgradeInfo = Instantiate(_upgradeInfoPrefab, _upgradesContainer);
+                if (building.GetCurrentLevel() >= nextLevel || nextLevel > building.GetMaxLevel()) continue;
+                var upgradeInfo = Instantiate(upgradeInfoPrefab, upgradesContainer);
                 upgradeInfo.GetComponent<BuildingUpgradeInfoUI>().Set(
                     building.GetBuildingName(),
                     building.GetCurrentLevel(), 
@@ -130,17 +131,17 @@ public class TownHallUI : MonoBehaviour
                 );
             }
         }
-    }
 
-    private void ClearContainer(Transform container)
-    {
-        foreach (Transform child in container)
-            Destroy(child.gameObject);
-    }
+        private static void ClearContainer(Transform container)
+        {
+            foreach (Transform child in container)
+                Destroy(child.gameObject);
+        }
 
-    private void OnUpgradeButtonClicked()
-    {
-        _townHall?.Upgrade();
-        Invoke(nameof(UpdateDialog), 0.1f);
+        private void OnUpgradeButtonClicked()
+        {
+            _townHall?.Upgrade();
+            Invoke(nameof(UpdateDialog), 0.1f);
+        }
     }
 }

@@ -1,143 +1,140 @@
 ﻿using System;
+using System.Linq;
+using Data.Tech;
+using Gameplay.Buildings;
+using Gameplay.Characters.Player;
+using Gameplay.Items;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class TechNodeUI : MonoBehaviour
+namespace UI
 {
-    [Header("UI Elements")]
-    public Image nodeIcon;
-    public TMP_Text nodeNameText;
-    public TMP_Text costText;
-    public Button unlockButton;
-    public Image background;
-    public GameObject lockedOverlay;
-    
-    private TechNode node;
-    private TechTree tree;
-    public event Action OnNodeUnlocked;
-    public event Action<TechNode> OnNodeSelected;
-    private bool isUnlocked = false;
-    private bool canUnlock = true;
-    
-    public void Initialize(TechNode node, TechTree tree)
+    public class TechNodeUI : MonoBehaviour
     {
-        this.node = node;
-        this.tree = tree;
-        this.isUnlocked = node.isUnlocked;
+        [Header("UI Elements")]
+        public Image nodeIcon;
+        public TMP_Text nodeNameText;
+        public TMP_Text costText;
+        public Button unlockButton;
+        public Image background;
+        public GameObject lockedOverlay;
     
-        nodeNameText.text = node.nodeName;
-        nodeIcon.sprite = node.icon;
+        private TechNode _node;
+        private TechTree _tree;
+        public event Action OnNodeUnlocked;
+        public event Action<TechNode> OnNodeSelected;
+        private bool _isUnlocked;
+        private bool _canUnlock = true;
     
-        // Отображаем стоимость
-        string costString = "";
-        foreach (var cost in node.unlockCost)
+        public void Initialize(TechNode node, TechTree tree)
         {
-            costString += $"{cost.Type}: {cost.Amount}\n";
+            _node = node;
+            _tree = tree;
+            _isUnlocked = node.isUnlocked;
+    
+            nodeNameText.text = node.nodeName;
+            nodeIcon.sprite = node.icon;
+    
+            // Отображаем стоимость
+            var costString = node.unlockCost.Aggregate("", (current, cost) => current + $"{cost.type}: {cost.amount}\n");
+            costText.text = costString;
+    
+            unlockButton.onClick.RemoveAllListeners();
+            unlockButton.onClick.AddListener(OnUnlockButtonClicked);
+    
+            var nodeButton = GetComponent<Button>();
+            if (nodeButton == null) nodeButton = gameObject.AddComponent<Button>();
+            nodeButton.onClick.RemoveAllListeners();
+            nodeButton.onClick.AddListener(OnNodeClicked);
+    
+            UpdateUI();
         }
-        costText.text = costString;
     
-        unlockButton.onClick.RemoveAllListeners();
-        unlockButton.onClick.AddListener(OnUnlockButtonClicked);
-    
-        Button nodeButton = GetComponent<Button>();
-        if (nodeButton == null) nodeButton = gameObject.AddComponent<Button>();
-        nodeButton.onClick.RemoveAllListeners();
-        nodeButton.onClick.AddListener(OnNodeClicked);
-    
-        UpdateUI();
-    }
-    
-    public void SetAccess(bool canUnlockTech)
-    {
-        canUnlock = canUnlockTech;
-        UpdateUI();
-    }
-    
-    public void SetViewMode()
-    {
-        // В режиме просмотра отключаем кнопку разблокировки
-        unlockButton.interactable = false;
-        unlockButton.gameObject.SetActive(false);
-    }
-    
-    private void OnNodeClicked()
-    {
-        OnNodeSelected?.Invoke(node);
-    }
-    
-    public void UpdateUI()
-    {
-        if (node == null || PlayerProgression.Instance == null) return;
-
-        // В режиме просмотра всегда запрещаем прокачку
-        bool canUnlockNode = TechTreeUI.Instance != null && 
-                             TechTreeUI.Instance.allowUnlock && 
-                             PlayerProgression.Instance.CanUnlockTech(node.nodeId, tree);
-
-        unlockButton.interactable = canUnlockNode && !isUnlocked;
-        lockedOverlay.SetActive(!isUnlocked);
-
-        if (isUnlocked)
+        public void SetAccess(bool canUnlockTech)
         {
-            costText.text = "Разблокирован";
-            unlockButton.gameObject.SetActive(false);
+            _canUnlock = canUnlockTech;
+            UpdateUI();
+        }
+    
+        public void SetViewMode()
+        {
+            // В режиме просмотра отключаем кнопку разблокировки
             unlockButton.interactable = false;
-            return;
+            unlockButton.gameObject.SetActive(false);
         }
     
-        // Показываем стоимость
-        string costString = "";
-        foreach (var cost in node.unlockCost)
+        private void OnNodeClicked()
         {
-            bool hasEnough = Inventory.Instance.GetItemCount(cost.Type) >= cost.Amount;
-            string color = hasEnough ? "green" : "red";
-            costString += $"<color={color}>{cost.Type}: {cost.Amount}</color>\n";
+            OnNodeSelected?.Invoke(_node);
         }
-        costText.text = costString;
     
-        if (!canUnlockNode)
+        public void UpdateUI()
         {
-            // Показываем причину почему нельзя разблокировать
-            string reason = "";
-            if (node.tier > TownHall.Instance.GetUnlockedTechTier())
+            if (_node == null || PlayerProgression.Instance == null) return;
+
+            // В режиме просмотра всегда запрещаем прокачку
+            var canUnlockNode = TechTreeUI.Instance != null && 
+                                TechTreeUI.Instance.allowUnlock && 
+                                PlayerProgression.Instance.CanUnlockTech(_node.nodeId, _tree);
+
+            unlockButton.interactable = canUnlockNode && !_isUnlocked;
+            lockedOverlay.SetActive(!_isUnlocked);
+
+            if (_isUnlocked)
             {
-                reason = $"Требуется уровень ратуши: {node.tier}";
+                costText.text = "Разблокирован";
+                unlockButton.gameObject.SetActive(false);
+                unlockButton.interactable = false;
+                return;
             }
-            else if (!TechTreeUI.Instance.allowUnlock)
-            {
-                reason = "Доступно только у NPC";
-            }
-            else
-            {
-                reason = "Не выполнены условия";
-            }
-            costText.text = reason;
-        }
-    }
     
-    private bool CheckPrerequisites()
-    {
-        foreach (string prereq in node.prerequisiteNodes)
-        {
-            if (!PlayerProgression.Instance.IsTechUnlocked(prereq))
-                return false;
-        }
-        return true;
-    }
+            // Показываем стоимость
+            var costString = "";
+            foreach (var cost in _node.unlockCost)
+            {
+                var hasEnough = Inventory.Instance.GetItemCount(cost.type) >= cost.amount;
+                var color = hasEnough ? "green" : "red";
+                costString += $"<color={color}>{cost.type}: {cost.amount}</color>\n";
+            }
+            costText.text = costString;
     
-    public void OnUnlockButtonClicked()
-    {
-        if (PlayerProgression.Instance.UnlockTech(node.nodeId, tree))
+            if (!canUnlockNode)
+            {
+                // Показываем причину почему нельзя разблокировать
+                string reason;
+                if (_node.tier > TownHall.Instance.GetUnlockedTechTier())
+                {
+                    reason = $"Требуется уровень ратуши: {_node.tier}";
+                }
+                else if (!TechTreeUI.Instance.allowUnlock)
+                {
+                    reason = "Доступно только у NPC";
+                }
+                else
+                {
+                    reason = "Не выполнены условия";
+                }
+                costText.text = reason;
+            }
+        }
+    
+        private bool CheckPrerequisites()
         {
-            isUnlocked = true;
+            return _node.prerequisiteNodes.All(prereq => PlayerProgression.Instance.IsTechUnlocked(prereq));
+        }
+    
+        public void OnUnlockButtonClicked()
+        {
+            if (!PlayerProgression.Instance.UnlockTech(_node.nodeId, _tree)) return;
+            _isUnlocked = true;
             UpdateUI();
             OnNodeUnlocked?.Invoke();
         }
-    }
     
-    public bool IsUnlocked()
-    {
-        return isUnlocked;
+        public bool IsUnlocked()
+        {
+            return _isUnlocked;
+        }
     }
 }

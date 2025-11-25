@@ -1,463 +1,615 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
+using TMPro;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class AIAssistant : MonoBehaviour
+namespace UI
 {
-    public static AIAssistant Instance;
-    
-    [Header("UI References")]
-    [SerializeField] private GameObject assistantPanel;
-    [SerializeField] private TextMeshProUGUI speechText;
-    [SerializeField] private CanvasGroup speechBubble;
-    [SerializeField] private RectTransform assistantRectTransform;
-    
-    [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 100f;
-    [SerializeField] private float bounceHeight = 10f;
-    [SerializeField] private float bounceSpeed = 2f;
-    [SerializeField] private float screenBoundsPaddingX = 50f;
-    [SerializeField] private float screenBoundsPaddingY = 50f;
-    
-    [Header("Animation Settings")]
-    [SerializeField] private float fadeDuration = 0.3f;
-    [SerializeField] private float showDuration = 3f;
-    [SerializeField] private float typeSpeed = 0.05f;
-    
-    [Header("Comment Settings")]
-    [SerializeField] private float minCommentDelay = 10f;
-    [SerializeField] private float maxCommentDelay = 30f;
-    
-    [Header("Chances")]
-    [SerializeField] private float combatCommentChance = 0.3f;
-    [SerializeField] private float resourceCommentChance = 0.5f;
-    [SerializeField] private float jumpChance = 0.1f;
-    
-    public enum AssistantMood { Neutral, Happy, Excited, Worried, Sarcastic }
+    public class AIAssistant : MonoBehaviour
+    {
+        public static AIAssistant Instance;
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving"); // bool
+        private static readonly int Roll = Animator.StringToHash("Roll"); // trigger
+        private static readonly int Jump = Animator.StringToHash("Jump"); // trigger
+        private static readonly int Mood = Animator.StringToHash("Mood"); // int
+        private static readonly int IsSpeaking = Animator.StringToHash("IsSpeaking"); // bool
 
-    private AssistantMood currentMood = AssistantMood.Neutral;
+        [Header("UI References")]
+        [SerializeField] private GameObject assistantPanel;
+        [SerializeField] private TextMeshProUGUI speechText;
+        [SerializeField] private CanvasGroup speechBubble;
+        [SerializeField] private RectTransform assistantRectTransform;
     
-    [System.Serializable]
-    public class CommentCategory
-    {
-        public string categoryName;
-        public List<string> comments;
-    }
+        [Header("Movement Settings")]
+        [SerializeField] private float moveSpeed = 100f;
+        [SerializeField] private float bounceHeight = 10f;
+        [SerializeField] private float bounceSpeed = 2f;
+        [SerializeField] private float movementAreaWidth = 300f;
+        [SerializeField] private float movementAreaHeight = 200f;
+        [SerializeField] private float jumpHeight = 3f;
+        [SerializeField] private float jumpDuration = 0.5f;
     
-    [Header("Comment Database")]
-    public List<CommentCategory> commentCategories;
+        [Header("Animation Settings")]
+        [SerializeField] private float fadeDuration = 0.3f;
+        [SerializeField] private float showDuration = 3f;
+        [SerializeField] private float typeSpeed = 0.05f;
     
-    // Components
-    private Animator animator;
-    private Canvas parentCanvas;
-    private Camera mainCamera;
+        [Header("Comment Settings")]
+        [SerializeField] private float minCommentDelay = 10f;
+        [SerializeField] private float maxCommentDelay = 30f;
     
-    // Movement
-    private Vector2 movementDirection;
-    private float currentBounceOffset;
-    private bool isSpeaking = false;
-    private bool shouldMove = true;
-    private float nextDirectionChangeTime;
-    private float directionChangeInterval = 3f;
+        [Header("Chances")]
+        [SerializeField] private float combatCommentChance = 0.3f;
+        [SerializeField] private float resourceCommentChance = 0.5f;
+        [SerializeField] private float jumpChance = 0.1f;
+        [SerializeField] private float rollChance = 0.1f;
+        [SerializeField] private float quickStopCommentChance = 0.1f;
+        [SerializeField] private float quickTurnCommentChance = 0.1f;
+        [SerializeField] private float quickMoveCommentChance = 0.1f;
     
-    // Speech
-    private Dictionary<string, List<string>> commentsDict = new Dictionary<string, List<string>>();
-    private List<string> recentlySpoken = new List<string>();
-    private const int memorySize = 5;
-    private Coroutine currentSpeechCoroutine;
-    private Coroutine bounceCoroutine;
-    private Coroutine movementCoroutine;
+        [Header("Inertia Settings")]
+        [SerializeField] private float inertiaForce = 80f;
+        [SerializeField] private float inertiaDecay = 0.93f;
+        [SerializeField] private float maxInertiaSpeed = 200f;
+        [SerializeField] private float cameraTurnThreshold = 45f;
+        [SerializeField] private float playerAccelThreshold = 5f;
+        [SerializeField] private float playerStopThreshold = 3f;
+
+        private AssistantMood _currentMood = AssistantMood.Neutral;
     
-    // Player tracking
-    private Vector3 lastPlayerWorldPosition;
-    private Vector2 targetFollowPosition;
-    
-    // Система приоритетов
-    public enum CommentPriority { Low, Normal, High, Critical }
-    
-    // События для комментариев
-    public System.Action<string> OnAssistantSpeak;
-    
-    void Awake()
-    {
-        if (Instance == null)
+        [Serializable]
+        public class CommentCategory
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            public string categoryName;
+            public List<string> comments;
         }
-        else
+    
+        [Header("Comment Database")]
+        public List<CommentCategory> commentCategories;
+    
+        // Components
+        private Animator _animator;
+        private Canvas _parentCanvas;
+        private Camera _mainCamera;
+    
+        // Movement
+        private Vector2 _movementDirection;
+        private float _currentBounceOffset;
+        private bool _isSpeaking;
+        private bool _shouldMove = true;
+
+        // Speech
+        private Dictionary<string, List<string>> _commentsDict = new();
+        private List<string> _recentlySpoken = new();
+        private const int MemorySize = 5;
+        private Coroutine _currentSpeechCoroutine;
+        private Coroutine _bounceCoroutine;
+        private Coroutine _movementCoroutine;
+    
+        // Инерция
+        private Vector2 _currentInertia;
+        private Vector3 _lastCameraForward;
+        private Vector3 _lastPlayerVelocity;
+    
+        // Player tracking
+        private CharacterController _playerController;
+        private Vector3 _lastPlayerWorldPosition;
+    
+        // События для комментариев
+        public Action<string> OnAssistantSpeak;
+
+        // Границы для правого нижнего угла
+        private Rect _movementBounds;
+        private Vector2 _assistantSize;
+        private Vector2 _defaultPosition;
+
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
-        }
-        
-        animator = GetComponent<Animator>();
-        parentCanvas = GetComponentInParent<Canvas>();
-        mainCamera = Camera.main;
-        
-        if (assistantRectTransform == null)
-            assistantRectTransform = GetComponent<RectTransform>();
-        
-        InitializeComments();
-    }
-    
-    void Start()
-    {
-        assistantPanel.SetActive(false);
-        speechBubble.alpha = 0;
-        
-        // Запускаем случайные комментарии и движение
-        StartCoroutine(RandomCommentsRoutine());
-        movementCoroutine = StartCoroutine(MovementRoutine());
-        StartCoroutine(IdleActionsRoutine());
-    }
-    
-    void Update()
-    {
-        HandleMovement();
-        HandleBounceAnimation();
-    }
-    
-    private void InitializeComments()
-    {
-        foreach (var category in commentCategories)
-        {
-            commentsDict[category.categoryName] = category.comments;
-        }
-    }
-    
-    private IEnumerator MovementRoutine()
-    {
-        while (true)
-        {
-            if (!isSpeaking && shouldMove)
+            if (Instance == null)
             {
-                // Случайно меняем направление
-                movementDirection = new Vector2(Random.Range(-1f, 1f), 0).normalized;
-                nextDirectionChangeTime = Time.time + Random.Range(directionChangeInterval * 0.5f, directionChangeInterval * 1.5f);
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
-            
-            yield return new WaitForSeconds(1f);
-        }
-    }
-    
-    private IEnumerator IdleActionsRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(5f, 15f));
-            
-            if (!isSpeaking && shouldMove)
+            else
             {
-                // Случайные анимации
-                if (Random.value < 0.3f)
+                Destroy(gameObject);
+                return;
+            }
+        
+            _animator = GetComponent<Animator>();
+            _parentCanvas = GetComponentInParent<Canvas>();
+            _mainCamera = Camera.main;
+        
+            if (assistantRectTransform == null)
+                assistantRectTransform = GetComponent<RectTransform>();
+        
+            InitializeComments();
+            FindPlayerController();
+            CalculateMovementBounds();
+        }
+
+        private void Start()
+        {
+            assistantPanel.SetActive(false);
+            speechBubble.alpha = 0;
+        
+            if (_mainCamera != null)
+                _lastCameraForward = _mainCamera.transform.forward;
+        
+            // Устанавливаем начальную позицию в правом нижнем углу
+            SetToDefaultPosition();
+        
+            StartCoroutine(RandomCommentsRoutine());
+            _movementCoroutine = StartCoroutine(MovementRoutine());
+            StartCoroutine(IdleActionsRoutine());
+            StartCoroutine(PlayerTrackingRoutine());
+        }
+    
+        void Update()
+        {
+            HandleInertiaForces();
+            HandleMovement();
+            HandleBounceAnimation();
+        }
+
+        private void CalculateMovementBounds()
+        {
+            if (_parentCanvas == null) return;
+
+            // Получаем размер ассистента
+            _assistantSize = assistantRectTransform.rect.size;
+        
+            // Получаем размер канваса
+            var canvasWidth = _parentCanvas.pixelRect.width;
+            var canvasHeight = _parentCanvas.pixelRect.height;
+        
+            // Рассчитываем область движения в правом нижнем углу
+            var rightEdge = canvasWidth/2 - _assistantSize.x * 0.5f;
+            var bottomEdge = (-canvasHeight/2)+_assistantSize.y*0.5f;
+            var leftEdge = rightEdge - movementAreaWidth;
+            var topEdge = bottomEdge - movementAreaHeight;
+        
+            // Убеждаемся, что область движения не выходит за пределы экрана
+            leftEdge = Mathf.Max(leftEdge, _assistantSize.x * 0.5f);
+            topEdge = Mathf.Max(topEdge, _assistantSize.y * 0.5f);
+        
+            _movementBounds = new Rect(
+                leftEdge,
+                topEdge,
+                Mathf.Max(movementAreaWidth, _assistantSize.x),
+                Mathf.Max(movementAreaHeight, _assistantSize.y)
+            );
+        
+            // Позиция по умолчанию - центр области движения
+            _defaultPosition = new Vector2(
+                leftEdge + _movementBounds.width * 0.5f,
+                bottomEdge
+            );
+        }
+    
+        private void SetToDefaultPosition()
+        {
+            assistantRectTransform.anchoredPosition = _defaultPosition;
+        }
+    
+        private void FindPlayerController()
+        {
+            _playerController = FindObjectOfType<CharacterController>();
+            if (_playerController == null)
+            {
+                Debug.LogWarning("Player CharacterController not found! Inertia effects will be disabled.");
+            }
+            else
+            {
+                _lastPlayerVelocity = _playerController.velocity;
+            }
+        }
+    
+        private void InitializeComments()
+        {
+            foreach (var category in commentCategories)
+            {
+                _commentsDict[category.categoryName] = category.comments;
+            }
+        }
+    
+        private IEnumerator PlayerTrackingRoutine()
+        {
+            while (true)
+            {
+                if (_playerController != null)
                 {
-                    animator.SetTrigger("Roll");
+                    TrackPlayerMovement();
                 }
-                else if (Random.value < 0.2f)
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+    
+        private void TrackPlayerMovement()
+        {
+            var currentVelocity = _playerController.velocity;
+            var currentCameraForward = _mainCamera != null ? _mainCamera.transform.forward : Vector3.forward;
+        
+            // Отслеживаем поворот камеры
+            var cameraTurnSpeed = CalculateCameraTurnSpeed(currentCameraForward);
+            if (cameraTurnSpeed > cameraTurnThreshold)
+            {
+                OnCameraTurnedQuickly(currentCameraForward, cameraTurnSpeed);
+            }
+        
+            // Отслеживаем ускорение игрока
+            var playerAcceleration = CalculatePlayerAcceleration(currentVelocity);
+            if (playerAcceleration.magnitude > playerAccelThreshold)
+            {
+                OnPlayerQuickMovement(playerAcceleration);
+            }
+        
+            // Отслеживаем резкую остановку
+            if (_lastPlayerVelocity.magnitude > playerStopThreshold && currentVelocity.magnitude < 1f)
+            {
+                OnPlayerStoppedQuickly(_lastPlayerVelocity);
+            }
+        
+            _lastCameraForward = currentCameraForward;
+            _lastPlayerVelocity = currentVelocity;
+        }
+    
+        private float CalculateCameraTurnSpeed(Vector3 currentCameraForward)
+        {
+            var angle = Vector3.Angle(_lastCameraForward, currentCameraForward);
+            return angle / Time.deltaTime;
+        }
+    
+        private Vector3 CalculatePlayerAcceleration(Vector3 currentVelocity)
+        {
+            return (currentVelocity - _lastPlayerVelocity) / Time.deltaTime;
+        }
+    
+        private IEnumerator MovementRoutine()
+        {
+            while (true)
+            {
+                if (!_isSpeaking && _shouldMove)
                 {
+                    _movementDirection = new Vector2(Random.Range(-1f, 1f), 0).normalized;
+                }
+            
+                yield return new WaitForSeconds(1f);
+            }
+        }
+    
+        private IEnumerator IdleActionsRoutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(5f, 15f));
+
+                if (_isSpeaking || !_shouldMove) continue;
+                if (Random.value < rollChance)
+                {
+                    _animator.SetTrigger(Roll);
+                }
+                else if (Random.value < jumpChance)
+                {
+                    _animator.SetTrigger(Jump);
                     StartCoroutine(JumpRoutine());
                 }
             }
         }
-    }
     
-    private void HandleMovement()
-    {
-        if (!shouldMove || isSpeaking) return;
-        
-        if (Time.time >= nextDirectionChangeTime)
+        private void HandleMovement()
         {
-            movementDirection = new Vector2(Random.Range(-1f, 1f), 0).normalized;
-            nextDirectionChangeTime = Time.time + Random.Range(directionChangeInterval * 0.5f, directionChangeInterval * 1.5f);
-        }
+            if (!_shouldMove || _isSpeaking) return;
         
-        // Движение RectTransform
-        Vector2 newPosition = assistantRectTransform.anchoredPosition + movementDirection * moveSpeed * Time.deltaTime;
-        assistantRectTransform.anchoredPosition = newPosition;
+            var totalMovement = _movementDirection * moveSpeed + _currentInertia;
+            var newPosition = assistantRectTransform.anchoredPosition + totalMovement * Time.deltaTime;
         
-        // Поворот спрайта в направлении движения
-        if (movementDirection.x > 0)
-            assistantRectTransform.localScale = new Vector3(1, 1, 1);
-        else if (movementDirection.x < 0)
-            assistantRectTransform.localScale = new Vector3(-1, 1, 1);
-            
-        animator.SetBool("IsMoving", movementDirection.magnitude > 0.1f);
+            // Ограничиваем движение областью в правом нижнем углу
+            newPosition = ClampToMovementBounds(newPosition);
         
-        HandleScreenBounds();
-    }
-    
-    private void HandleScreenBounds()
-    {
-        if (parentCanvas == null) return;
-        
-        Rect canvasRect = parentCanvas.pixelRect;
-        Vector2 currentPos = assistantRectTransform.anchoredPosition;
-        bool changedDirection = false;
-        
-        // Проверяем границы с учетом паддинга
-        if (currentPos.x > screenBoundsPaddingX)
-        {
-            movementDirection.x = Mathf.Abs(movementDirection.x);
-            changedDirection = true;
-            currentPos.x = screenBoundsPaddingX;
-        }
-        else if (currentPos.x < canvasRect.width - screenBoundsPaddingX)
-        {
-            movementDirection.x = -Mathf.Abs(movementDirection.x);
-            changedDirection = true;
-            currentPos.x = canvasRect.width - screenBoundsPaddingX;
-        }
-        
-        if (currentPos.y < screenBoundsPaddingY)
-        {
-            movementDirection.y = Mathf.Abs(movementDirection.y);
-            changedDirection = true;
-            currentPos.y = screenBoundsPaddingY;
-        }
-        else if (currentPos.y > canvasRect.height - screenBoundsPaddingY)
-        {
-            movementDirection.y = -Mathf.Abs(movementDirection.y);
-            changedDirection = true;
-            currentPos.y = canvasRect.height - screenBoundsPaddingY;
-        }
-        
-        assistantRectTransform.anchoredPosition = currentPos;
-        
-        if (changedDirection)
-        {
-            nextDirectionChangeTime = Time.time + directionChangeInterval;
-        }
-    }
-    
-    private void HandleBounceAnimation()
-    {
-        if (isSpeaking && bounceCoroutine == null)
-        {
-            bounceCoroutine = StartCoroutine(BounceRoutine());
-        }
-        else if (!isSpeaking && bounceCoroutine != null)
-        {
-            StopCoroutine(bounceCoroutine);
-            bounceCoroutine = null;
-            // Плавно возвращаем на исходную позицию
-            Vector2 currentPos = assistantRectTransform.anchoredPosition;
-            assistantRectTransform.anchoredPosition = new Vector2(currentPos.x, currentPos.y - currentBounceOffset);
-            currentBounceOffset = 0f;
-        }
-    }
-    
-    private IEnumerator BounceRoutine()
-    {
-        Vector2 startPos = assistantRectTransform.anchoredPosition;
-        float time = 0f;
-        
-        while (isSpeaking)
-        {
-            currentBounceOffset = Mathf.Sin(time * bounceSpeed) * bounceHeight;
-            assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + currentBounceOffset);
-            time += Time.deltaTime;
-            yield return null;
-        }
-    }
-    
-    private IEnumerator JumpRoutine()
-    {
-        Vector2 startPos = assistantRectTransform.anchoredPosition;
-        float jumpHeight = 30f;
-        float jumpDuration = 0.6f;
-        
-        // Прыжок вверх
-        float elapsed = 0f;
-        while (elapsed < jumpDuration / 2)
-        {
-            elapsed += Time.deltaTime;
-            float progress = elapsed / (jumpDuration / 2);
-            float yOffset = Mathf.Sin(progress * Mathf.PI) * jumpHeight;
-            assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + yOffset);
-            yield return null;
-        }
-        
-        // Падение вниз
-        elapsed = 0f;
-        while (elapsed < jumpDuration / 2)
-        {
-            elapsed += Time.deltaTime;
-            float progress = elapsed / (jumpDuration / 2);
-            float yOffset = Mathf.Sin((1 - progress) * Mathf.PI) * jumpHeight;
-            assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + yOffset);
-            yield return null;
-        }
-        
-        assistantRectTransform.anchoredPosition = startPos;
-    }
-    
-    public void SetMood(AssistantMood newMood)
-    {
-        currentMood = newMood;
-        animator.SetInteger("Mood", (int)newMood);
-    }
-    
-    public void TriggerMoodChange(AssistantMood newMood, float duration = 0f)
-    {
-        SetMood(newMood);
-        
-        if (duration > 0)
-        {
-            StartCoroutine(RevertMoodAfterDelay(duration));
-        }
-    }
-    
-    private IEnumerator RevertMoodAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        SetMood(AssistantMood.Neutral);
-    }
-    
-    private IEnumerator RandomCommentsRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(minCommentDelay, maxCommentDelay));
-            
-            if (!isSpeaking && !IsAnyImportantUIOpen())
+            assistantRectTransform.anchoredPosition = newPosition;
+
+            transform.localScale = totalMovement.x switch
             {
-                SpeakRandomFromCategory("Random");
+                // Поворот спрайта
+                > 0.1f => Vector3.one,
+                < -0.1f => new Vector3(-1, 1, 1),
+                _ => transform.localScale
+            };
+
+            _animator.SetBool(IsMoving, totalMovement.magnitude > 10f);
+        }
+
+        private Vector2 ClampToMovementBounds(Vector2 position)
+        {
+            // Обновляем границы на случай изменения размера экрана
+            CalculateMovementBounds();
+
+            // Ограничиваем позицию областью движения
+            position.x = Mathf.Clamp(position.x, _movementBounds.x, _movementBounds.x + _movementBounds.width);
+
+            // Если достигли границы, меняем направление и уменьшаем инерцию
+            if (!(position.x <= _movementBounds.x) && !(position.x >= _movementBounds.x + _movementBounds.width))
+                return position;
+            _movementDirection.x *= -1;
+            _currentInertia.x *= 0.3f;
+
+            return position;
+        }
+    
+        private void HandleInertiaForces()
+        {
+            _currentInertia *= inertiaDecay;
+            _currentInertia = Vector2.ClampMagnitude(_currentInertia, maxInertiaSpeed);
+        }
+    
+        private void HandleBounceAnimation()
+        {
+            switch (_isSpeaking)
+            {
+                case true when _bounceCoroutine == null:
+                    _bounceCoroutine = StartCoroutine(BounceRoutine());
+                    break;
+                case false when _bounceCoroutine != null:
+                {
+                    StopCoroutine(_bounceCoroutine);
+                    _bounceCoroutine = null;
+                    var currentPos = assistantRectTransform.anchoredPosition;
+                    assistantRectTransform.anchoredPosition = new Vector2(currentPos.x, currentPos.y - _currentBounceOffset);
+                    _currentBounceOffset = 0f;
+                    break;
+                }
             }
         }
-    }
     
-    private string GetUniqueComment(string category)
-    {
-        if (!commentsDict.ContainsKey(category)) return "Category not found!";
-        
-        var availableComments = new List<string>(commentsDict[category]);
-    
-        // Убираем недавно сказанные комментарии
-        foreach (var spoken in recentlySpoken)
+        private IEnumerator BounceRoutine()
         {
-            availableComments.Remove(spoken);
+            var startPos = assistantRectTransform.anchoredPosition;
+            var time = 0f;
+        
+            while (_isSpeaking)
+            {
+                _currentBounceOffset = Mathf.Sin(time * bounceSpeed) * bounceHeight;
+                assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + _currentBounceOffset);
+                time += Time.deltaTime;
+                yield return null;
+            }
         }
     
-        if (availableComments.Count == 0)
+        private IEnumerator JumpRoutine()
         {
-            // Если все сказали, сбрасываем память
-            recentlySpoken.Clear();
-            availableComments = new List<string>(commentsDict[category]);
-        }
-    
-        string selected = availableComments[Random.Range(0, availableComments.Count)];
-    
-        // Добавляем в память
-        recentlySpoken.Add(selected);
-        if (recentlySpoken.Count > memorySize)
-        {
-            recentlySpoken.RemoveAt(0);
-        }
-    
-        return selected;
-    }
-    
-    public void Speak(string text)
-    {
-        if (isSpeaking) return;
-        
-        if (currentSpeechCoroutine != null)
-            StopCoroutine(currentSpeechCoroutine);
-            
-        currentSpeechCoroutine = StartCoroutine(SpeechRoutine(text));
-    }
-    
-    public void SpeakWithPriority(string text, CommentPriority priority = CommentPriority.Normal)
-    {
-        if (isSpeaking)
-        {
-            if (priority <= CommentPriority.Normal) return;
-            StopSpeaking();
-        }
-        
-        StartCoroutine(PrioritySpeechRoutine(text, priority));
-    }
-    
-    private IEnumerator PrioritySpeechRoutine(string text, CommentPriority priority)
-    {
-        float duration = priority == CommentPriority.Critical ? 5f : showDuration;
-        float speed = priority == CommentPriority.Critical ? 0.02f : typeSpeed;
-        
-        // Визуальные эффекты для важных сообщений
-        if (priority == CommentPriority.Critical)
-        {
-            // Можно добавить мигание или изменение цвета
-            TriggerMoodChange(AssistantMood.Worried, duration);
-        }
-        
-        yield return StartCoroutine(SpeechRoutine(text, duration, speed));
-    }
-    
-    private IEnumerator SpeechRoutine(string text, float duration = 0f, float speed = 0f)
-    {
-        if (duration == 0) duration = showDuration;
-        if (speed == 0) speed = typeSpeed;
-        
-        isSpeaking = true;
-        shouldMove = false;
-        
-        // Останавливаем движение
-        animator.SetBool("IsMoving", false);
-        animator.SetBool("IsSpeaking", true);
-        
-        // Показываем пузырь
-        assistantPanel.SetActive(true);
-        yield return StartCoroutine(FadeSpeechBubble(0f, 1f, fadeDuration));
-        
-        // Печатаем текст
-        speechText.text = "";
-        foreach (char c in text)
-        {
-            speechText.text += c;
-            yield return new WaitForSeconds(speed);
-        }
-        
-        // Ждем
-        yield return new WaitForSeconds(duration);
-        
-        // Скрываем пузырь
-        yield return StartCoroutine(FadeSpeechBubble(1f, 0f, fadeDuration));
-        assistantPanel.SetActive(false);
-        
-        // Возобновляем движение
-        animator.SetBool("IsSpeaking", false);
-        isSpeaking = false;
-        shouldMove = true;
-        
-        // Уведомляем подписчиков
-        OnAssistantSpeak?.Invoke(text);
-    }
-    
-    private IEnumerator FadeSpeechBubble(float from, float to, float duration)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            speechBubble.alpha = Mathf.Lerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        speechBubble.alpha = to;
-    }
-    
-    // Методы для вызова из других систем
-    public void OnResourceCollected(ItemType itemType, int amount)
-    {
-        if (isSpeaking) return;
+            var startPos = assistantRectTransform.anchoredPosition;
 
-        if (Random.value < resourceCommentChance)
+            float elapsed = 0f;
+            while (elapsed < jumpDuration / 2)
+            {
+                elapsed += Time.deltaTime;
+                float progress = elapsed / (jumpDuration / 2);
+                float yOffset = Mathf.Sin(progress * Mathf.PI) * jumpHeight;
+                assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + yOffset);
+                yield return null;
+            }
+        
+            elapsed = 0f;
+            while (elapsed < jumpDuration / 2)
+            {
+                elapsed += Time.deltaTime;
+                float progress = elapsed / (jumpDuration / 2);
+                float yOffset = Mathf.Sin((1 - progress) * Mathf.PI) * jumpHeight;
+                assistantRectTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + yOffset);
+                yield return null;
+            }
+        
+            assistantRectTransform.anchoredPosition = startPos;
+        }
+    
+        // МЕТОДЫ ИНЕРЦИИ
+
+        private void OnCameraTurnedQuickly(Vector3 currentCameraForward, float turnSpeed)
         {
+            if (!(turnSpeed > cameraTurnThreshold) || _isSpeaking) return;
+            var turnDirection = (currentCameraForward - _lastCameraForward).normalized;
+            var inertia = new Vector2(turnDirection.x, 0f).normalized * (turnSpeed * 0.1f);
+            _currentInertia += inertia;
+            
+            if (Random.value < quickTurnCommentChance)
+            {
+                SpeakRandomFromCategory("CameraQuickTurn");
+            }
+        }
+
+        private void OnPlayerQuickMovement(Vector3 acceleration)
+        {
+            if (!(acceleration.magnitude > playerAccelThreshold) || _isSpeaking) return;
+            var inertia = new Vector2(-acceleration.x, 0f).normalized * (acceleration.magnitude * 0.2f);
+            _currentInertia += inertia;
+
+            if (!(Random.value < quickMoveCommentChance)) return;
+            if (!(acceleration.magnitude > playerAccelThreshold * 2f)) return;
+            TriggerMoodChange(AssistantMood.Excited, 2f);
+            SpeakRandomFromCategory("QuickMovement");
+        }
+
+        private void OnPlayerStoppedQuickly(Vector3 previousVelocity)
+        {
+            if (!(previousVelocity.magnitude > playerStopThreshold) || _isSpeaking) return;
+            var stopInertia = new Vector2(previousVelocity.x, 0f).normalized * (previousVelocity.magnitude * 0.3f);
+            _currentInertia += stopInertia;
+            
+            if (Random.value < quickStopCommentChance)
+            {
+                SpeakRandomFromCategory("QuickStop");
+            }
+        }
+    
+        public void AddInertia(Vector2 force)
+        {
+            _currentInertia += force;
+        }
+    
+        public void AddScreenShakeInertia(float intensity = 1f)
+        {
+            var randomInertia = Random.insideUnitCircle * inertiaForce * intensity;
+            _currentInertia += randomInertia;
+        }
+    
+        // ОСТАЛЬНЫЕ МЕТОДЫ
+
+        private void SetMood(AssistantMood newMood)
+        {
+            _currentMood = newMood;
+            _animator.SetInteger(Mood, (int)newMood);
+        }
+
+        private void TriggerMoodChange(AssistantMood newMood, float duration = 0f)
+        {
+            SetMood(newMood);
+        
+            if (duration > 0)
+            {
+                StartCoroutine(RevertMoodAfterDelay(duration));
+            }
+        }
+    
+        private IEnumerator RevertMoodAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            SetMood(AssistantMood.Neutral);
+        }
+    
+        private IEnumerator RandomCommentsRoutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(minCommentDelay, maxCommentDelay));
+            
+                if (!_isSpeaking && !IsAnyImportantUIOpen())
+                {
+                    SpeakRandomFromCategory("Random");
+                }
+            }
+        }
+    
+        private string GetUniqueComment(string category)
+        {
+            if (!_commentsDict.TryGetValue(category, out var value)) return "Category not found!";
+        
+            var availableComments = new List<string>(value);
+    
+            foreach (var spoken in _recentlySpoken)
+            {
+                availableComments.Remove(spoken);
+            }
+    
+            if (availableComments.Count == 0)
+            {
+                _recentlySpoken.Clear();
+                availableComments = new List<string>(_commentsDict[category]);
+            }
+    
+            var selected = availableComments[Random.Range(0, availableComments.Count)];
+    
+            _recentlySpoken.Add(selected);
+            if (_recentlySpoken.Count > MemorySize)
+            {
+                _recentlySpoken.RemoveAt(0);
+            }
+    
+            return selected;
+        }
+
+        private void Speak(string text)
+        {
+            if (_isSpeaking) return;
+        
+            if (_currentSpeechCoroutine != null)
+                StopCoroutine(_currentSpeechCoroutine);
+            
+            _currentSpeechCoroutine = StartCoroutine(SpeechRoutine(text));
+        }
+
+        private void SpeakWithPriority(string text, CommentPriority priority = CommentPriority.Normal)
+        {
+            if (_isSpeaking)
+            {
+                if (priority <= CommentPriority.Normal) return;
+                StopSpeaking();
+            }
+        
+            StartCoroutine(PrioritySpeechRoutine(text, priority));
+        }
+    
+        private IEnumerator PrioritySpeechRoutine(string text, CommentPriority priority)
+        {
+            var duration = priority == CommentPriority.Critical ? 5f : showDuration;
+            var speed = priority == CommentPriority.Critical ? 0.02f : typeSpeed;
+        
+            if (priority == CommentPriority.Critical)
+            {
+                TriggerMoodChange(AssistantMood.Worried, duration);
+            }
+        
+            yield return StartCoroutine(SpeechRoutine(text, duration, speed));
+        }
+    
+        private IEnumerator SpeechRoutine(string text, float duration = 0f, float speed = 0f)
+        {
+            if (duration == 0) duration = showDuration;
+            if (speed == 0) speed = typeSpeed;
+        
+            _isSpeaking = true;
+            _shouldMove = false;
+        
+            _animator.SetBool(IsMoving, false);
+            _animator.SetBool(IsSpeaking, true);
+        
+            assistantPanel.SetActive(true);
+            yield return StartCoroutine(FadeSpeechBubble(0f, 1f, fadeDuration));
+        
+            speechText.text = "";
+            foreach (var c in text)
+            {
+                speechText.text += c;
+                yield return new WaitForSeconds(speed);
+            }
+        
+            yield return new WaitForSeconds(duration);
+        
+            yield return StartCoroutine(FadeSpeechBubble(1f, 0f, fadeDuration));
+            assistantPanel.SetActive(false);
+        
+            _animator.SetBool(IsSpeaking, false);
+            _isSpeaking = false;
+            _shouldMove = true;
+        
+            OnAssistantSpeak?.Invoke(text);
+        }
+    
+        private IEnumerator FadeSpeechBubble(float from, float to, float duration)
+        {
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                speechBubble.alpha = Mathf.Lerp(from, to, elapsed / duration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            speechBubble.alpha = to;
+        }
+    
+        // Методы для вызова из других систем
+        public void OnResourceCollected(ItemType itemType, int amount)
+        {
+            if (_isSpeaking) return;
+
+            if (!(Random.value < resourceCommentChance)) return;
             switch (itemType)
             {
-                case ItemType.Crystal_Red:
-                case ItemType.Crystal_Blue:
+                case ItemType.CrystalRed:
+                case ItemType.CrystalBlue:
                     SpeakRandomFromCategory("CrystalCollection");
                     break;
                 case ItemType.Metal:
@@ -469,134 +621,110 @@ public class AIAssistant : MonoBehaviour
                 case ItemType.Stone:
                     SpeakRandomFromCategory("StoneCollection");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
             }
         }
-    }
     
-    public void OnEnemyKilled(string enemyType)
-    {
-        if (isSpeaking) return;
-        
-        if (Random.value < combatCommentChance)
+        public void OnEnemyKilled(string enemyType)
         {
-            SpeakRandomFromCategory("Combat");
-        }
-    }
-    
-    public void OnTechUnlocked(string techName)
-    {
-        if (isSpeaking) return;
+            if (_isSpeaking) return;
         
-        SpeakRandomFromCategory("Technology");
-    }
-    
-    public void OnBuildingUpgraded(string buildingName)
-    {
-        if (isSpeaking) return;
-        
-        SpeakRandomFromCategory("Construction");
-    }
-    
-    public void OnPlayerLowHealth()
-    {
-        if (isSpeaking) return;
-        
-        SpeakWithPriority(GetUniqueComment("LowHealth"), CommentPriority.High);
-    }
-    
-    public void OnPlayerRich()
-    {
-        if (isSpeaking) return;
-        
-        if (Random.value < 0.2f)
-        {
-            SpeakRandomFromCategory("Wealth");
-        }
-    }
-    
-    public void OnPlayerEnterNewArea(string areaName)
-    {
-        if (isSpeaking) return;
-        SpeakRandomFromCategory("NewArea");
-    }
-    
-    public void OnTimeOfDayChanged(bool isNight)
-    {
-        if (isSpeaking) return;
-        
-        if (isNight && Random.value < 0.4f)
-        {
-            SpeakRandomFromCategory("NightTime");
-        }
-    }
-    
-    public void SpeakRandomFromCategory(string category)
-    {
-        if (commentsDict.ContainsKey(category) && commentsDict[category].Count > 0)
-        {
-            Speak(GetUniqueComment(category));
-        }
-    }
-    
-    private bool IsAnyImportantUIOpen()
-    {
-        // Проверка основных UI окон (нужно адаптировать под вашу игру)
-        return false;
-    }
-    
-    // Принудительно остановить речь
-    public void StopSpeaking()
-    {
-        if (currentSpeechCoroutine != null)
-        {
-            StopCoroutine(currentSpeechCoroutine);
-            isSpeaking = false;
-            shouldMove = true;
-            assistantPanel.SetActive(false);
-            animator.SetBool("IsSpeaking", false);
-            
-            if (bounceCoroutine != null)
+            if (Random.value < combatCommentChance)
             {
-                StopCoroutine(bounceCoroutine);
-                bounceCoroutine = null;
+                SpeakRandomFromCategory("Combat");
             }
         }
-    }
     
-    public void SetMovementEnabled(bool enabled)
-    {
-        shouldMove = enabled;
-        if (!enabled)
+        public void OnTechUnlocked(string techName)
         {
-            animator.SetBool("IsMoving", false);
-        }
-    }
-    
-    // Для сохранения/загрузки
-    [System.Serializable]
-    public class AssistantData
-    {
-        public AssistantMood currentMood;
-        public List<string> spokenComments;
-        public Vector2 position;
-    }
-    
-    public AssistantData GetSaveData()
-    {
-        return new AssistantData
-        {
-            currentMood = currentMood,
-            spokenComments = recentlySpoken,
-            position = assistantRectTransform.anchoredPosition
-        };
-    }
-    
-    public void LoadData(AssistantData data)
-    {
-        if (data == null) return;
+            if (_isSpeaking) return;
         
-        SetMood(data.currentMood);
-        recentlySpoken = data.spokenComments ?? new List<string>();
-        assistantRectTransform.anchoredPosition = data.position;
+            SpeakRandomFromCategory("Technology");
+        }
+    
+        public void OnBuildingUpgraded(string buildingName)
+        {
+            if (_isSpeaking) return;
+        
+            SpeakRandomFromCategory("Construction");
+        }
+    
+        public void OnPlayerLowHealth()
+        {
+            if (_isSpeaking) return;
+        
+            SpeakWithPriority(GetUniqueComment("LowHealth"), CommentPriority.High);
+        }
+    
+        public void OnPlayerEnterNewArea(string areaName)
+        {
+            if (_isSpeaking) return;
+            SpeakRandomFromCategory("NewArea");
+        }
+
+        private void SpeakRandomFromCategory(string category)
+        {
+            if (_commentsDict.ContainsKey(category) && _commentsDict[category].Count > 0)
+            {
+                Speak(GetUniqueComment(category));
+            }
+        }
+    
+        private static bool IsAnyImportantUIOpen()
+        {
+            return false;
+        }
+
+        public void StopSpeaking()
+        {
+            if (_currentSpeechCoroutine == null) return;
+            StopCoroutine(_currentSpeechCoroutine);
+            _isSpeaking = false;
+            _shouldMove = true;
+            assistantPanel.SetActive(false);
+            _animator.SetBool(IsSpeaking, false);
+
+            if (_bounceCoroutine == null) return;
+            StopCoroutine(_bounceCoroutine);
+            _bounceCoroutine = null;
+        }
+    
+        public void SetMovementEnabled(bool value)
+        {
+            _shouldMove = value;
+            if (!value)
+            {
+                _animator.SetBool(IsMoving, false);
+            }
+        }
+    
+        // Для сохранения/загрузки
+        [Serializable]
+        public class AssistantData
+        {
+            public AssistantMood currentMood;
+            public List<string> spokenComments;
+            public Vector2 position;
+        }
+    
+        public AssistantData GetSaveData()
+        {
+            return new AssistantData
+            {
+                currentMood = _currentMood,
+                spokenComments = _recentlySpoken,
+                position = assistantRectTransform.anchoredPosition
+            };
+        }
+    
+        public void LoadData(AssistantData data)
+        {
+            if (data == null) return;
+        
+            SetMood(data.currentMood);
+            _recentlySpoken = data.spokenComments ?? new List<string>();
+            assistantRectTransform.anchoredPosition = data.position;
+        }
     }
 }

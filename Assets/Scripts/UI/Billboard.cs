@@ -1,25 +1,28 @@
 using UnityEngine;
 
-public class Billboard : MonoBehaviour
+namespace UI
 {
-    private Camera mainCamera;
-    
-    void Start()
+    public class Billboard : MonoBehaviour
     {
-        mainCamera = Camera.main;
+        private Camera _mainCamera;
+
+        private void Start()
+        {
+            _mainCamera = Camera.main;
         
-        if (mainCamera == null)
-        {
-            mainCamera = FindObjectOfType<Camera>();
+            if (_mainCamera == null)
+            {
+                _mainCamera = FindObjectOfType<Camera>();
+            }
         }
-    }
-    
-    void LateUpdate()
-    {
-        if (mainCamera != null)
+
+        private void LateUpdate()
         {
-            transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward,
-                mainCamera.transform.rotation * Vector3.up);
+            if (_mainCamera != null)
+            {
+                transform.LookAt(transform.position + _mainCamera.transform.rotation * Vector3.forward,
+                    _mainCamera.transform.rotation * Vector3.up);
+            }
         }
     }
 }

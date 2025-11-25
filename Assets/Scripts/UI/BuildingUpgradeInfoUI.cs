@@ -1,16 +1,19 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-public class BuildingUpgradeInfoUI : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private TextMeshProUGUI _buildingNameText;
-    [SerializeField] private TextMeshProUGUI _levelText;
-    [SerializeField] private TextMeshProUGUI _descriptionText;
-
-    public void Set(string buildingName, int currentLevel, int newLevel, string description)
+    public class BuildingUpgradeInfoUI : MonoBehaviour
     {
-        _buildingNameText.text = buildingName;
-        _levelText.text = $"{currentLevel} → {newLevel}";
-        _descriptionText.text = description;
+        [SerializeField] private TextMeshProUGUI buildingNameText;
+        [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
+
+        public void Set(string buildingName, int currentLevel, int newLevel, string description)
+        {
+            buildingNameText.text = buildingName;
+            levelText.text = $"{currentLevel} → {newLevel}";
+            descriptionText.text = description;
+        }
     }
 }
