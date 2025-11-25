@@ -5100,6 +5100,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   vacuumParticles: {fileID: 7548935465707962582}
+  vacuumSpeed: 10
   collectionDelay: 0.1
   weaponRange: 150
   fireRate: 0.3

@@ -1,84 +1,89 @@
 ﻿using System.Collections.Generic;
+using Core;
+using Data.Inventory;
+using Gameplay.Items;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InventoryUI : MonoBehaviour
+namespace UI
 {
-    [Header("UI References")]
-    [SerializeField] private Transform itemsContainer;
-    [SerializeField] private GameObject itemSlotPrefab;
-    
-    [Header("Database")]
-    [SerializeField] private ItemDatabase itemDatabase;
-    
-    private Dictionary<ItemType, InventorySlotUI> slotUIs = new Dictionary<ItemType, InventorySlotUI>();
-    
-    void Start()
+    public class InventoryUI : MonoBehaviour
     {
-        Inventory.Instance.OnInventoryChanged += UpdateItemDisplay;
+        [Header("UI References")]
+        [SerializeField] private Transform itemsContainer;
+        [SerializeField] private GameObject itemSlotPrefab;
+    
+        [Header("Database")]
+        [SerializeField] private ItemDatabase itemDatabase;
+    
+        private Dictionary<ItemType, InventorySlotUI> _slotUIs = new();
+
+        private void Start()
+        {
+            Inventory.Instance.OnInventoryChanged += UpdateItemDisplay;
         
-        InitializeUI();
-    }
-    
-    void OnDestroy()
-    {
-        if (Inventory.Instance != null)
-            Inventory.Instance.OnInventoryChanged -= UpdateItemDisplay;
-    }
-    
-    private void InitializeUI()
-    {
-        foreach (Transform child in itemsContainer)
-        {
-            Destroy(child.gameObject);
+            InitializeUI();
         }
-        slotUIs.Clear();
-        
-        var allItems = Inventory.Instance.GetAllItems();
-        foreach (var item in allItems)
+
+        private void OnDestroy()
         {
-            CreateSlotUI(item.Type, item.Count);
+            if (Inventory.Instance != null)
+                Inventory.Instance.OnInventoryChanged -= UpdateItemDisplay;
         }
-    }
     
-    private void UpdateItemDisplay(ItemType itemType, int count)
-    {
-        if (slotUIs.ContainsKey(itemType))
+        private void InitializeUI()
         {
-            if (count <= 0)
+            foreach (Transform child in itemsContainer)
             {
-                Destroy(slotUIs[itemType].gameObject);
-                slotUIs.Remove(itemType);
+                Destroy(child.gameObject);
             }
-            else
+            _slotUIs.Clear();
+        
+            var allItems = Inventory.Instance.GetAllItems();
+            foreach (var item in allItems)
             {
-                slotUIs[itemType].UpdateCount(count);
+                CreateSlotUI(item.type, item.count);
             }
         }
-        else if (count > 0)
-        {
-            CreateSlotUI(itemType, count);
-        }
-    }
     
-    private void CreateSlotUI(ItemType itemType, int count)
-    {
-        GameObject slotObject = Instantiate(itemSlotPrefab, itemsContainer);
-        InventorySlotUI slotUI = slotObject.GetComponent<InventorySlotUI>();
-        
-        if (slotUI != null && itemDatabase != null)
+        private void UpdateItemDisplay(ItemType itemType, int count)
         {
-            ItemData itemData = itemDatabase.GetItemData(itemType);
-            Sprite icon = itemData?.Icon;
-            Color color = itemData?.ParticleColor ?? Color.white;
-            string itemName = itemData?.name ?? itemType.ToString();
+            if (_slotUIs.ContainsKey(itemType))
+            {
+                if (count <= 0)
+                {
+                    Destroy(_slotUIs[itemType].gameObject);
+                    _slotUIs.Remove(itemType);
+                }
+                else
+                {
+                    _slotUIs[itemType].UpdateCount(count);
+                }
+            }
+            else if (count > 0)
+            {
+                CreateSlotUI(itemType, count);
+            }
+        }
+    
+        private void CreateSlotUI(ItemType itemType, int count)
+        {
+            var slotObject = Instantiate(itemSlotPrefab, itemsContainer);
+            var slotUI = slotObject.GetComponent<InventorySlotUI>();
+        
+            if (slotUI != null && itemDatabase != null)
+            {
+                var itemData = itemDatabase.GetItemData(itemType);
+                var icon = itemData?.icon;
+                var color = itemData?.particleColor ?? Color.white;
+                var itemName = itemData?.name ?? itemType.ToString();
             
-            slotUI.Initialize(itemType, color, count, itemName, icon);
-            slotUIs[itemType] = slotUI;
-        }
-        else if (itemDatabase == null)
-        {
-            Debug.LogWarning("ItemDatabase is not assigned in InventoryUI");
+                slotUI.Initialize(itemType, color, count, itemName, icon);
+                _slotUIs[itemType] = slotUI;
+            }
+            else if (itemDatabase == null)
+            {
+                Debug.LogWarning("ItemDatabase is not assigned in InventoryUI");
+            }
         }
     }
 }

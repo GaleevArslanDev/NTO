@@ -1,4 +1,4 @@
-namespace Structs
+namespace LocalizationManager.Structs
 {
 
     // public serializable class
@@ -7,8 +7,7 @@ namespace Structs
     public class Localization
     {
 
-        public string LocalizationCode;
-        public string StringsFileName;
-        
+        public string localizationCode;
+        public string stringsFileName;
     }
 }
