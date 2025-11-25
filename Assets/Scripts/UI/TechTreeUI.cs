@@ -126,7 +126,6 @@ namespace UI
             _isUpgradeMode = upgradeMode && allowUnlock;
 
             techTreePanel.SetActive(true);
-            isUIOpen = true;
 
             if (upgradeModePanel != null)
                 upgradeModePanel.SetActive(_isUpgradeMode);
@@ -138,7 +137,9 @@ namespace UI
             }
 
             if (UIManager.Instance != null)
-                UIManager.Instance.RegisterUIOpen();
+                if (!isUIOpen)
+                    UIManager.Instance.RegisterUIOpen();
+            isUIOpen = true;
 
             GenerateTreeUI();
         }
@@ -432,6 +433,7 @@ namespace UI
             // Используем UIManager вместо прямого управления
             if (UIManager.Instance != null)
                 UIManager.Instance.RegisterUIClose();
+            _forcedTree = null;
 
             if (_isUpgradeMode)
             {
