@@ -90,7 +90,8 @@ namespace UI
             }
 
             if (UIManager.Instance != null)
-                UIManager.Instance.RegisterUIOpen();
+                if (!isUIOpen) 
+                    UIManager.Instance.RegisterUIOpen();
 
             isUIOpen = true;
             RefreshQuestsUI();
@@ -217,13 +218,13 @@ namespace UI
         private void OpenQuestBoard()
         {
             questBoardPanel.SetActive(true);
-            isUIOpen = true;
             _isNpcMode = false;
             npcModePanel.SetActive(false);
 
             if (UIManager.Instance != null)
-                UIManager.Instance.RegisterUIOpen();
-
+                if (!isUIOpen) 
+                    UIManager.Instance.RegisterUIOpen();
+            isUIOpen = true;
             RefreshQuestsUI();
         }
 
