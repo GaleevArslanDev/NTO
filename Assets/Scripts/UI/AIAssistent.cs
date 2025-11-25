@@ -11,11 +11,11 @@ namespace UI
     public class AIAssistant : MonoBehaviour
     {
         public static AIAssistant Instance;
-        private static readonly int IsMoving = Animator.StringToHash("IsMoving"); // bool
-        private static readonly int Roll = Animator.StringToHash("Roll"); // trigger
-        private static readonly int Jump = Animator.StringToHash("Jump"); // trigger
-        private static readonly int Mood = Animator.StringToHash("Mood"); // int
-        private static readonly int IsSpeaking = Animator.StringToHash("IsSpeaking"); // bool
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int Roll = Animator.StringToHash("Roll");
+        private static readonly int Jump = Animator.StringToHash("Jump");
+        private static readonly int Mood = Animator.StringToHash("Mood");
+        private static readonly int IsSpeaking = Animator.StringToHash("IsSpeaking");
 
         [Header("UI References")]
         [SerializeField] private GameObject assistantPanel;
@@ -27,8 +27,8 @@ namespace UI
         [SerializeField] private float moveSpeed = 100f;
         [SerializeField] private float bounceHeight = 10f;
         [SerializeField] private float bounceSpeed = 2f;
-        [SerializeField] private float movementAreaWidth = 300f;
-        [SerializeField] private float movementAreaHeight = 200f;
+        [SerializeField] private Vector2 movementAreaSize = new Vector2(300f, 200f);
+        [SerializeField] private Vector2 bottomRightOffset = new Vector2(-100f, 100f);
         [SerializeField] private float jumpHeight = 3f;
         [SerializeField] private float jumpDuration = 0.5f;
     
@@ -96,7 +96,6 @@ namespace UI
     
         // Player tracking
         private CharacterController _playerController;
-        private Vector3 _lastPlayerWorldPosition;
     
         // События для комментариев
         public Action<string> OnAssistantSpeak;
@@ -105,6 +104,11 @@ namespace UI
         private Rect _movementBounds;
         private Vector2 _assistantSize;
         private Vector2 _defaultPosition;
+        private Vector2 _currentPixelOffset;
+
+        // Флаги инициализации
+        private bool _isInitialized = false;
+        private bool _isCalculatingBounds = false;
 
         private void Awake()
         {
@@ -128,71 +132,137 @@ namespace UI
         
             InitializeComments();
             FindPlayerController();
-            CalculateMovementBounds();
         }
 
         private void Start()
         {
-            assistantPanel.SetActive(false);
             speechBubble.alpha = 0;
         
             if (_mainCamera != null)
                 _lastCameraForward = _mainCamera.transform.forward;
         
-            // Устанавливаем начальную позицию в правом нижнем углу
+            // Запускаем полную инициализацию
+            StartCoroutine(FullInitialization());
+        }
+
+        private IEnumerator FullInitialization()
+        {
+            // Ждем пока Canvas полностью инициализируется
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame(); // Двойное ожидание для надежности
+            
+            // Инициализируем границы и позицию
+            CalculateMovementBounds();
             SetToDefaultPosition();
-        
+            
+            _isInitialized = true;
+            
+            // Запускаем основные корутины
             StartCoroutine(RandomCommentsRoutine());
             _movementCoroutine = StartCoroutine(MovementRoutine());
             StartCoroutine(IdleActionsRoutine());
             StartCoroutine(PlayerTrackingRoutine());
         }
-    
-        void Update()
-        {
-            HandleInertiaForces();
-            HandleMovement();
-            HandleBounceAnimation();
-        }
 
+        private void OnRectTransformDimensionsChange()
+        {
+            if (!_isInitialized || _isCalculatingBounds) return;
+
+            StartCoroutine(DelayedBoundsRecalculation());
+        }
+    
+        private IEnumerator DelayedBoundsRecalculation()
+        {
+            yield return new WaitForEndOfFrame();
+            CalculateMovementBounds();
+            
+            if (!_isSpeaking)
+            {
+                // Плавно перемещаем к текущей позиции с учетом новых границ
+                var currentPos = assistantRectTransform.anchoredPosition;
+                var clampedPos = ClampToMovementBounds(currentPos);
+                
+                if (Vector2.Distance(currentPos, clampedPos) > 10f)
+                {
+                    if (_movementCoroutine != null)
+                        StopCoroutine(_movementCoroutine);
+                    _movementCoroutine = StartCoroutine(SmoothReposition(currentPos, clampedPos));
+                }
+            }
+        }
+    
+        private IEnumerator SmoothReposition(Vector2 from, Vector2 to)
+        {
+            var duration = 0.5f;
+            var elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                var t = elapsed / duration;
+                assistantRectTransform.anchoredPosition = Vector2.Lerp(from, to, t);
+                yield return null;
+            }
+            
+            assistantRectTransform.anchoredPosition = to;
+            _movementCoroutine = StartCoroutine(MovementRoutine());
+        }
+    
         private void CalculateMovementBounds()
         {
-            if (_parentCanvas == null) return;
+            if (_parentCanvas == null) 
+            {
+                Debug.LogWarning("Parent canvas not found!");
+                return;
+            }
 
-            // Получаем размер ассистента
-            _assistantSize = assistantRectTransform.rect.size;
-        
-            // Получаем размер канваса
-            var canvasWidth = _parentCanvas.pixelRect.width;
-            var canvasHeight = _parentCanvas.pixelRect.height;
-        
-            // Рассчитываем область движения в правом нижнем углу
-            var rightEdge = canvasWidth/2 - _assistantSize.x * 0.5f;
-            var bottomEdge = (-canvasHeight/2)+_assistantSize.y*0.5f;
-            var leftEdge = rightEdge - movementAreaWidth;
-            var topEdge = bottomEdge - movementAreaHeight;
-        
-            // Убеждаемся, что область движения не выходит за пределы экрана
-            leftEdge = Mathf.Max(leftEdge, _assistantSize.x * 0.5f);
-            topEdge = Mathf.Max(topEdge, _assistantSize.y * 0.5f);
-        
-            _movementBounds = new Rect(
-                leftEdge,
-                topEdge,
-                Mathf.Max(movementAreaWidth, _assistantSize.x),
-                Mathf.Max(movementAreaHeight, _assistantSize.y)
-            );
-        
-            // Позиция по умолчанию - центр области движения
-            _defaultPosition = new Vector2(
-                leftEdge + _movementBounds.width * 0.5f,
-                bottomEdge
-            );
+            _isCalculatingBounds = true;
+
+            try
+            {
+                // Получаем размер ассистента
+                if (assistantRectTransform == null)
+                    assistantRectTransform = GetComponent<RectTransform>();
+                    
+                _assistantSize = assistantRectTransform.rect.size;
+            
+                // Рассчитываем область движения в правом нижнем углу с учетом смещения
+                var rightEdge = bottomRightOffset.x;
+                var bottomEdge = bottomRightOffset.y;
+            
+                var leftEdge = rightEdge - movementAreaSize.x;
+                var topEdge = bottomEdge - movementAreaSize.y;
+
+                // Гарантируем, что область движения имеет минимальный размер
+                var boundsWidth = Mathf.Max(movementAreaSize.x, _assistantSize.x);
+                var boundsHeight = Mathf.Max(movementAreaSize.y, _assistantSize.y);
+
+                _movementBounds = new Rect(
+                    leftEdge,
+                    topEdge,
+                    boundsWidth,
+                    boundsHeight
+                );
+
+                // Позиция по умолчанию - центр нижней части области движения
+                _defaultPosition = new Vector2(
+                    leftEdge + _movementBounds.width * 0.5f,
+                    bottomEdge
+                );
+            }
+            finally
+            {
+                _isCalculatingBounds = false;
+            }
         }
     
         private void SetToDefaultPosition()
         {
-            assistantRectTransform.anchoredPosition = _defaultPosition;
+            if (assistantRectTransform != null)
+            {
+                assistantRectTransform.anchoredPosition = _defaultPosition;
+                _currentPixelOffset = Vector2.zero;
+            }
         }
     
         private void FindPlayerController()
@@ -277,7 +347,7 @@ namespace UI
                     _movementDirection = new Vector2(Random.Range(-1f, 1f), 0).normalized;
                 }
             
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(Random.Range(1f, 3f));
             }
         }
     
@@ -299,6 +369,15 @@ namespace UI
                 }
             }
         }
+
+        private void Update()
+        {
+            if (!_isInitialized) return;
+            
+            HandleInertiaForces();
+            HandleMovement();
+            HandleBounceAnimation();
+        }
     
         private void HandleMovement()
         {
@@ -311,13 +390,16 @@ namespace UI
             newPosition = ClampToMovementBounds(newPosition);
         
             assistantRectTransform.anchoredPosition = newPosition;
+            
+            // Сохраняем смещение от позиции по умолчанию
+            _currentPixelOffset = newPosition - _defaultPosition;
 
-            transform.localScale = totalMovement.x switch
+            assistantPanel.transform.localScale = totalMovement.x switch
             {
                 // Поворот спрайта
                 > 0.1f => Vector3.one,
                 < -0.1f => new Vector3(-1, 1, 1),
-                _ => transform.localScale
+                _ => assistantPanel.transform.localScale
             };
 
             _animator.SetBool(IsMoving, totalMovement.magnitude > 10f);
@@ -325,17 +407,15 @@ namespace UI
 
         private Vector2 ClampToMovementBounds(Vector2 position)
         {
-            // Обновляем границы на случай изменения размера экрана
-            CalculateMovementBounds();
-
-            // Ограничиваем позицию областью движения
             position.x = Mathf.Clamp(position.x, _movementBounds.x, _movementBounds.x + _movementBounds.width);
+            position.y = Mathf.Clamp(position.y, _movementBounds.y, _movementBounds.y + _movementBounds.height);
 
             // Если достигли границы, меняем направление и уменьшаем инерцию
-            if (!(position.x <= _movementBounds.x) && !(position.x >= _movementBounds.x + _movementBounds.width))
-                return position;
-            _movementDirection.x *= -1;
-            _currentInertia.x *= 0.3f;
+            if (position.x <= _movementBounds.x || position.x >= _movementBounds.x + _movementBounds.width)
+            {
+                _movementDirection.x *= -1;
+                _currentInertia.x *= 0.3f;
+            }
 
             return position;
         }
@@ -406,8 +486,6 @@ namespace UI
             assistantRectTransform.anchoredPosition = startPos;
         }
     
-        // МЕТОДЫ ИНЕРЦИИ
-
         private void OnCameraTurnedQuickly(Vector3 currentCameraForward, float turnSpeed)
         {
             if (!(turnSpeed > cameraTurnThreshold) || _isSpeaking) return;
@@ -456,8 +534,6 @@ namespace UI
             _currentInertia += randomInertia;
         }
     
-        // ОСТАЛЬНЫЕ МЕТОДЫ
-
         private void SetMood(AssistantMood newMood)
         {
             _currentMood = newMood;
@@ -566,7 +642,6 @@ namespace UI
             _animator.SetBool(IsMoving, false);
             _animator.SetBool(IsSpeaking, true);
         
-            assistantPanel.SetActive(true);
             yield return StartCoroutine(FadeSpeechBubble(0f, 1f, fadeDuration));
         
             speechText.text = "";
@@ -579,7 +654,6 @@ namespace UI
             yield return new WaitForSeconds(duration);
         
             yield return StartCoroutine(FadeSpeechBubble(1f, 0f, fadeDuration));
-            assistantPanel.SetActive(false);
         
             _animator.SetBool(IsSpeaking, false);
             _isSpeaking = false;
@@ -600,7 +674,6 @@ namespace UI
             speechBubble.alpha = to;
         }
     
-        // Методы для вызова из других систем
         public void OnResourceCollected(ItemType itemType, int amount)
         {
             if (_isSpeaking) return;
@@ -682,7 +755,6 @@ namespace UI
             StopCoroutine(_currentSpeechCoroutine);
             _isSpeaking = false;
             _shouldMove = true;
-            assistantPanel.SetActive(false);
             _animator.SetBool(IsSpeaking, false);
 
             if (_bounceCoroutine == null) return;
@@ -699,7 +771,6 @@ namespace UI
             }
         }
     
-        // Для сохранения/загрузки
         [Serializable]
         public class AssistantData
         {
@@ -714,7 +785,7 @@ namespace UI
             {
                 currentMood = _currentMood,
                 spokenComments = _recentlySpoken,
-                position = assistantRectTransform.anchoredPosition
+                position = _currentPixelOffset
             };
         }
     
@@ -724,7 +795,10 @@ namespace UI
         
             SetMood(data.currentMood);
             _recentlySpoken = data.spokenComments ?? new List<string>();
-            assistantRectTransform.anchoredPosition = data.position;
+            
+            CalculateMovementBounds();
+            assistantRectTransform.anchoredPosition = ClampToMovementBounds(_defaultPosition + data.position);
+            _currentPixelOffset = data.position;
         }
     }
 }
