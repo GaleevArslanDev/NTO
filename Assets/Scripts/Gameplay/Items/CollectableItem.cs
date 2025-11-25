@@ -42,7 +42,7 @@ namespace Gameplay.Items
             }
         }
     
-        public void StartBreaking()
+        public void StartBreaking(float vacuumSpeedMultiplier)
         {
             if (_isCollected || _isBeingBroken) return;
         
@@ -61,10 +61,10 @@ namespace Gameplay.Items
                 breakProgressSlider.value = 0;
             }
         
-            StartCoroutine(BreakingRoutine());
+            StartCoroutine(BreakingRoutine(vacuumSpeedMultiplier));
         }
     
-        public void StopBreaking()
+        public void StopBreaking(float time)
         {
             if (!_isBeingBroken) return;
         
@@ -77,17 +77,19 @@ namespace Gameplay.Items
             }
         
             StopAllCoroutines();
-            StartCoroutine(ReturnToOriginalPosition());
+            StartCoroutine(ReturnToOriginalPosition(time));
         }
     
-        private IEnumerator BreakingRoutine()
+        private IEnumerator BreakingRoutine(float vacuumSpeedMultiplier)
         {
             var timer = 0f;
+            
+            var breakTime = data.breakTime * (1 / vacuumSpeedMultiplier);
         
-            while (timer < data.breakTime && _isBeingBroken)
+            while (timer < breakTime && _isBeingBroken)
             {
                 timer += Time.deltaTime;
-                _currentBreakProgress = timer / data.breakTime;
+                _currentBreakProgress = timer / breakTime;
             
                 if (breakProgressSlider != null)
                 {
@@ -122,10 +124,10 @@ namespace Gameplay.Items
                                  shakeOffset * 0.1f; // Уменьшаем тряску для позиции
         }
     
-        private IEnumerator ReturnToOriginalPosition()
+        private IEnumerator ReturnToOriginalPosition(float returnTime)
         {
+            Debug.Log("Returning to original position in " + returnTime + " seconds");
             var startPos = transform.position;
-            const float returnTime = 0.5f;
             var timer = 0f;
         
             while (timer < returnTime)
@@ -159,19 +161,18 @@ namespace Gameplay.Items
             }
         }
     
-        public void StartCollection(Transform target)
+        public void StartCollection(Transform target, float vacuumSpeedMultiplier)
         {
             if (_isCollected) return;
             _isCollected = true;
         
             if (_coll != null) _coll.enabled = false;
         
-            StartCoroutine(CollectionRoutine(target));
+            StartCoroutine(CollectionRoutine(target, data.vacuumTime * (1 / vacuumSpeedMultiplier)));
         }
     
-        private IEnumerator CollectionRoutine(Transform target)
+        private IEnumerator CollectionRoutine(Transform target, float duration)
         {
-            const float duration = 0.7f;
             var time = 0f;
             var startPos = transform.position;
             var startScale = transform.localScale;
