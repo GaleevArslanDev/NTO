@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1779160901}
-  breakProgressSlider: {fileID: 292146477}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1779160906}
 --- !u!65 &98515820
 BoxCollider:
@@ -2375,7 +2375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 748138968}
-  breakProgressSlider: {fileID: 976635707}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 748138973}
 --- !u!65 &170272783
 BoxCollider:
@@ -3042,7 +3042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 171632317}
-  breakProgressSlider: {fileID: 799083060}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 171632322}
 --- !u!65 &206055136
 BoxCollider:
@@ -5805,7 +5805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 1705518156}
-  breakProgressSlider: {fileID: 1262250842}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1705518161}
 --- !u!65 &404981564
 BoxCollider:
@@ -7652,7 +7652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 561711246}
-  breakProgressSlider: {fileID: 736569743}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 561711247}
 --- !u!65 &567400832
 BoxCollider:
@@ -8023,7 +8023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 859912816}
-  breakProgressSlider: {fileID: 368630142}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 859912821}
 --- !u!65 &625950652
 BoxCollider:
@@ -9734,7 +9734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 1771967911}
-  breakProgressSlider: {fileID: 425440393}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1771967916}
 --- !u!65 &769015034
 BoxCollider:
@@ -9893,7 +9893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 372109489}
-  breakProgressSlider: {fileID: 539992384}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 372109494}
 --- !u!65 &775791199
 BoxCollider:
@@ -10888,7 +10888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 1164016008}
-  breakProgressSlider: {fileID: 697228572}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1164016013}
 --- !u!65 &885974311
 BoxCollider:
@@ -12850,7 +12850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1494140638}
-  breakProgressSlider: {fileID: 304997169}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1494140643}
 --- !u!65 &1044927368
 BoxCollider:
@@ -14651,7 +14651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 175379744}
-  breakProgressSlider: {fileID: 1002588784}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 175379745}
 --- !u!65 &1172866326
 BoxCollider:
@@ -14865,7 +14865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 199883119}
-  breakProgressSlider: {fileID: 2109028293}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 199883124}
 --- !u!65 &1180320341
 BoxCollider:
@@ -15259,7 +15259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 261079826}
-  breakProgressSlider: {fileID: 384740553}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 261079831}
 --- !u!65 &1208960543
 BoxCollider:
@@ -16287,7 +16287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 2126709316}
-  breakProgressSlider: {fileID: 1270212129}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 2126709321}
 --- !u!65 &1306486317
 BoxCollider:
@@ -16730,13 +16730,6 @@ MonoBehaviour:
     - "\u042D\u0442\u043E\u0442 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B
       \u0441\u0442\u043E\u0438\u0442 \u0431\u043E\u043B\u044C\u0448\u0435, \u0447\u0435\u043C
       \u0432\u0435\u0441\u044C \u043C\u043E\u0439 \u043A\u043E\u0434!"
-    - "\u042D\u0442\u043E\u0442 \u043A\u0440\u0438\u0441\u0442\u0430\u043B\u043B
-      \u0441\u0442\u043E\u0438\u0442 \u0431\u043E\u043B\u044C\u0448\u0435, \u0447\u0435\u043C
-      \u0432\u0435\u0441\u044C \u043C\u043E\u0439 \u043A\u043E\u0434!"
-    - "\u0424\u0430\u043D\u0442\u0430\u0441\u0442\u0438\u0447\u0435\u0441\u043A\u0438!
-      \u041F\u0440\u0435\u0432\u043E\u0441\u0445\u043E\u0434\u043D\u043E! \u0412\u0435\u043B\u0438\u043A\u043E\u043B\u0435\u043F\u043D\u043E!
-      (\u0423 \u043C\u0435\u043D\u044F \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B\u0438\u0441\u044C
-      \u0441\u0438\u043D\u043E\u043D\u0438\u043C\u044B)"
     - "\u0424\u0430\u043D\u0442\u0430\u0441\u0442\u0438\u0447\u0435\u0441\u043A\u0438!
       \u041F\u0440\u0435\u0432\u043E\u0441\u0445\u043E\u0434\u043D\u043E! \u0412\u0435\u043B\u0438\u043A\u043E\u043B\u0435\u043F\u043D\u043E!
       (\u0423 \u043C\u0435\u043D\u044F \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u043B\u0438\u0441\u044C
@@ -16767,9 +16760,6 @@ MonoBehaviour:
     - "\u041E\u0441\u0442\u043E\u0440\u043E\u0436\u043D\u043E! \u041C\u043E\u0436\u0435\u0442
       \u0432\u044B\u0437\u0432\u0430\u0442\u044C \u0445\u0438\u043C\u0438\u0447\u0435\u0441\u043A\u0443\u044E
       \u0437\u0430\u0432\u0438\u0441\u0438\u043C\u043E\u0441\u0442\u044C \u043A \u043A\u043E\u043B\u043B\u0435\u043A\u0446\u0438\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044E!"
-    - "\u041E\u0441\u0442\u043E\u0440\u043E\u0436\u043D\u043E! \u041C\u043E\u0436\u0435\u0442
-      \u0432\u044B\u0437\u0432\u0430\u0442\u044C \u0445\u0438\u043C\u0438\u0447\u0435\u0441\u043A\u0443\u044E
-      \u0437\u0430\u0432\u0438\u0441\u0438\u043C\u043E\u0441\u0442\u044C \u043A \u043A\u043E\u043B\u043B\u0435\u043A\u0446\u0438\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044E!"
     - "\u041C\u0435\u0442\u0430\u043B\u043B! \u0422\u044F\u0436\u0435\u043B\u044B\u0439,
       \u043D\u043E \u0446\u0435\u043D\u043D\u044B\u0439... \u043A\u0430\u043A \u043C\u043E\u0438
       \u0448\u0443\u0442\u043A\u0438."
@@ -16780,8 +16770,6 @@ MonoBehaviour:
     - "\u042D\u0442\u043E\u0442 \u043C\u0435\u0442\u0430\u043B\u043B \u0437\u0430\u0441\u0442\u0430\u0432\u043B\u044F\u0435\u0442
       \u043C\u0435\u043D\u044F \u0445\u043E\u0442\u0435\u0442\u044C \u0432\u043A\u043B\u044E\u0447\u0438\u0442\u044C
       Metallica!"
-    - "\u041C\u0435\u0442\u0430\u043B\u043B, \u043A\u0430\u043A \u0438 \u043B\u044E\u0434\u0438,
-      \u0437\u0430\u043A\u0430\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u0442\u0440\u0443\u0434\u043D\u043E\u0441\u0442\u044F\u0445."
     - "\u041C\u0435\u0442\u0430\u043B\u043B, \u043A\u0430\u043A \u0438 \u043B\u044E\u0434\u0438,
       \u0437\u0430\u043A\u0430\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u0442\u0440\u0443\u0434\u043D\u043E\u0441\u0442\u044F\u0445."
   - categoryName: Technology
@@ -16895,9 +16883,6 @@ MonoBehaviour:
       (\u0432\u0438\u0440\u0442\u0443\u0430\u043B\u044C\u043D\u043E)"
     - "\u0424\u0430\u0442\u0430\u043B\u0438\u0442\u0438! ...\u041E\u0439, \u044D\u0442\u043E
       \u0438\u0437 \u0434\u0440\u0443\u0433\u043E\u0439 \u0438\u0433\u0440\u044B"
-    - "\u0412\u0440\u0430\u0433 \u043F\u043E\u0432\u0435\u0440\u0436\u0435\u043D!
-      \u0422\u0435\u043F\u0435\u0440\u044C \u043C\u043E\u0436\u043D\u043E \u0438
-      \u043F\u043E\u0442\u0430\u043D\u0446\u0435\u0432\u0430\u0442\u044C?"
     - "\u0412\u0440\u0430\u0433 \u043F\u043E\u0432\u0435\u0440\u0436\u0435\u043D!
       \u0422\u0435\u043F\u0435\u0440\u044C \u043C\u043E\u0436\u043D\u043E \u0438
       \u043F\u043E\u0442\u0430\u043D\u0446\u0435\u0432\u0430\u0442\u044C?"
@@ -17522,7 +17507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1260245163}
-  breakProgressSlider: {fileID: 1391938288}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1260245168}
 --- !u!65 &1356536608
 BoxCollider:
@@ -18792,7 +18777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 628413080}
-  breakProgressSlider: {fileID: 1033667024}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 628413085}
 --- !u!65 &1430528101
 BoxCollider:
@@ -20446,7 +20431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 1551861452}
-  breakProgressSlider: {fileID: 2000182374}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1551861457}
 --- !u!65 &1573358288
 BoxCollider:
@@ -21994,7 +21979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1321633422}
-  breakProgressSlider: {fileID: 1278805387}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1321633427}
 --- !u!65 &1676592716
 BoxCollider:
@@ -22341,7 +22326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 934068400}
-  breakProgressSlider: {fileID: 336883724}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 934068405}
 --- !u!65 &1687444435
 BoxCollider:
@@ -22571,7 +22556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1476353917}
-  breakProgressSlider: {fileID: 2056130923}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1476353922}
 --- !u!65 &1695088681
 BoxCollider:
@@ -22820,7 +22805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 549948171}
-  breakProgressSlider: {fileID: 1219597782}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 549948176}
 --- !u!65 &1697161524
 BoxCollider:
@@ -23117,7 +23102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1159061834}
-  breakProgressSlider: {fileID: 672237647}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1159061835}
 --- !u!65 &1717672459
 BoxCollider:
@@ -23240,7 +23225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 127982139}
-  breakProgressSlider: {fileID: 341736152}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 127982143}
 --- !u!65 &1721376814
 BoxCollider:
@@ -29500,7 +29485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1824826187}
-  breakProgressSlider: {fileID: 931808721}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1824826188}
 --- !u!65 &1817759560
 BoxCollider:
@@ -32138,7 +32123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 61589130}
-  breakProgressSlider: {fileID: 1045006970}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 61589135}
 --- !u!65 &2123716448
 BoxCollider:
