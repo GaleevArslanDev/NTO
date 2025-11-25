@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1779160901}
-  breakProgressSlider: {fileID: 292146477}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1779160906}
 --- !u!65 &98515820
 BoxCollider:
@@ -2375,7 +2375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 748138968}
-  breakProgressSlider: {fileID: 976635707}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 748138973}
 --- !u!65 &170272783
 BoxCollider:
@@ -3042,7 +3042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 171632317}
-  breakProgressSlider: {fileID: 799083060}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 171632322}
 --- !u!65 &206055136
 BoxCollider:
@@ -3452,7 +3452,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1323443256}
-  - {fileID: 1781290528}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4632,7 +4631,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 0}
-  m_FillRect: {fileID: 391153578}
+  m_FillRect: {fileID: 0}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
@@ -5334,7 +5333,7 @@ RectTransform:
   m_Father: {fileID: 29476926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5805,7 +5804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 1705518156}
-  breakProgressSlider: {fileID: 1262250842}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1705518161}
 --- !u!65 &404981564
 BoxCollider:
@@ -7652,7 +7651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 561711246}
-  breakProgressSlider: {fileID: 736569743}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 561711247}
 --- !u!65 &567400832
 BoxCollider:
@@ -8023,7 +8022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 859912816}
-  breakProgressSlider: {fileID: 368630142}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 859912821}
 --- !u!65 &625950652
 BoxCollider:
@@ -9734,7 +9733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 1771967911}
-  breakProgressSlider: {fileID: 425440393}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1771967916}
 --- !u!65 &769015034
 BoxCollider:
@@ -9893,7 +9892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 372109489}
-  breakProgressSlider: {fileID: 539992384}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 372109494}
 --- !u!65 &775791199
 BoxCollider:
@@ -10888,7 +10887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 1164016008}
-  breakProgressSlider: {fileID: 697228572}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1164016013}
 --- !u!65 &885974311
 BoxCollider:
@@ -12850,7 +12849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1494140638}
-  breakProgressSlider: {fileID: 304997169}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1494140643}
 --- !u!65 &1044927368
 BoxCollider:
@@ -14651,7 +14650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 175379744}
-  breakProgressSlider: {fileID: 1002588784}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 175379745}
 --- !u!65 &1172866326
 BoxCollider:
@@ -14865,7 +14864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 199883119}
-  breakProgressSlider: {fileID: 2109028293}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 199883124}
 --- !u!65 &1180320341
 BoxCollider:
@@ -15259,7 +15258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 261079826}
-  breakProgressSlider: {fileID: 384740553}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 261079831}
 --- !u!65 &1208960543
 BoxCollider:
@@ -16287,7 +16286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 2126709316}
-  breakProgressSlider: {fileID: 1270212129}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 2126709321}
 --- !u!65 &1306486317
 BoxCollider:
@@ -16533,7 +16532,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1323443256}
   - component: {fileID: 1323443258}
-  - component: {fileID: 1323443257}
   - component: {fileID: 1323443259}
   - component: {fileID: 1323443263}
   - component: {fileID: 1323443264}
@@ -16557,43 +16555,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2110275763}
+  - {fileID: 1691443716}
   m_Father: {fileID: 254925160}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 767, y: -490}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1323443257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1323443255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_Pivot: {x: 1, y: 0}
 --- !u!222 &1323443258
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16687,15 +16656,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ace2f01aaf489a83d6bbcf72857b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assistantPanel: {fileID: 1781290525}
+  assistantPanel: {fileID: 1691443715}
   speechText: {fileID: 207233641}
   speechBubble: {fileID: 2110275760}
   assistantRectTransform: {fileID: 1323443256}
   moveSpeed: 100
   bounceHeight: 10
   bounceSpeed: 2
-  movementAreaWidth: 600
-  movementAreaHeight: 200
+  movementAreaSize: {x: 300, y: 200}
+  bottomRightOffset: {x: 0, y: 0}
   jumpHeight: 3
   jumpDuration: 0.5
   fadeDuration: 0.3
@@ -17522,7 +17491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1260245163}
-  breakProgressSlider: {fileID: 1391938288}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1260245168}
 --- !u!65 &1356536608
 BoxCollider:
@@ -18792,7 +18761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 628413080}
-  breakProgressSlider: {fileID: 1033667024}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 628413085}
 --- !u!65 &1430528101
 BoxCollider:
@@ -21994,7 +21963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1321633422}
-  breakProgressSlider: {fileID: 1278805387}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1321633427}
 --- !u!65 &1676592716
 BoxCollider:
@@ -22341,7 +22310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 934068400}
-  breakProgressSlider: {fileID: 336883724}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 934068405}
 --- !u!65 &1687444435
 BoxCollider:
@@ -22521,6 +22490,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1821985474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1691443715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1691443716}
+  - component: {fileID: 1691443718}
+  - component: {fileID: 1691443717}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1691443716
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691443715}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1323443256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1691443717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691443715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1691443718
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691443715}
+  m_CullTransparentMesh: 1
 --- !u!1 &1695088678
 GameObject:
   m_ObjectHideFlags: 0
@@ -22571,7 +22615,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1476353917}
-  breakProgressSlider: {fileID: 2056130923}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1476353922}
 --- !u!65 &1695088681
 BoxCollider:
@@ -22820,7 +22864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 549948171}
-  breakProgressSlider: {fileID: 1219597782}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 549948176}
 --- !u!65 &1697161524
 BoxCollider:
@@ -23117,7 +23161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1159061834}
-  breakProgressSlider: {fileID: 672237647}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1159061835}
 --- !u!65 &1717672459
 BoxCollider:
@@ -24243,81 +24287,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1781290525
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1781290528}
-  - component: {fileID: 1781290527}
-  - component: {fileID: 1781290526}
-  m_Layer: 5
-  m_Name: AAA
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1781290526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1781290525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1781290527
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1781290525}
-  m_CullTransparentMesh: 1
---- !u!224 &1781290528
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1781290525}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 254925160}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1783646851
 GameObject:
   m_ObjectHideFlags: 0
@@ -29500,7 +29469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 1824826187}
-  breakProgressSlider: {fileID: 931808721}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1824826188}
 --- !u!65 &1817759560
 BoxCollider:
@@ -32138,7 +32107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 61589130}
-  breakProgressSlider: {fileID: 1045006970}
+  breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 61589135}
 --- !u!65 &2123716448
 BoxCollider:
