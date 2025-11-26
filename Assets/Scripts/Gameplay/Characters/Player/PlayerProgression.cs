@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Data.Game;
 using Data.Tech;
 using Gameplay.Buildings;
 using Gameplay.Items;
+using Gameplay.Systems;
 using UI;
 using UnityEngine;
 
@@ -34,20 +36,19 @@ namespace Gameplay.Characters.Player
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeTechTrees();
             }
             else
             {
                 Destroy(gameObject);
             }
         }
-    
-        private void InitializeTechTrees()
+
+        public void Initialize()
         {
-            // Загрузка сохраненных прокачек
-            LoadTechProgress();
-        
-            // Применяем все разблокированные улучшения
+            // Устанавливаем начальные значения по умолчанию
+            ResetTechProgress();
+            
+            // Применяем все разблокированные улучшения (если есть)
             ApplyAllUnlockedTechs();
         }
     
@@ -88,8 +89,9 @@ namespace Gameplay.Characters.Player
             // Применяем эффекты
             ApplyTechEffects(node);
     
-            // Сохраняем прогресс
-            SaveTechProgress();
+            // Сохраняем прогресс через SaveManager
+            if (SaveManager.Instance != null)
+                SaveManager.Instance.AutoSave();
     
             Debug.Log($"Технология разблокирована: {node.nodeName}");
         
@@ -97,6 +99,9 @@ namespace Gameplay.Characters.Player
             {
                 AIAssistant.Instance.OnTechUnlocked(node.nodeName);
             }
+            
+            if (SaveManager.Instance != null)
+                SaveManager.Instance.AutoSave();
         
             return true;
         }
@@ -182,6 +187,67 @@ namespace Gameplay.Characters.Player
                 FarmManager.Instance.UpgradeFarmPlot(plotId, newProductionRate);
             }
         }
+        
+        public Dictionary<string, bool> GetUnlockedTechsDictionary()
+        {
+            return _unlockedTechs;
+        }
+
+        public void ApplyUnlockedTechs(Dictionary<string, bool> unlockedTechs)
+        {
+            _unlockedTechs = unlockedTechs ?? new Dictionary<string, bool>();
+    
+            // Применяем разблокированные технологии
+            ApplyAllUnlockedTechs();
+        }
+
+        public TechSaveData GetTechSaveData()
+        {
+            var saveData = new TechSaveData();
+            
+            // Сохраняем все разблокированные технологии из всех деревьев
+            var trees = new[] { forgeTechTree, farmTechTree, generalTechTree };
+            foreach (var tree in trees)
+            {
+                if (tree != null)
+                {
+                    foreach (var node in tree.nodes)
+                    {
+                        saveData.unlockedNodes[node.nodeId] = node.isUnlocked;
+                    }
+                }
+            }
+            
+            return saveData;
+        }
+
+        public void ApplyTechSaveData(TechSaveData data)
+        {
+            if (data == null) return;
+    
+            // Сначала сбрасываем все технологии
+            ResetTechProgress();
+    
+            // Затем применяем сохраненные состояния
+            var trees = new[] { forgeTechTree, farmTechTree, generalTechTree };
+            foreach (var tree in trees)
+            {
+                if (tree != null)
+                {
+                    foreach (var node in tree.nodes)
+                    {
+                        if (data.unlockedNodes.ContainsKey(node.nodeId))
+                        {
+                            node.isUnlocked = data.unlockedNodes[node.nodeId];
+                            _unlockedTechs[node.nodeId] = node.isUnlocked;
+                        }
+                    }
+                }
+            }
+    
+            // Применяем эффекты разблокированных технологий
+            ApplyAllUnlockedTechs();
+        }
     
         private void UpdateMtbStats()
         {
@@ -198,32 +264,6 @@ namespace Gameplay.Characters.Player
             }
         }
     
-        private void SaveTechProgress()
-        {
-            foreach (var tree in new[] { forgeTechTree, farmTechTree, generalTechTree })
-            {
-                if (tree == null) continue;
-                foreach (var node in tree.nodes)
-                {
-                    PlayerPrefs.SetInt($"Tech_{node.nodeId}", node.isUnlocked ? 1 : 0);
-                }
-            }
-            PlayerPrefs.Save();
-        }
-    
-        private void LoadTechProgress()
-        {
-            foreach (var tree in new[] { forgeTechTree, farmTechTree, generalTechTree })
-            {
-                if (tree == null) continue;
-                foreach (var node in tree.nodes)
-                {
-                    node.isUnlocked = PlayerPrefs.GetInt($"Tech_{node.nodeId}", 0) == 1;
-                    _unlockedTechs[node.nodeId] = node.isUnlocked;
-                }
-            }
-        }
-    
         // Методы для проверки статуса технологий
         public bool IsTechUnlocked(string nodeId)
         {
@@ -233,6 +273,33 @@ namespace Gameplay.Characters.Player
         public int GetUnlockedTechCount(TechTree techTree)
         {
             return techTree.nodes.Count(node => node.isUnlocked);
+        }
+        
+        public void ResetTechProgress()
+        {
+            _unlockedTechs.Clear();
+            
+            // Сбрасываем все технологии в заблокированное состояние
+            var trees = new[] { forgeTechTree, farmTechTree, generalTechTree };
+            foreach (var tree in trees)
+            {
+                if (tree != null)
+                {
+                    foreach (var node in tree.nodes)
+                    {
+                        node.isUnlocked = false;
+                    }
+                }
+            }
+            
+            // Сбрасываем статы к начальным значениям
+            damageMultiplier = 1f;
+            fireRateMultiplier = 1f;
+            miningSpeedMultiplier = 1f;
+            inventoryCapacity = 50;
+            collectionRangeMultiplier = 1f;
+            
+            UpdateMtbStats();
         }
     }
 }

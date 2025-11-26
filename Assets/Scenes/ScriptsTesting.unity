@@ -1233,6 +1233,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1779160901}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1779160906}
+  resourceId: 
 --- !u!65 &98515820
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2378,6 +2379,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 748138968}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 748138973}
+  resourceId: 
 --- !u!65 &170272783
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3045,6 +3047,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 171632317}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 171632322}
+  resourceId: 
 --- !u!65 &206055136
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3461,6 +3464,54 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &259686964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 259686966}
+  - component: {fileID: 259686965}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &259686965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259686964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9c9c7993374a458d7f879adf9519e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameVersion: 1.0
+  maxManualSaves: 10
+  autoSaveInterval: 300
+  saveIndicator: {fileID: 925816807}
+--- !u!4 &259686966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259686964}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261079826
 GameObject:
   m_ObjectHideFlags: 0
@@ -4043,8 +4094,9 @@ RectTransform:
   - {fileID: 664311082}
   - {fileID: 1438025106}
   - {fileID: 1103939999}
-  - {fileID: 1783646852}
   - {fileID: 2131133896}
+  - {fileID: 925816810}
+  - {fileID: 1783646852}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5883,6 +5935,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1705518156}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1705518161}
+  resourceId: 
 --- !u!65 &404981564
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6365,6 +6418,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 477797928}
   m_CullTransparentMesh: 1
+--- !u!1 &478335387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 478335389}
+  - component: {fileID: 478335388}
+  m_Layer: 0
+  m_Name: GameInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &478335388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478335387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def2665f6a3348dcb0b31f452e0dc7ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &478335389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478335387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &478604960
 GameObject:
   m_ObjectHideFlags: 0
@@ -7730,6 +7827,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 561711246}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 561711247}
+  resourceId: 
 --- !u!65 &567400832
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8101,6 +8199,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 859912816}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 859912821}
+  resourceId: 
 --- !u!65 &625950652
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9813,6 +9912,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1771967911}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1771967916}
+  resourceId: 
 --- !u!65 &769015034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9972,6 +10072,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 372109489}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 372109494}
+  resourceId: 
 --- !u!65 &775791199
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10967,6 +11068,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1164016008}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1164016013}
+  resourceId: 
 --- !u!65 &885974311
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11435,6 +11537,82 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &925816807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925816810}
+  - component: {fileID: 925816809}
+  - component: {fileID: 925816808}
+  m_Layer: 5
+  m_Name: SaveIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &925816808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925816807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &925816809
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925816807}
+  m_CullTransparentMesh: 1
+--- !u!224 &925816810
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925816807}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1847092653}
+  m_Father: {fileID: 297761356}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 150}
+  m_Pivot: {x: 1, y: 1}
 --- !u!1 &925969560
 GameObject:
   m_ObjectHideFlags: 0
@@ -12929,6 +13107,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1494140638}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1494140643}
+  resourceId: 
 --- !u!65 &1044927368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14730,6 +14909,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 175379744}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 175379745}
+  resourceId: 
 --- !u!65 &1172866326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14944,6 +15124,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 199883119}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 199883124}
+  resourceId: 
 --- !u!65 &1180320341
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15338,6 +15519,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 261079826}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 261079831}
+  resourceId: 
 --- !u!65 &1208960543
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16366,6 +16548,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 2126709316}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 2126709321}
+  resourceId: 
 --- !u!65 &1306486317
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17606,6 +17789,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1260245163}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1260245168}
+  resourceId: 
 --- !u!65 &1356536608
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18876,6 +19060,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 628413080}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 628413085}
+  resourceId: 
 --- !u!65 &1430528101
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20531,6 +20716,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1551861452}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1551861457}
+  resourceId: 
 --- !u!65 &1573358288
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22086,6 +22272,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1321633422}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1321633427}
+  resourceId: 
 --- !u!65 &1676592716
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22433,6 +22620,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 934068400}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 934068405}
+  resourceId: 
 --- !u!65 &1687444435
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22663,6 +22851,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1476353917}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1476353922}
+  resourceId: 
 --- !u!65 &1695088681
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22912,6 +23101,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 549948171}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 549948176}
+  resourceId: 
 --- !u!65 &1697161524
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23209,6 +23399,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1159061834}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1159061835}
+  resourceId: 
 --- !u!65 &1717672459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23332,6 +23523,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 127982139}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 127982143}
+  resourceId: 
 --- !u!65 &1721376814
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29592,6 +29784,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 1824826187}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 1824826188}
+  resourceId: 
 --- !u!65 &1817759560
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30165,6 +30358,140 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1847092652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847092653}
+  - component: {fileID: 1847092655}
+  - component: {fileID: 1847092654}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1847092653
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847092652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 925816810}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1847092654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847092652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "\u0421\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u043E!"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 60
+  m_fontSizeBase: 60
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1847092655
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847092652}
+  m_CullTransparentMesh: 1
 --- !u!1 &1848186573
 GameObject:
   m_ObjectHideFlags: 0
@@ -32230,6 +32557,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 61589130}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 61589135}
+  resourceId: 
 --- !u!65 &2123716448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33207,3 +33535,5 @@ SceneRoots:
   - {fileID: 2078736676}
   - {fileID: 639483295}
   - {fileID: 254925160}
+  - {fileID: 259686966}
+  - {fileID: 478335389}

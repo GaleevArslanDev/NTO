@@ -16,6 +16,9 @@ namespace Gameplay.Items
         [SerializeField] private CollectableSlider breakProgressSlider;
         [SerializeField] private Canvas breakCanvas;
         
+        [Header("Persistence")]
+        [SerializeField] private string resourceId; // Уникальный ID для сохранения
+        
         private bool _isCollected;
         private bool _isBeingBroken;
         private float _currentBreakProgress;
@@ -25,9 +28,20 @@ namespace Gameplay.Items
 
         private void Start()
         {
+            // Генерируем ID если не задан
+            if (string.IsNullOrEmpty(resourceId))
+            {
+                resourceId = $"{transform.position.x}_{transform.position.y}_{transform.position.z}";
+            }
             _rb = GetComponent<Rigidbody>();
             _coll = GetComponent<Collider>();
             _originalPosition = transform.position;
+            
+            if (ResourceManager.Instance != null && 
+                ResourceManager.Instance.IsResourceCollected(resourceId))
+            {
+                Destroy(gameObject);
+            }
 
             if (breakCanvas == null) return;
             breakCanvas.worldCamera = Camera.main;
@@ -147,6 +161,11 @@ namespace Gameplay.Items
             {
                 breakProgressUI.SetActive(false);
             }
+            
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.MarkResourceCollected(resourceId);
+            }
         
             if (AIAssistant.Instance != null && data != null)
             {
@@ -212,5 +231,6 @@ namespace Gameplay.Items
     
         public bool CanBeCollected => _currentBreakProgress >= 1f;
         public bool IsBeingBroken => _isBeingBroken;
+        public string GetResourceId() => resourceId;
     }
 }

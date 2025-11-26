@@ -157,6 +157,31 @@ namespace Gameplay.Characters.NPC
             
             return Mathf.Abs(Vector3.Dot(toPlayer.normalized, playerRight)) > 0.7f;
         }
+        
+        public int GetCurrentDialogueIndex()
+        {
+            return _currentDialogueIndex;
+        }
+
+        public void SetCurrentDialogueIndex(int index)
+        {
+            _currentDialogueIndex = index;
+        }
+
+        public float GetLastCallTime()
+        {
+            return _lastCallTime;
+        }
+
+        public void SetCallCooldown(float lastCallTime)
+        {
+            _lastCallTime = lastCallTime;
+        }
+
+        public void SetCanCall(bool canCall)
+        {
+            _canCall = canCall;
+        }
 
         private void StartCalling()
         {

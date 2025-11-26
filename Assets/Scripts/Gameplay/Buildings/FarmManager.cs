@@ -103,5 +103,10 @@ namespace Gameplay.Buildings
             if (_productionCoroutine != null)
                 StopCoroutine(_productionCoroutine);
         }
+
+        public void SetPlotTimer(string plotId, float time)
+        {
+            _farmPlots[plotId].timer = time;
+        }
     }
 }
