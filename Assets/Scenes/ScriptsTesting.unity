@@ -17691,8 +17691,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   vacuumParticles: {fileID: 1796156342}
-  vacuumSpeed: 10
-  collectionDelay: 0.1
+  vacuumSpeedMultiplier: 1
   weaponRange: 150
   fireRate: 2
   weaponDamage: 10
@@ -20415,7 +20414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce26377e156d1f4ea59a5ff4af76bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
+  data: {fileID: 11400000, guid: 74296cb31f3208946a738b29242c6fc6, type: 2}
   breakProgressUI: {fileID: 1551861452}
   breakProgressSlider: {fileID: 2000182375}
   breakCanvas: {fileID: 1551861457}
