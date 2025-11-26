@@ -28,7 +28,9 @@ MonoBehaviour:
   leisureLocation: {x: 0, y: 0, z: 5}
   dialogueTrees:
   - {fileID: 11400000, guid: 82e6de2240272c145b13f7830eacea7b, type: 2}
+  - {fileID: 11400000, guid: 122b21b25de143a4aa1bfb1071600f36, type: 2}
+  - {fileID: 11400000, guid: 29831c25cafb5134685c34951ca72279, type: 2}
   movementSpeed: 3.5
-  interactionRange: 3
+  interactionRange: 2
   customModel: {fileID: 0}
   customMaterials: []

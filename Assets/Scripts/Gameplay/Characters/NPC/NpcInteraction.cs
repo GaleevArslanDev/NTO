@@ -19,6 +19,9 @@ namespace Gameplay.Characters.NPC
         public DialogueTree[] dialogueTrees;
         public Sprite portrait;
         public AudioClip defaultVoice;
+        
+        [Header("Reactive Dialogue")]
+        public ReactiveDialogueTrigger reactiveTrigger;
     
         [Header("UI References")]
         public GameObject interactionPrompt;
@@ -39,23 +42,52 @@ namespace Gameplay.Characters.NPC
             {
                 RelationshipManager.Instance.RegisterNpc(npcData);
             }
+            
+            if (reactiveTrigger == null)
+                reactiveTrigger = GetComponent<ReactiveDialogueTrigger>();
+        
+            if (reactiveTrigger != null)
+            {
+                reactiveTrigger.OnPlayerResponded += OnPlayerRespondedToCall;
+                reactiveTrigger.OnPlayerIgnored += OnPlayerIgnoredCall;
+            }
+        }
+        
+        private void OnPlayerRespondedToCall()
+        {
+            Debug.Log($"{npcData.npcName}: Игрок откликнулся на мой зов!");
+        }
+        
+        private void OnPlayerIgnoredCall()
+        {
+            Debug.Log($"{npcData.npcName}: Игрок проигнорировал меня...");
+    
+            if (AIAssistant.Instance != null)
+            {
+                AIAssistant.Instance.OnNpcIgnored(npcData.npcName);
+            }
         }
 
         private void Update()
         {
             if (!_isPlayerInRange) return;
-            // E - диалог
+    
+            // E - ТОЛЬКО реактивный диалог (когда NPC зовет)
             if (Input.GetKeyDown(KeyCode.E))
             {
-                StartDialogueWithPlayer();
+                if (reactiveTrigger != null && reactiveTrigger.IsCalling)
+                {
+                    reactiveTrigger.TriggerDialogue();
+                }
+                // Убрана возможность начать диалог по E без вызова
             }
-            // F - прокачка/услуги
+            // F - прокачка/услуги (без изменений)
             else if (Input.GetKeyDown(KeyCode.F))
             {
                 OpenServices();
             }
         }
-
+        
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player")) return;
@@ -71,18 +103,8 @@ namespace Gameplay.Characters.NPC
             CloseAllUI();
         }
 
-        public void StartDialogueWithPlayer()
-        {
-            if (DialogueManager.Instance.IsInDialogue || npcData == null) return;
+        // УБРАН публичный метод StartDialogueWithPlayer - диалоги теперь только реактивные
         
-            var dialogueStarted = DialogueManager.Instance.StartDialogue(this);
-        
-            if (!dialogueStarted)
-            {
-                Debug.Log($"Не удалось начать диалог с {npcData.npcName}");
-            }
-        }
-
         public void StartSpecificDialogue(string treeName)
         {
             if (DialogueManager.Instance.IsInDialogue) return;
@@ -100,7 +122,6 @@ namespace Gameplay.Characters.NPC
             switch (npcType)
             {
                 case NpcType.Mayor:
-                    // Открываем окно ратуши вместо дерева технологий
                     if (TownHallUI.Instance != null && TownHall.Instance != null)
                     {
                         TownHallUI.Instance.ShowDialog(TownHall.Instance);
@@ -135,18 +156,6 @@ namespace Gameplay.Characters.NPC
             }
         }
 
-        private void OpenTownHallUI()
-        {
-            // Для мэра открываем общее дерево, но с возможностью прокачки
-            if (TechTreeUI.Instance != null && PlayerProgression.Instance != null)
-            {
-                TechTreeUI.Instance.ShowTechTreeForNpc(
-                    PlayerProgression.Instance.generalTechTree, 
-                    "Зол (Ратуша)"
-                );
-            }
-        }
-
         private void OpenQuestUI()
         {
             if (QuestBoardUI.Instance != null)
@@ -172,11 +181,21 @@ namespace Gameplay.Characters.NPC
         {
             var textMesh = interactionPrompt.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (textMesh == null) return;
+
             var npcName = GetNpcName();
-            textMesh.text = $"{npcName}\nE - Поговорить\nF - Услуги";
+
+            if (reactiveTrigger != null && reactiveTrigger.IsCalling)
+            {
+                textMesh.text = $"{npcName} (зовет)\nE - Ответить\nF - Услуги";
+            }
+            else
+            {
+                // Только услуги, диалог недоступен
+                textMesh.text = $"{npcName}\nF - Услуги";
+            }
         }
 
-        private string GetNpcName()
+        public string GetNpcName()
         {
             if (npcData != null)
                 return npcData.npcName;
@@ -213,6 +232,12 @@ namespace Gameplay.Characters.NPC
                 {
                     DialogueManager.Instance.UnloadDialogueTree(tree.treeName);
                 }
+            }
+            
+            if (reactiveTrigger != null)
+            {
+                reactiveTrigger.OnPlayerResponded -= OnPlayerRespondedToCall;
+                reactiveTrigger.OnPlayerIgnored -= OnPlayerIgnoredCall;
             }
         }
     }

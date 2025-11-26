@@ -16,6 +16,7 @@ namespace Gameplay.Characters.Player
     
         private Camera _mainCamera;
         private NpcInteraction _currentNpc;
+        private ReactiveDialogueTrigger _currentReactiveNpc;
 
         private void Start()
         {
@@ -32,34 +33,61 @@ namespace Gameplay.Characters.Player
     
         private void CheckForNpc()
         {
-            var ray = _mainCamera.ScreenPointToRay(new Vector3(width / 2.0f, height / 2.0f, 0));
+            var ray = _mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0));
 
             NpcInteraction newNpc = null;
-        
+            ReactiveDialogueTrigger reactiveNpc = null;
+    
             if (Physics.Raycast(ray, out var hit, interactionDistance, npcLayerMask))
             {
                 newNpc = hit.collider.GetComponent<NpcInteraction>();
+                reactiveNpc = hit.collider.GetComponent<ReactiveDialogueTrigger>();
             }
 
-            if (newNpc == _currentNpc) return;
+            if (newNpc == _currentNpc && reactiveNpc == _currentReactiveNpc) return;
             if (_currentNpc != null)
             {
                 HideInteractionPrompt();
             }
-            
+        
             _currentNpc = newNpc;
-            
+            _currentReactiveNpc = reactiveNpc;
+        
             if (_currentNpc != null)
             {
                 ShowInteractionPrompt();
+                UpdateInteractionPrompt();
+            }
+        }
+        
+        private void UpdateInteractionPrompt()
+        {
+            if (_currentNpc == null || interactionPrompt == null) return;
+    
+            var textMesh = interactionPrompt.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (textMesh == null) return;
+    
+            var npcName = _currentNpc.GetNpcName();
+    
+            if (_currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
+            {
+                textMesh.text = $"{npcName} (зовет)\nE - Ответить";
+            }
+            else
+            {
+                // Диалог недоступен, показываем только услуги
+                textMesh.text = $"{npcName}\nF - Услуги";
             }
         }
     
         private void HandleInteractionInput()
         {
-            if (_currentNpc != null && Input.GetKeyDown(interactionKey))
+            if (_currentNpc == null || !Input.GetKeyDown(interactionKey)) return;
+            
+            // Только реактивный диалог
+            if (_currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
             {
-                _currentNpc.StartDialogueWithPlayer();
+                _currentReactiveNpc.TriggerDialogue();
             }
         }
     

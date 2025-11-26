@@ -49,6 +49,8 @@ namespace UI
         [SerializeField] private float quickStopCommentChance = 0.1f;
         [SerializeField] private float quickTurnCommentChance = 0.1f;
         [SerializeField] private float quickMoveCommentChance = 0.1f;
+        [SerializeField] private float npcShoutCommentChance = 0.5f;
+        [SerializeField] private float npcIgnoredCommentChance = 0.25f;
     
         [Header("Inertia Settings")]
         [SerializeField] private float inertiaForce = 80f;
@@ -266,6 +268,26 @@ namespace UI
         private Vector3 CalculatePlayerAcceleration(Vector3 currentVelocity)
         {
             return (currentVelocity - _lastPlayerVelocity) / Time.deltaTime;
+        }
+        
+        public void OnNpcCalling(string npcName)
+        {
+            if (_isSpeaking) return;
+    
+            if (Random.value < npcShoutCommentChance)
+            {
+                SpeakRandomFromCategory("NpcCalling");
+            }
+        }
+
+        public void OnNpcIgnored(string npcName)
+        {
+            if (_isSpeaking) return;
+    
+            if (Random.value < npcIgnoredCommentChance)
+            {
+                SpeakRandomFromCategory("NpcIgnored");
+            }
         }
     
         private IEnumerator MovementRoutine()
