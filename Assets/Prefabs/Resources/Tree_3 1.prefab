@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1504099645536343896}
   - component: {fileID: 3330050676165503968}
   - component: {fileID: -5078615112437831057}
+  - component: {fileID: 2979451615696742113}
   m_Layer: 0
   m_Name: Tree_3 1
   m_TagString: Untagged
@@ -27,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8261391217763741421}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 229.43376, y: 3.8600004, z: 165.37112}
   m_LocalScale: {x: 250, y: 250, z: 250}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
 --- !u!33 &1504099645536343896
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,7 +98,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce26377e156d1f4ea59a5ff4af76bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
+  data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 0}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 0}
+--- !u!64 &2979451615696742113
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8261391217763741421}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8693436764281777323, guid: 3d01276fe5086f34292a11da61aae6f0, type: 3}

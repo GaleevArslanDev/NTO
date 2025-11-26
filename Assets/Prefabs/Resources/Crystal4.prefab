@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 223.26079, y: 5.740835, z: 172.88809}
-  m_LocalScale: {x: 153.13246, y: 153.13243, z: 153.13243}
+  m_LocalScale: {x: 153.13246, y: 153.13242, z: 153.13242}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1268387698088921825}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce26377e156d1f4ea59a5ff4af76bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
+  data: {fileID: 11400000, guid: e7dbd54cc9b30a14db0327845894ffba, type: 2}
   breakProgressUI: {fileID: 1469488186005262676}
   breakProgressSlider: {fileID: 1658048435893794207}
   breakCanvas: {fileID: 3028403059835368550}
