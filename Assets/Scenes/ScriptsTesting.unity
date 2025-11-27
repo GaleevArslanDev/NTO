@@ -622,6 +622,7 @@ GameObject:
   - component: {fileID: 47190399}
   - component: {fileID: 47190398}
   - component: {fileID: 47190397}
+  - component: {fileID: 47190405}
   m_Layer: 7
   m_Name: NPC
   m_TagString: Untagged
@@ -706,7 +707,6 @@ MonoBehaviour:
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
   reactiveTrigger: {fileID: 0}
-  interactionPrompt: {fileID: 0}
 --- !u!114 &47190399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,6 +831,29 @@ Transform:
   - {fileID: 106878849}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &47190405
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47190396}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &59128071
 GameObject:
   m_ObjectHideFlags: 0
@@ -10005,6 +10028,7 @@ GameObject:
   - component: {fileID: 703038437}
   - component: {fileID: 703038436}
   - component: {fileID: 703038435}
+  - component: {fileID: 703038443}
   m_Layer: 7
   m_Name: NPC (3)
   m_TagString: Untagged
@@ -10089,7 +10113,6 @@ MonoBehaviour:
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
   reactiveTrigger: {fileID: 0}
-  interactionPrompt: {fileID: 0}
 --- !u!114 &703038437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10214,6 +10237,29 @@ Transform:
   - {fileID: 1843727451}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &703038443
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703038434}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &721766989
 GameObject:
   m_ObjectHideFlags: 0
@@ -20835,6 +20881,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   interactionKey: 101
+  servicesKey: 102
   interactionPrompt: {fileID: 0}
 --- !u!114 &1436688145
 MonoBehaviour:
@@ -22629,6 +22676,7 @@ GameObject:
   - component: {fileID: 1615469678}
   - component: {fileID: 1615469677}
   - component: {fileID: 1615469685}
+  - component: {fileID: 1615469686}
   m_Layer: 7
   m_Name: NPC (1)
   m_TagString: Untagged
@@ -22713,7 +22761,6 @@ MonoBehaviour:
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
   reactiveTrigger: {fileID: 1615469685}
-  interactionPrompt: {fileID: 0}
 --- !u!114 &1615469679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22843,6 +22890,29 @@ MonoBehaviour:
   - test
   - test_reactive2
   loopSequence: 0
+--- !u!136 &1615469686
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615469676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1615605408
 GameObject:
   m_ObjectHideFlags: 0
@@ -23269,6 +23339,7 @@ GameObject:
   - component: {fileID: 1666105647}
   - component: {fileID: 1666105646}
   - component: {fileID: 1666105645}
+  - component: {fileID: 1666105653}
   m_Layer: 7
   m_Name: NPC (2)
   m_TagString: Untagged
@@ -23353,7 +23424,6 @@ MonoBehaviour:
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
   reactiveTrigger: {fileID: 0}
-  interactionPrompt: {fileID: 0}
 --- !u!114 &1666105647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23478,6 +23548,29 @@ Transform:
   - {fileID: 844396631}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1666105653
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666105644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1667989934
 GameObject:
   m_ObjectHideFlags: 0

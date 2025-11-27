@@ -71,14 +71,15 @@ namespace Gameplay.Characters.NPC
 
         private void SetupCallZoneCollider()
         {
-            // Создаем коллайдер для зоны вызова если его нет
-            _callZoneCollider = GetComponent<Collider>();
-            if (_callZoneCollider == null)
-            {
-                _callZoneCollider = gameObject.AddComponent<SphereCollider>();
-                ((SphereCollider)_callZoneCollider).radius = callRadius;
-                _callZoneCollider.isTrigger = true;
-            }
+            // Создаем отдельный дочерний объект для зоны вызова
+            GameObject callZone = new GameObject("CallZone");
+            callZone.transform.SetParent(transform);
+            callZone.transform.localPosition = Vector3.zero;
+            callZone.layer = LayerMask.NameToLayer("NPC_CallZone");
+    
+            _callZoneCollider = callZone.AddComponent<SphereCollider>();
+            ((SphereCollider)_callZoneCollider).radius = callRadius;
+            _callZoneCollider.isTrigger = true;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -311,11 +312,7 @@ namespace Gameplay.Characters.NPC
 
         private void UpdateCallState()
         {
-            // Обновляем UI в зависимости от состояния
-            if (_npcInteraction != null && _npcInteraction.interactionPrompt != null)
-            {
-                _npcInteraction.interactionPrompt.SetActive(_playerInCallZone);
-            }
+            Debug.Log("Call state updated");
         }
 
         private string GetCurrentDialogue()

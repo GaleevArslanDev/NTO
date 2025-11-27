@@ -1,6 +1,5 @@
 ﻿using Gameplay.Characters.NPC;
 using UnityEngine;
-using static UnityEngine.Screen;
 
 namespace Gameplay.Characters.Player
 {
@@ -10,6 +9,7 @@ namespace Gameplay.Characters.Player
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private LayerMask npcLayerMask;
         [SerializeField] private KeyCode interactionKey = KeyCode.E;
+        [SerializeField] private KeyCode servicesKey = KeyCode.F;
     
         [Header("UI Indicators")]
         [SerializeField] private GameObject interactionPrompt;
@@ -44,19 +44,24 @@ namespace Gameplay.Characters.Player
                 reactiveNpc = hit.collider.GetComponent<ReactiveDialogueTrigger>();
             }
 
-            if (newNpc == _currentNpc && reactiveNpc == _currentReactiveNpc) return;
-            if (_currentNpc != null)
+            // Если NPC изменился
+            if (newNpc != _currentNpc || reactiveNpc != _currentReactiveNpc)
             {
-                HideInteractionPrompt();
-            }
-        
-            _currentNpc = newNpc;
-            _currentReactiveNpc = reactiveNpc;
-        
-            if (_currentNpc != null)
-            {
-                ShowInteractionPrompt();
-                UpdateInteractionPrompt();
+                // Скрываем подсказку для предыдущего NPC
+                if (_currentNpc != null)
+                {
+                    HideInteractionPrompt();
+                }
+            
+                _currentNpc = newNpc;
+                _currentReactiveNpc = reactiveNpc;
+            
+                // Показываем подсказку для нового NPC
+                if (_currentNpc != null)
+                {
+                    ShowInteractionPrompt();
+                    UpdateInteractionPrompt();
+                }
             }
         }
         
@@ -71,23 +76,27 @@ namespace Gameplay.Characters.Player
     
             if (_currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
             {
-                textMesh.text = $"{npcName} (зовет)\nE - Ответить";
+                textMesh.text = $"{npcName} (зовет)\nE - Ответить\nF - Услуги";
             }
             else
             {
-                // Диалог недоступен, показываем только услуги
                 textMesh.text = $"{npcName}\nF - Услуги";
             }
         }
     
         private void HandleInteractionInput()
         {
-            if (_currentNpc == null || !Input.GetKeyDown(interactionKey)) return;
+            if (_currentNpc == null) return;
             
-            // Только реактивный диалог
-            if (_currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
+            // Реактивный диалог по E
+            if (Input.GetKeyDown(interactionKey) && _currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
             {
                 _currentReactiveNpc.TriggerDialogue();
+            }
+            // Услуги по F
+            else if (Input.GetKeyDown(servicesKey))
+            {
+                _currentNpc.OpenServices();
             }
         }
     
