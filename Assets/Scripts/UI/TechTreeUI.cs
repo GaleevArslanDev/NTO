@@ -49,6 +49,9 @@ namespace UI
         public bool allowAllTrees;
         public bool allowUnlock;
         private TechTree _forcedTree;
+        
+        [Header("Details Panel")]
+        [SerializeField] private TechNodeDetailsPanel detailsPanel;
     
         private TechTree _currentTree;
         private Dictionary<string, GameObject> _nodeObjects = new ();
@@ -63,9 +66,6 @@ namespace UI
             {
                 Instance = this;
             }
-        
-            if (unlockButton != null)
-                unlockButton.onClick.AddListener(OnUnlockButtonClicked);
             
             techTreePanel.SetActive(false);
         }
@@ -137,9 +137,9 @@ namespace UI
             }
 
             if (UIManager.Instance != null)
-                if (!isUIOpen)
-                    UIManager.Instance.RegisterUIOpen();
-            isUIOpen = true;
+                UIManager.Instance.RegisterUIOpen();
+            
+            detailsPanel?.HideDetails();
 
             GenerateTreeUI();
         }
@@ -179,13 +179,6 @@ namespace UI
 
             // Показываем только указанное дерево в режиме прокачки
             ShowTechTree(tree, true);
-
-            // Обновляем UI для режима NPC
-            if (upgradeModePanel != null)
-            {
-                upgradeModePanel.SetActive(true);
-                upgradeModeText.text = $"Услуги {npcName}";
-            }
 
             // Скрываем табы переключения деревьев
             if (forgeTab != null) forgeTab.gameObject.SetActive(false);
@@ -239,41 +232,11 @@ namespace UI
             if (nodeUI == null) return;
             nodeUI.Initialize(node, _currentTree);
             nodeUI.OnNodeUnlocked += OnNodeUnlocked;
-            nodeUI.OnNodeSelected += OnNodeSelected;
+            nodeUI.OnNodeSelected += ShowNodeDetails;
             
             if (!_isUpgradeMode)
             {
                 nodeUI.SetViewMode();
-            }
-        }
-    
-        private void OnNodeSelected(TechNode node)
-        {
-            _selectedNode = node;
-        
-            if (_isUpgradeMode)
-            {
-                UpdateUnlockButton();
-            }
-        }
-    
-        private void UpdateUnlockButton()
-        {
-            if (_selectedNode == null) return;
-            var canUnlock = PlayerProgression.Instance.CanUnlockTech(_selectedNode.nodeId, _currentTree);
-            unlockButton.interactable = canUnlock && !_selectedNode.isUnlocked;
-            
-            if (canUnlock && !_selectedNode.isUnlocked)
-            {
-                unlockButton.GetComponentInChildren<TMP_Text>().text = "Изучить";
-            }
-            else if (_selectedNode.isUnlocked)
-            {
-                unlockButton.GetComponentInChildren<TMP_Text>().text = "Изучено";
-            }
-            else
-            {
-                unlockButton.GetComponentInChildren<TMP_Text>().text = "Недоступно";
             }
         }
     
@@ -389,18 +352,21 @@ namespace UI
             _connectionObjects.Clear();
         }
     
-        public void OnUnlockButtonClicked()
-        {
-            if (_selectedNode == null || !_isUpgradeMode) return;
-            PlayerProgression.Instance.UnlockTech(_selectedNode.nodeId, _currentTree);
-            UpdateUnlockButton();
-            RefreshTreeUI();
-        }
-    
-        private void RefreshTreeUI()
+        public void RefreshTreeUI()
         {
             ClearTree();
             GenerateTreeUI();
+            
+            // Если панель деталей открыта, обновляем её
+            if (detailsPanel != null && detailsPanel.IsVisible && _currentTree != null)
+            {
+                // Находим текущий узел в обновленном дереве
+                var currentNode = _currentTree.nodes.Find(n => n.nodeId == _selectedNode.nodeId);
+                if (currentNode != null)
+                {
+                    detailsPanel.ShowDetails(currentNode, _currentTree, _isUpgradeMode);
+                }
+            }
         }
     
         public void ToggleTechTree()
@@ -438,6 +404,16 @@ namespace UI
             if (_isUpgradeMode)
             {
                 _isUpgradeMode = false;
+            }
+            
+            detailsPanel?.HideDetails();
+        }
+        
+        public void ShowNodeDetails(TechNode node)
+        {
+            if (detailsPanel != null)
+            {
+                detailsPanel.ShowDetails(node, _currentTree, _isUpgradeMode);
             }
         }
     }
