@@ -1433,6 +1433,7 @@ GameObject:
   - component: {fileID: 127982142}
   - component: {fileID: 127982141}
   - component: {fileID: 127982144}
+  - component: {fileID: 127982145}
   m_Layer: 6
   m_Name: BreakingCanvas
   m_TagString: Untagged
@@ -1535,6 +1536,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766c2581b1e3c374e9b7ff4cf54d4110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &127982145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127982139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717b3eec2f5b36340b90f80816e98d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxValue: 0
+  minValue: 0
+  divisionCount: 0
+  divisions: []
 --- !u!1 &132261839
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,6 +3513,14 @@ MonoBehaviour:
   gameVersion: 1.0
   maxManualSaves: 10
   autoSaveInterval: 300
+  screenshotWidth: 320
+  screenshotHeight: 180
+  screenshotQuality: 75
+  enableScreenshots: 1
+  enableAutoSaveScreenshots: 1
+  enableChecksum: 1
+  backupSaves: 0
+  maxBackupCount: 0
   saveIndicator: {fileID: 925816807}
 --- !u!4 &259686966
 Transform:
@@ -11537,6 +11562,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &920886921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 920886923}
+  - component: {fileID: 920886922}
+  m_Layer: 0
+  m_Name: ResourcesManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &920886922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920886921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d99f19661ab4af285beaef0fd75f1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &920886923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920886921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &925816807
 GameObject:
   m_ObjectHideFlags: 0
@@ -20714,7 +20783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 1551861452}
-  breakProgressSlider: {fileID: 0}
+  breakProgressSlider: {fileID: 127982145}
   breakCanvas: {fileID: 1551861457}
   resourceId: 
 --- !u!65 &1573358288
@@ -23521,7 +23590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 035c3d3aa3d8d8c4ca15927beb808147, type: 2}
   breakProgressUI: {fileID: 127982139}
-  breakProgressSlider: {fileID: 0}
+  breakProgressSlider: {fileID: 127982145}
   breakCanvas: {fileID: 127982143}
   resourceId: 
 --- !u!65 &1721376814
@@ -33537,3 +33606,4 @@ SceneRoots:
   - {fileID: 254925160}
   - {fileID: 259686966}
   - {fileID: 478335389}
+  - {fileID: 920886923}

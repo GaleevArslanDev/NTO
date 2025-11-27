@@ -55,15 +55,14 @@ namespace Gameplay.Items
             {
                 Destroy(gameObject);
             }
-        }
-
-        private void Start()
-        {
             _baseWeaponDamage = weaponDamage;
             _baseWeaponFireRate = fireRate;
             _baseVacuumRadius = vacuumRadius;
             _baseVacuumSpeed = vacuumSpeed;
-        
+        }
+
+        private void Start()
+        {
             // Настройка лазерного луча
             if (laserBeam != null)
             {

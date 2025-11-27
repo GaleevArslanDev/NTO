@@ -25,15 +25,20 @@ namespace Gameplay.Systems
         [Header("Save Settings")] public string gameVersion = "1.0";
         public int maxManualSaves = 10;
         public float autoSaveInterval = 300f; // 5 minutes
-        
-        [Header("Screenshot Settings")]
-        [SerializeField] private int screenshotWidth = 320;
+
+        [Header("Screenshot Settings")] [SerializeField]
+        private int screenshotWidth = 320;
+
         [SerializeField] private int screenshotHeight = 180;
         [SerializeField] private int screenshotQuality = 75;
         [SerializeField] private bool enableScreenshots = true;
-        
-        [Header("Validation Settings")]
-        [SerializeField] private bool enableChecksum = true;
+
+        [Header("AutoSave Screenshot")] [SerializeField]
+        private bool enableAutoSaveScreenshots = false;
+
+        [Header("Validation Settings")] [SerializeField]
+        private bool enableChecksum = true;
+
         [SerializeField] private bool backupSaves = true;
         [SerializeField] private int maxBackupCount = 3;
 
@@ -41,7 +46,7 @@ namespace Gameplay.Systems
 
         private string SaveFolder => Path.Combine(Application.persistentDataPath, "Saves");
         private string AutoSavePath => Path.Combine(SaveFolder, "autosave.json");
-        
+
         private Coroutine _screenshotCoroutine;
 
         private float _autoSaveTimer;
@@ -92,7 +97,7 @@ namespace Gameplay.Systems
                 QuickLoad();
             }
         }
-        
+
         private IEnumerator TakeScreenshotCoroutine(string saveName, System.Action<Texture2D> callback)
         {
             // Ждем конец кадра чтобы захватить весь экран
@@ -102,7 +107,7 @@ namespace Gameplay.Systems
             {
                 // Создаем текстуру для скриншота
                 var screenTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-                
+
                 // Читаем пиксели с экрана
                 screenTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
                 screenTexture.Apply();
@@ -119,11 +124,11 @@ namespace Gameplay.Systems
                 callback(null);
             }
         }
-        
+
         private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
         {
             var result = new Texture2D(targetWidth, targetHeight, source.format, false);
-            
+
             var scaleX = (float)source.width / targetWidth;
             var scaleY = (float)source.height / targetHeight;
 
@@ -137,11 +142,11 @@ namespace Gameplay.Systems
                     result.SetPixel(x, y, color);
                 }
             }
-            
+
             result.Apply();
             return result;
         }
-        
+
         private string SaveScreenshotToBase64(Texture2D screenshot)
         {
             if (screenshot == null) return string.Empty;
@@ -159,7 +164,7 @@ namespace Gameplay.Systems
                 return string.Empty;
             }
         }
-        
+
         public Texture2D LoadScreenshotFromBase64(string base64Data)
         {
             if (string.IsNullOrEmpty(base64Data)) return null;
@@ -216,8 +221,43 @@ namespace Gameplay.Systems
 
         public void AutoSave()
         {
-            SaveGame("autosave");
+            if (enableAutoSaveScreenshots)
+            {
+                StartCoroutine(CreateAutoSaveWithScreenshot());
+            }
+            else
+            {
+                SaveGame("autosave");
+            }
+
             Debug.Log("Game auto-saved");
+        }
+
+        private IEnumerator CreateAutoSaveWithScreenshot()
+        {
+            // Показываем индикатор загрузки
+            if (saveIndicator != null)
+                saveIndicator.SetActive(true);
+
+            // Делаем скриншот
+            Texture2D screenshot = null;
+            yield return StartCoroutine(TakeScreenshotCoroutine("autosave", tex => screenshot = tex));
+
+            // Создаем данные сохранения
+            var saveData = CreateSaveData("autosave");
+
+            // Добавляем скриншот если удалось сделать
+            if (screenshot != null)
+            {
+                saveData.screenshotData = SaveScreenshotToBase64(screenshot);
+            }
+
+            // Сохраняем игру
+            var result = SaveGameData(saveData, "autosave");
+            result.LogResult();
+
+            // Показываем результат
+            ShowSaveIndicator();
         }
 
         public void SaveGame(string saveName = null)
@@ -351,19 +391,19 @@ namespace Gameplay.Systems
                 ShowSaveIndicator();
             }
         }
-        
+
         private string FormatManualSaveName(string saveName)
         {
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            return string.IsNullOrEmpty(saveName) 
-                ? $"manual_{timestamp}" 
+            return string.IsNullOrEmpty(saveName)
+                ? $"manual_{timestamp}"
                 : $"manual_{saveName}_{timestamp}";
         }
-        
+
         private IEnumerator CreateManualSaveWithScreenshot(string saveName)
         {
             var formattedName = FormatManualSaveName(saveName);
-            
+
             // Показываем индикатор загрузки
             if (saveIndicator != null)
                 saveIndicator.SetActive(true);
@@ -374,7 +414,7 @@ namespace Gameplay.Systems
 
             // Создаем данные сохранения
             var saveData = CreateSaveData(formattedName);
-            
+
             // Добавляем скриншот если удалось сделать
             if (screenshot != null)
             {
@@ -387,23 +427,23 @@ namespace Gameplay.Systems
 
             // Показываем результат
             ShowSaveIndicator();
-            
+
             // Обновляем список сохранений
             LoadSaveList();
             CleanupOldSaves();
         }
-        
+
         private SaveOperationResult SaveGameData(GameSaveData saveData, string saveName)
         {
             try
             {
                 var filePath = GetSaveFilePath(saveName);
-                
+
                 // Валидация данных перед сохранением
                 var validationResult = ValidateSaveData(saveData);
                 if (!validationResult.Success)
                 {
-                    return SaveOperationResult.FromError($"Save data validation failed: {validationResult.Message}", 
+                    return SaveOperationResult.FromError($"Save data validation failed: {validationResult.Message}",
                         SaveErrorType.InvalidData);
                 }
 
@@ -421,10 +461,10 @@ namespace Gameplay.Systems
 
                 // Сериализуем данные
                 var json = JsonUtility.ToJson(saveData, true);
-                
+
                 // Сохраняем в файл
                 File.WriteAllText(filePath, json);
-                
+
                 var fileInfo = new FileInfo(filePath);
                 return SaveOperationResult.FromSuccess($"Game saved successfully", filePath, fileInfo.Length);
             }
@@ -434,32 +474,32 @@ namespace Gameplay.Systems
                 return SaveOperationResult.FromError($"Save failed: {e.Message}", errorType, e);
             }
         }
-        
+
         private SaveOperationResult LoadGameData(string saveName)
         {
             try
             {
                 var filePath = GetSaveFilePath(saveName);
-                
+
                 if (!File.Exists(filePath))
                 {
-                    return SaveOperationResult.FromError($"Save file not found: {filePath}", 
+                    return SaveOperationResult.FromError($"Save file not found: {filePath}",
                         SaveErrorType.FileNotFound);
                 }
 
                 // Читаем файл
                 var json = File.ReadAllText(filePath);
-                
+
                 // Десериализуем данные
                 var saveData = JsonUtility.FromJson<GameSaveData>(json);
-                
+
                 // Проверяем контрольную сумму если включено
                 if (enableChecksum && !string.IsNullOrEmpty(saveData.checksum))
                 {
                     var currentChecksum = CalculateChecksum(saveData);
                     if (currentChecksum != saveData.checksum)
                     {
-                        return SaveOperationResult.FromError("Save file checksum mismatch - data may be corrupted", 
+                        return SaveOperationResult.FromError("Save file checksum mismatch - data may be corrupted",
                             SaveErrorType.DataCorrupted);
                     }
                 }
@@ -468,7 +508,8 @@ namespace Gameplay.Systems
                 var validationResult = ValidateSaveData(saveData);
                 if (!validationResult.Success)
                 {
-                    return SaveOperationResult.FromError($"Loaded save data validation failed: {validationResult.Message}", 
+                    return SaveOperationResult.FromError(
+                        $"Loaded save data validation failed: {validationResult.Message}",
                         SaveErrorType.InvalidData);
                 }
 
@@ -502,7 +543,7 @@ namespace Gameplay.Systems
 
             return SaveOperationResult.FromSuccess("Save data validation passed");
         }
-        
+
         private string CalculateChecksum(GameSaveData saveData)
         {
             try
@@ -510,15 +551,15 @@ namespace Gameplay.Systems
                 // Временно убираем checksum чтобы он не влиял на расчет
                 var originalChecksum = saveData.checksum;
                 saveData.checksum = string.Empty;
-                
+
                 var json = JsonUtility.ToJson(saveData);
                 using var sha256 = SHA256.Create();
                 var bytes = Encoding.UTF8.GetBytes(json);
                 var hash = sha256.ComputeHash(bytes);
-                
+
                 // Восстанавливаем checksum
                 saveData.checksum = originalChecksum;
-                
+
                 return Convert.ToBase64String(hash);
             }
             catch (Exception e)
@@ -527,7 +568,7 @@ namespace Gameplay.Systems
                 return string.Empty;
             }
         }
-        
+
         private void CreateBackup(string originalFilePath)
         {
             try
@@ -540,7 +581,8 @@ namespace Gameplay.Systems
 
                 var fileName = Path.GetFileName(originalFilePath);
                 var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                var backupPath = Path.Combine(backupDir, $"{Path.GetFileNameWithoutExtension(fileName)}_{timestamp}.backup");
+                var backupPath = Path.Combine(backupDir,
+                    $"{Path.GetFileNameWithoutExtension(fileName)}_{timestamp}.backup");
 
                 File.Copy(originalFilePath, backupPath);
 
@@ -552,12 +594,13 @@ namespace Gameplay.Systems
                 Debug.LogWarning($"Failed to create backup: {e.Message}");
             }
         }
-        
+
         private void CleanupOldBackups(string backupDir, string fileName)
         {
             try
             {
-                var backupFiles = Directory.GetFiles(backupDir, $"{Path.GetFileNameWithoutExtension(fileName)}_*.backup")
+                var backupFiles = Directory
+                    .GetFiles(backupDir, $"{Path.GetFileNameWithoutExtension(fileName)}_*.backup")
                     .OrderByDescending(f => new FileInfo(f).CreationTime)
                     .ToArray();
 
@@ -571,7 +614,7 @@ namespace Gameplay.Systems
                 Debug.LogWarning($"Failed to cleanup old backups: {e.Message}");
             }
         }
-        
+
         public SaveOperationResult RestoreFromBackup(string saveName)
         {
             try
@@ -588,7 +631,8 @@ namespace Gameplay.Systems
 
                 if (backupFiles.Length == 0)
                 {
-                    return SaveOperationResult.FromError($"No backups found for {saveName}", SaveErrorType.FileNotFound);
+                    return SaveOperationResult.FromError($"No backups found for {saveName}",
+                        SaveErrorType.FileNotFound);
                 }
 
                 var latestBackup = backupFiles[0];
@@ -596,7 +640,8 @@ namespace Gameplay.Systems
 
                 File.Copy(latestBackup, originalFile, true);
 
-                return SaveOperationResult.FromSuccess($"Successfully restored from backup: {Path.GetFileName(latestBackup)}", originalFile);
+                return SaveOperationResult.FromSuccess(
+                    $"Successfully restored from backup: {Path.GetFileName(latestBackup)}", originalFile);
             }
             catch (Exception e)
             {
@@ -672,14 +717,12 @@ namespace Gameplay.Systems
 
             // Преобразуем обычный Dictionary в IntIntDictionary
             playerSaveData.relationships.FromDictionary(player.RelationshipsWithNpCs);
-    
-            // Преобразуем обычный Dictionary в StringBoolDictionary
-            playerSaveData.progression.unlockedTechs.FromDictionary(playerProgression.GetUnlockedTechsDictionary());
 
             return playerSaveData;
         }
 
-        private IntDialogueHistoryListDictionary ConvertDialogueHistory(Dictionary<int, List<PlayerData.DialogueHistory>> history)
+        private IntDialogueHistoryListDictionary ConvertDialogueHistory(
+            Dictionary<int, List<PlayerData.DialogueHistory>> history)
         {
             var result = new IntDialogueHistoryListDictionary();
             foreach (var entry in history)
@@ -696,8 +739,10 @@ namespace Gameplay.Systems
                         flagsSet = item.flagsSet
                     });
                 }
+
                 result[entry.Key] = saveList;
             }
+
             return result;
         }
 
@@ -728,17 +773,16 @@ namespace Gameplay.Systems
         {
             var npcs = new List<NpcSaveData>();
             var npcManager = NpcManager.Instance;
-            var relationshipManager = RelationshipManager.Instance;
 
             if (npcManager != null)
             {
                 foreach (var npcBehaviour in npcManager.GetAllNpcs())
                 {
                     var npcInteraction = npcBehaviour.GetComponent<NpcInteraction>();
+                    var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
+            
                     if (npcInteraction?.npcData != null)
                     {
-                        var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
-
                         var npcSaveData = new NpcSaveData
                         {
                             npcID = npcInteraction.npcData.npcID,
@@ -746,16 +790,19 @@ namespace Gameplay.Systems
                             position = npcBehaviour.transform.position,
                             rotation = npcBehaviour.transform.eulerAngles,
                             currentState = npcInteraction.npcData.currentState,
-                            memories = ConvertMemories(npcInteraction.npcData.memories),
-                            currentDialogueIndex = reactiveTrigger?.GetCurrentDialogueIndex() ?? 0,
-                            canCall = reactiveTrigger?.CanCall ?? true,
-                            lastCallTime = reactiveTrigger?.GetLastCallTime() ?? 0,
-                            currentActivity = CreateActivitySaveData(npcInteraction.npcData)
+                            memories = ConvertMemories(npcInteraction.npcData.memories)
                         };
 
-                        // Преобразуем обычный Dictionary в IntIntDictionary
-                        npcSaveData.relationships.FromDictionary(npcInteraction.npcData.Relationships);
+                        // Сохраняем данные реактивного диалога
+                        if (reactiveTrigger != null)
+                        {
+                            var reactiveData = reactiveTrigger.GetSaveData();
+                            npcSaveData.currentDialogueIndex = reactiveData.currentDialogueIndex;
+                            npcSaveData.canCall = reactiveData.canCall;
+                            npcSaveData.lastCallTime = reactiveData.lastCallTime;
+                        }
 
+                        npcSaveData.relationships.FromDictionary(npcInteraction.npcData.Relationships);
                         npcs.Add(npcSaveData);
                     }
                 }
@@ -805,7 +852,7 @@ namespace Gameplay.Systems
                 // Преобразуем обычный Dictionary в StringIntDictionary
                 var buildingLevelsDict = new Dictionary<string, int>();
                 var unlockedBuildingsDict = new Dictionary<string, bool>();
-        
+
                 foreach (var building in buildingManager.GetAllBuildings())
                 {
                     buildingLevelsDict[building.GetBuildingId()] = building.GetCurrentLevel();
@@ -835,13 +882,15 @@ namespace Gameplay.Systems
                         timer = plot.Value.timer
                     };
                 }
+
                 buildingData.farmPlots.FromDictionary(farmPlotsDict);
             }
 
             return buildingData;
         }
-        
-        private Dictionary<int, List<PlayerData.DialogueHistory>> ConvertSaveDialogueHistory(IntDialogueHistoryListDictionary saveHistory)
+
+        private Dictionary<int, List<PlayerData.DialogueHistory>> ConvertSaveDialogueHistory(
+            IntDialogueHistoryListDictionary saveHistory)
         {
             var result = new Dictionary<int, List<PlayerData.DialogueHistory>>();
             if (saveHistory == null) return result;
@@ -860,14 +909,16 @@ namespace Gameplay.Systems
                     history.flagsSet = item.flagsSet;
                     historyList.Add(history);
                 }
+
                 result[entry.Key] = historyList;
             }
+
             return result;
         }
 
         private TechSaveData CreateTechSaveData()
         {
-            return PlayerProgression.Instance != null 
+            return PlayerProgression.Instance != null
                 ? PlayerProgression.Instance.GetTechSaveData()
                 : new TechSaveData();
         }
@@ -884,6 +935,7 @@ namespace Gameplay.Systems
                 {
                     itemsDict[slot.type.ToString()] = slot.count;
                 }
+
                 inventoryData.items.FromDictionary(itemsDict);
                 inventoryData.capacity = inventory.GetCapacity();
             }
@@ -911,7 +963,7 @@ namespace Gameplay.Systems
 
                 // Сохраняем прогресс для активных квестов
                 questData.questProgress = new StringQuestProgressDictionary();
-        
+
                 foreach (var quest in questSystem.GetActiveQuests())
                 {
                     var progressData = new QuestProgressSaveData
@@ -954,31 +1006,31 @@ namespace Gameplay.Systems
         private SettingsSaveData CreateSettingsSaveData()
         {
             var settings = new SettingsSaveData();
-    
+
             // Настройки аудио
             settings.masterVolume = AudioListener.volume;
-    
+
             // Настройки языка
             if (LocalizationManager.LocalizationManager.Instance != null)
             {
                 settings.language = LocalizationManager.LocalizationManager.Instance.GetCurrentLanguage();
             }
-    
+
             // Настройки графики
             settings.fullscreen = Screen.fullScreen;
             settings.resolutionWidth = Screen.width;
             settings.resolutionHeight = Screen.height;
-    
+
             return settings;
         }
 
         private List<string> CreateCollectedResourcesData()
         {
-            return ResourceManager.Instance != null 
+            return ResourceManager.Instance != null
                 ? new List<string>(ResourceManager.Instance.GetCollectedResources())
                 : new List<string>();
         }
-        
+
         private void InitializeSystems()
         {
             // Инициализируем PlayerProgression если он еще не инициализирован
@@ -991,7 +1043,7 @@ namespace Gameplay.Systems
                 }
             }
         }
-        
+
         public void StartNewGame()
         {
             // Сбрасываем все системы к начальному состоянию
@@ -999,23 +1051,23 @@ namespace Gameplay.Systems
             {
                 PlayerProgression.Instance.ResetTechProgress();
             }
-    
+
             if (ResourceManager.Instance != null)
             {
                 ResourceManager.Instance.SetCollectedResources(new HashSet<string>());
             }
-    
+
             if (QuestSystem.Instance != null)
             {
                 QuestSystem.Instance.ResetQuests();
             }
-    
+
             // Сбрасываем инвентарь
             if (Inventory.Instance != null)
             {
                 Inventory.Instance.ClearInventory();
             }
-    
+
             Debug.Log("New game started");
         }
 
@@ -1028,7 +1080,7 @@ namespace Gameplay.Systems
             {
                 // Сначала инициализируем системы, если они еще не инициализированы
                 InitializeSystems();
-        
+
                 ApplyPlayerSaveData(saveData.playerData);
                 ApplyWorldSaveData(saveData.worldData);
                 ApplyNpcsSaveData(saveData.npcsData);
@@ -1056,8 +1108,21 @@ namespace Gameplay.Systems
 
             if (playerController != null)
             {
+                // Отключаем CharacterController для изменения позиции
+                var characterController = playerController.GetComponent<CharacterController>();
+                if (characterController != null)
+                {
+                    characterController.enabled = false;
+                }
+        
                 playerController.transform.position = data.position;
                 playerController.transform.eulerAngles = data.rotation;
+        
+                // Включаем обратно
+                if (characterController != null)
+                {
+                    characterController.enabled = true;
+                }
             }
 
             if (playerHealth != null)
@@ -1070,10 +1135,10 @@ namespace Gameplay.Systems
                 player.playerID = data.playerID;
                 player.playerName = data.playerName;
                 player.playerLevel = data.level;
-        
+
                 // Преобразуем IntIntDictionary в обычный Dictionary
                 player.RelationshipsWithNpCs = data.relationships?.ToDictionary() ?? new Dictionary<int, int>();
-        
+
                 player.dialogueHistory = ConvertSaveDialogueHistory(data.dialogueHistory);
                 player.dialogueFlags = ConvertSaveDialogueFlags(data.dialogueFlags);
             }
@@ -1085,9 +1150,6 @@ namespace Gameplay.Systems
                 playerProgression.miningSpeedMultiplier = data.progression.miningSpeedMultiplier;
                 playerProgression.inventoryCapacity = data.progression.inventoryCapacity;
                 playerProgression.collectionRangeMultiplier = data.progression.collectionRangeMultiplier;
-        
-                // Преобразуем StringBoolDictionary в обычный Dictionary
-                playerProgression.ApplyUnlockedTechs(data.progression.unlockedTechs?.ToDictionary());
             }
         }
 
@@ -1143,31 +1205,29 @@ namespace Gameplay.Systems
                 var npcBehaviour = npcManager.GetNpcByID(npcSaveData.npcID);
                 if (npcBehaviour != null)
                 {
-                    // Восстанавливаем позицию и rotation
+                    // Восстанавливаем позицию и поворот
                     npcBehaviour.transform.position = npcSaveData.position;
                     npcBehaviour.transform.eulerAngles = npcSaveData.rotation;
 
                     var npcInteraction = npcBehaviour.GetComponent<NpcInteraction>();
                     if (npcInteraction?.npcData != null)
                     {
-                        // Восстанавливаем данные NPC
                         npcInteraction.npcData.currentState = npcSaveData.currentState;
-                
-                        // Преобразуем IntIntDictionary в обычный Dictionary
-                        npcInteraction.npcData.Relationships = npcSaveData.relationships?.ToDictionary() ?? new Dictionary<int, int>();
-                
+                        npcInteraction.npcData.Relationships = 
+                            npcSaveData.relationships?.ToDictionary() ?? new Dictionary<int, int>();
                         npcInteraction.npcData.memories = ConvertSaveMemories(npcSaveData.memories);
-
-                        // Регистрируем в менеджере отношений
-                        relationshipManager.RegisterNpc(npcInteraction.npcData);
 
                         // Восстанавливаем реактивные диалоги
                         var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
                         if (reactiveTrigger != null)
                         {
-                            reactiveTrigger.SetCurrentDialogueIndex(npcSaveData.currentDialogueIndex);
-                            reactiveTrigger.SetCallCooldown(npcSaveData.lastCallTime);
-                            reactiveTrigger.SetCanCall(npcSaveData.canCall);
+                            var reactiveData = new ReactiveDialogueSaveData
+                            {
+                                currentDialogueIndex = npcSaveData.currentDialogueIndex,
+                                canCall = npcSaveData.canCall,
+                                lastCallTime = npcSaveData.lastCallTime
+                            };
+                            reactiveTrigger.ApplySaveData(reactiveData);
                         }
                     }
                 }
@@ -1237,7 +1297,7 @@ namespace Gameplay.Systems
                 PlayerProgression.Instance.ApplyTechSaveData(techData);
             }
         }
-        
+
         private void ApplyInventorySaveData(InventorySaveData data)
         {
             var inventory = Inventory.Instance;
@@ -1287,25 +1347,25 @@ namespace Gameplay.Systems
         private void ApplySettingsSaveData(SettingsSaveData settingsData)
         {
             if (settingsData == null) return;
-    
+
             // Применяем настройки аудио
             AudioListener.volume = settingsData.masterVolume;
-    
+
             // Применяем настройки языка
-            if (LocalizationManager.LocalizationManager.Instance != null && 
+            if (LocalizationManager.LocalizationManager.Instance != null &&
                 !string.IsNullOrEmpty(settingsData.language))
             {
                 LocalizationManager.LocalizationManager.Instance.SetLanguage(settingsData.language);
             }
-    
+
             // Применяем настройки графики
             Screen.SetResolution(
-                settingsData.resolutionWidth, 
-                settingsData.resolutionHeight, 
+                settingsData.resolutionWidth,
+                settingsData.resolutionHeight,
                 settingsData.fullscreen
             );
         }
-        
+
         public SettingsSaveData GetSettingsData()
         {
             return CreateSettingsSaveData();

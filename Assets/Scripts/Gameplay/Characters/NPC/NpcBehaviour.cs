@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Core;
+using Data.Game;
 using Data.NPC;
 using UnityEngine;
 using UnityEngine.AI;
@@ -213,5 +214,87 @@ namespace Gameplay.Characters.NPC
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(npcDataConfig.homeLocation, 1f);
         }
+        
+        public NpcBehaviourSaveData GetSaveData()
+        {
+            return new NpcBehaviourSaveData
+            {
+                position = transform.position,
+                rotation = transform.eulerAngles,
+                currentState = _currentState,
+                currentActivity = CreateActivitySaveData()
+            };
+        }
+
+        public void ApplySaveData(NpcBehaviourSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Восстанавливаем позицию и поворот
+            transform.position = saveData.position;
+            transform.eulerAngles = saveData.rotation;
+
+            // Восстанавливаем состояние
+            _currentState = saveData.currentState;
+
+            // Останавливаем текущие корутины
+            if (_currentActivityRoutine != null)
+            {
+                StopCoroutine(_currentActivityRoutine);
+                _currentActivityRoutine = null;
+            }
+
+            // Восстанавливаем NavMeshAgent позицию
+            if (_agent != null && _agent.enabled)
+            {
+                _agent.Warp(saveData.position);
+            }
+
+            // Восстанавливаем активность если нужно
+            if (saveData.currentActivity != null && _agent != null && _agent.enabled)
+            {
+                _currentActivity = ConvertToActivity(saveData.currentActivity);
+                _currentActivityRoutine = StartCoroutine(ExecuteActivity(_currentActivity));
+            }
+        }
+
+        private ActivitySaveData CreateActivitySaveData()
+        {
+            return new ActivitySaveData
+            {
+                type = _currentActivity.type,
+                location = _currentActivity.location,
+                targetNpc = _currentActivity.targetNpc,
+                duration = _currentActivity.duration,
+                remainingTime = GetRemainingActivityTime()
+            };
+        }
+
+        private Activity ConvertToActivity(ActivitySaveData saveData)
+        {
+            return new Activity
+            {
+                type = saveData.type,
+                location = saveData.location,
+                targetNpc = saveData.targetNpc,
+                duration = saveData.duration
+            };
+        }
+
+        private float GetRemainingActivityTime()
+        {
+            // TODO: Реализовать логику получения оставшегося времени активности
+            return 0f;
+        }
     }
+    
+    [System.Serializable]
+    public class NpcBehaviourSaveData
+    {
+        public Vector3 position;
+        public Vector3 rotation;
+        public NpcState currentState;
+        public ActivitySaveData currentActivity;
+    }
+
 }

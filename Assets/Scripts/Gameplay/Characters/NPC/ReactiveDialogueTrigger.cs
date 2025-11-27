@@ -433,5 +433,43 @@ namespace Gameplay.Characters.NPC
                 StopCoroutine(_callRoutine);
             }
         }
+        
+        public ReactiveDialogueSaveData GetSaveData()
+        {
+            return new ReactiveDialogueSaveData
+            {
+                currentDialogueIndex = _currentDialogueIndex,
+                canCall = _canCall,
+                lastCallTime = _lastCallTime
+            };
+        }
+        
+        public void ApplySaveData(ReactiveDialogueSaveData saveData)
+        {
+            if (saveData == null) return;
+    
+            _currentDialogueIndex = saveData.currentDialogueIndex;
+            _canCall = saveData.canCall;
+            _lastCallTime = saveData.lastCallTime;
+    
+            // Сбрасываем состояние если нужно
+            if (_callRoutine != null)
+            {
+                StopCoroutine(_callRoutine);
+                _callRoutine = null;
+            }
+    
+            _isCalling = false;
+            if (callIcon != null)
+                callIcon.SetActive(false);
+        }
+    }
+    
+    [System.Serializable]
+    public class ReactiveDialogueSaveData
+    {
+        public int currentDialogueIndex;
+        public bool canCall;
+        public float lastCallTime;
     }
 }

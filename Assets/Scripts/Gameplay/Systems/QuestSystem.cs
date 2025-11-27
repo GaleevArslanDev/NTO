@@ -213,10 +213,15 @@ namespace Gameplay.Systems
 
         private void CheckQuestProgress()
         {
-            foreach (var quest in _activeQuests.Where(quest =>
-                         quest.type == QuestType.GatherResources && IsQuestComplete(quest)))
+            // Создаем копию списка для безопасного перечисления
+            var activeQuestsCopy = new List<Quest>(_activeQuests);
+    
+            foreach (var quest in activeQuestsCopy)
             {
-                CompleteQuest(quest.questId);
+                if (quest.type == QuestType.GatherResources && IsQuestComplete(quest))
+                {
+                    CompleteQuest(quest.questId);
+                }
             }
         }
 
@@ -254,100 +259,72 @@ namespace Gameplay.Systems
         }
 
         public void ApplySaveData(QuestSaveData saveData)
+{
+    if (saveData == null) return;
+
+    try
+    {
+        // Очищаем текущие состояния квестов
+        _activeQuests.Clear();
+        _completedQuests.Clear();
+        _availableQuests.Clear();
+
+        // Генерируем базовые квесты
+        GenerateInitialQuests();
+
+        // Восстанавливаем завершенные квесты
+        foreach (var questId in saveData.completedQuests)
         {
-            if (saveData == null) return;
-
-            try
+            var quest = FindQuestById(questId);
+            if (quest != null)
             {
-                // Очищаем текущие состояния квестов
-                _activeQuests.Clear();
-                _completedQuests.Clear();
-                _availableQuests.Clear();
-
-                // Восстанавливаем завершенные квесты
-                foreach (var questId in saveData.completedQuests)
-                {
-                    var quest = FindQuestById(questId);
-                    if (quest != null)
-                    {
-                        quest.isCompleted = true;
-                        quest.isActive = false;
-                        _completedQuests.Add(quest);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Quest not found for completion: {questId}");
-                    }
-                }
-
-                // Восстанавливаем активные квесты
-                foreach (var questId in saveData.activeQuests)
-                {
-                    var quest = FindQuestById(questId);
-                    if (quest != null)
-                    {
-                        quest.isActive = true;
-                        quest.isCompleted = false;
-
-                        // Восстанавливаем прогресс квеста
-                        if (saveData.questProgress != null &&
-                            saveData.questProgress.TryGetValue(questId, out var progressData))
-                        {
-                            quest.currentKills = progressData.currentKills;
-
-                            // Восстанавливаем прогресс сбора ресурсов
-                            if (progressData.gatheredResources != null)
-                            {
-                                // Преобразуем StringIntDictionary в обычный Dictionary
-                                quest.currentResources = progressData.gatheredResources.ToDictionary();
-                            }
-                        }
-
-                        _activeQuests.Add(quest);
-
-                        // Удаляем из доступных если он там есть
-                        _availableQuests.RemoveAll(q => q.questId == questId);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Active quest not found: {questId}");
-                    }
-                }
-
-                // Восстанавливаем доступные квесты
-                var allQuestIds = GetAllQuestIds();
-                foreach (var questId in allQuestIds)
-                {
-                    if (!saveData.activeQuests.Contains(questId) &&
-                        !saveData.completedQuests.Contains(questId))
-                    {
-                        var quest = FindQuestById(questId);
-                        if (quest != null)
-                        {
-                            quest.isActive = false;
-                            quest.isCompleted = false;
-                            _availableQuests.Add(quest);
-                        }
-                    }
-                }
-
-                // Если нет доступных квестов, генерируем новые
-                if (_availableQuests.Count == 0)
-                {
-                    GenerateRandomQuests();
-                }
-
-                // Обновляем UI
-                OnQuestsUpdated?.Invoke();
-
-                Debug.Log(
-                    $"Quests loaded: {_activeQuests.Count} active, {_completedQuests.Count} completed, {_availableQuests.Count} available");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error applying quest save data: {e.Message}");
+                quest.isCompleted = true;
+                quest.isActive = false;
+                _completedQuests.Add(quest);
             }
         }
+
+        // Восстанавливаем активные квесты
+        foreach (var questId in saveData.activeQuests)
+        {
+            var quest = FindQuestById(questId);
+            if (quest != null)
+            {
+                quest.isActive = true;
+                quest.isCompleted = false;
+
+                // Восстанавливаем прогресс квеста
+                if (saveData.questProgress != null && 
+                    saveData.questProgress.TryGetValue(questId, out var progressData))
+                {
+                    quest.currentKills = progressData.currentKills;
+
+                    // Восстанавливаем прогресс сбора ресурсов
+                    if (progressData.gatheredResources != null)
+                    {
+                        quest.currentResources = progressData.gatheredResources.ToDictionary();
+                    }
+                }
+
+                _activeQuests.Add(quest);
+                
+                // Удаляем из доступных если он там есть
+                _availableQuests.RemoveAll(q => q.questId == questId);
+            }
+        }
+
+        // Обновляем UI
+        OnQuestsUpdated?.Invoke();
+
+        Debug.Log($"Quests loaded: {_activeQuests.Count} active, {_completedQuests.Count} completed, {_availableQuests.Count} available");
+    }
+    catch (Exception e)
+    {
+        Debug.LogError($"Error applying quest save data: {e.Message}");
+        // В случае ошибки генерируем начальные квесты
+        ResetQuests();
+    }
+}
 
 // Вспомогательные методы для ApplySaveData
 
@@ -418,7 +395,7 @@ namespace Gameplay.Systems
             // Например, если у нас есть отдельная система отслеживания собранных ресурсов для квестов
             Debug.Log($"Restored resource progress for quest {quest.questId}");
         }
-        
+
         public QuestProgressSaveData GetQuestProgressData(string questId)
         {
             var quest = FindQuestById(questId);
@@ -488,6 +465,91 @@ namespace Gameplay.Systems
             }
 
             OnQuestsUpdated?.Invoke();
+        }
+
+        public QuestSaveData GetQuestSaveData()
+        {
+            var saveData = new QuestSaveData();
+
+            saveData.activeQuests = new List<string>(_activeQuests.Select(q => q.questId));
+            saveData.completedQuests = new List<string>(_completedQuests.Select(q => q.questId));
+
+            // Сохраняем прогресс квестов
+            saveData.questProgress = new StringQuestProgressDictionary();
+            foreach (var quest in _activeQuests)
+            {
+                var progressData = new QuestProgressSaveData
+                {
+                    currentKills = quest.currentKills
+                };
+
+                // Сохраняем прогресс ресурсов если нужно
+                if (quest.currentResources != null)
+                {
+                    progressData.gatheredResources = new Data.Game.StringIntDictionary();
+                    progressData.gatheredResources.FromDictionary(quest.currentResources);
+                }
+
+                saveData.questProgress[quest.questId] = progressData;
+            }
+
+            return saveData;
+        }
+
+        public void ApplyQuestSaveData(QuestSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Очищаем текущее состояние
+            _activeQuests.Clear();
+            _completedQuests.Clear();
+            _availableQuests.Clear();
+
+            // Восстанавливаем завершенные квесты
+            foreach (var questId in saveData.completedQuests)
+            {
+                var quest = FindQuestById(questId);
+                if (quest != null)
+                {
+                    quest.isCompleted = true;
+                    _completedQuests.Add(quest);
+                }
+            }
+
+            // Восстанавливаем активные квесты
+            foreach (var questId in saveData.activeQuests)
+            {
+                var quest = FindQuestById(questId);
+                if (quest != null)
+                {
+                    quest.isActive = true;
+
+                    // Восстанавливаем прогресс
+                    if (saveData.questProgress != null &&
+                        saveData.questProgress.TryGetValue(questId, out var progress))
+                    {
+                        quest.currentKills = progress.currentKills;
+
+                        if (progress.gatheredResources != null)
+                        {
+                            quest.currentResources = progress.gatheredResources.ToDictionary();
+                        }
+                    }
+
+                    _activeQuests.Add(quest);
+                }
+            }
+
+            // Восстанавливаем доступные квесты
+            GenerateInitialQuests();
+            foreach (var quest in _availableQuests.ToList())
+            {
+                if (saveData.activeQuests.Contains(quest.questId) ||
+                    saveData.completedQuests.Contains(quest.questId))
+                {
+                    _availableQuests.Remove(quest);
+                }
+            }
         }
 
         public List<Quest> GetAvailableQuests() => new List<Quest>(_availableQuests);
