@@ -196,7 +196,7 @@ namespace Gameplay.Characters.Player
         public void ApplyUnlockedTechs(Dictionary<string, bool> unlockedTechs)
         {
             _unlockedTechs = unlockedTechs ?? new Dictionary<string, bool>();
-    
+
             // Применяем разблокированные технологии
             ApplyAllUnlockedTechs();
         }

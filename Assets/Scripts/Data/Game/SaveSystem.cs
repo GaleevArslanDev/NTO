@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ namespace Data.Game
         public string saveName;
         public string timestamp;
         public string gameVersion;
+        
+        // Screenshot data for manual saves
+        public string screenshotData; // Base64 encoded thumbnail
         
         // Player Data
         public PlayerSaveData playerData;
@@ -36,6 +40,10 @@ namespace Data.Game
         // Settings
         public List<string> collectedResourceIds = new List<string>();
         public SettingsSaveData settingsData;
+
+        // Validation and metadata
+        public string checksum;
+        public bool isValid = true;
     }
 
     [System.Serializable]
@@ -48,15 +56,15 @@ namespace Data.Game
         public float health;
         public int level;
         
-        // Relationships
-        public Dictionary<int, int> relationships;
+        // Relationships - using SerializableDictionary
+        public IntIntDictionary relationships = new IntIntDictionary();
         
         // Dialogue History
-        public Dictionary<int, List<DialogueHistorySaveData>> dialogueHistory;
-        public List<DialogueFlagsSaveData> dialogueFlags;
+        public IntDialogueHistoryListDictionary dialogueHistory = new IntDialogueHistoryListDictionary();
+        public List<DialogueFlagsSaveData> dialogueFlags = new List<DialogueFlagsSaveData>();
         
         // Progression
-        public PlayerProgressionSaveData progression;
+        public PlayerProgressionSaveData progression = new PlayerProgressionSaveData();
     }
 
     [System.Serializable]
@@ -66,14 +74,14 @@ namespace Data.Game
         public string nodeID;
         public string selectedOption;
         public GameTimestamp timestamp;
-        public List<string> flagsSet;
+        public List<string> flagsSet = new List<string>();
     }
 
     [System.Serializable]
     public class DialogueFlagsSaveData
     {
         public int npcID;
-        public List<string> flags;
+        public List<string> flags = new List<string>();
     }
 
     [System.Serializable]
@@ -84,7 +92,7 @@ namespace Data.Game
         public float miningSpeedMultiplier = 1f;
         public int inventoryCapacity = 50;
         public float collectionRangeMultiplier = 1f;
-        public Dictionary<string, bool> unlockedTechs = new();
+        public StringBoolDictionary unlockedTechs = new StringBoolDictionary();
     }
 
     [System.Serializable]
@@ -106,10 +114,10 @@ namespace Data.Game
         public NpcState currentState;
         
         // Relationships
-        public Dictionary<int, int> relationships;
+        public IntIntDictionary relationships = new IntIntDictionary();
         
         // Memories
-        public List<MemorySaveData> memories;
+        public List<MemorySaveData> memories = new List<MemorySaveData>();
         
         // Reactive Dialogue
         public int currentDialogueIndex;
@@ -117,7 +125,7 @@ namespace Data.Game
         public float lastCallTime;
         
         // Schedule
-        public ActivitySaveData currentActivity;
+        public ActivitySaveData currentActivity = new ActivitySaveData();
     }
 
     [System.Serializable]
@@ -142,13 +150,13 @@ namespace Data.Game
     [System.Serializable]
     public class BuildingSaveData
     {
-        public Dictionary<string, int> buildingLevels = new();
-        public Dictionary<string, bool> unlockedBuildings = new();
+        public StringIntDictionary buildingLevels = new StringIntDictionary();
+        public StringBoolDictionary unlockedBuildings = new StringBoolDictionary();
         public int townHallLevel;
         public int unlockedTechTier;
         
         // Farm plots
-        public Dictionary<string, FarmPlotSaveData> farmPlots = new();
+        public StringFarmPlotDictionary farmPlots = new StringFarmPlotDictionary();
     }
 
     [System.Serializable]
@@ -164,14 +172,14 @@ namespace Data.Game
     [System.Serializable]
     public class TechSaveData
     {
-        public Dictionary<string, bool> unlockedNodes = new();
-        public List<string> unlockedTrees = new();
+        public StringBoolDictionary unlockedNodes = new StringBoolDictionary();
+        public List<string> unlockedTrees = new List<string>();
     }
 
     [System.Serializable]
     public class InventorySaveData
     {
-        public Dictionary<string, int> items = new();
+        public StringIntDictionary items = new StringIntDictionary();
         public int gold;
         public int capacity;
     }
@@ -179,16 +187,16 @@ namespace Data.Game
     [System.Serializable]
     public class QuestSaveData
     {
-        public List<string> activeQuests = new();
-        public List<string> completedQuests = new();
-        public Dictionary<string, QuestProgressSaveData> questProgress = new();
+        public List<string> activeQuests = new List<string>();
+        public List<string> completedQuests = new List<string>();
+        public StringQuestProgressDictionary questProgress = new StringQuestProgressDictionary();
     }
 
     [System.Serializable]
     public class QuestProgressSaveData
     {
         public int currentKills;
-        public Dictionary<string, int> gatheredResources;
+        public StringIntDictionary gatheredResources = new StringIntDictionary();
     }
 
     [System.Serializable]
@@ -203,11 +211,14 @@ namespace Data.Game
         public int resolutionHeight = 1080;
     }
 
-    [System.Serializable]
-    public class CollectedResourceData
-    {
-        public string resourceId;
-        public Vector3 position;
-        public ItemType itemType;
-    }
+    // Specific dictionary types for serialization
+    [Serializable] public class IntIntDictionary : SerializableDictionary<int, int> { }
+    [Serializable] public class IntBoolDictionary : SerializableDictionary<int, bool> { }
+    [Serializable] public class IntStringDictionary : SerializableDictionary<int, string> { }
+    [Serializable] public class StringIntDictionary : SerializableDictionary<string, int> { }
+    [Serializable] public class StringBoolDictionary : SerializableDictionary<string, bool> { }
+    [Serializable] public class StringStringDictionary : SerializableDictionary<string, string> { }
+    [Serializable] public class IntDialogueHistoryListDictionary : SerializableDictionary<int, List<DialogueHistorySaveData>> { }
+    [Serializable] public class StringFarmPlotDictionary : SerializableDictionary<string, FarmPlotSaveData> { }
+    [Serializable] public class StringQuestProgressDictionary : SerializableDictionary<string, QuestProgressSaveData> { }
 }

@@ -23,20 +23,20 @@ namespace Gameplay.Systems
             public List<ResourceCost> rewards;
             public bool isCompleted;
             public bool isActive;
-    
+
             // Для квестов на убийство
             public string enemyType;
             public int requiredKills;
             public int currentKills;
-    
+
             // Для квестов на сбор ресурсов (дополнительные поля)
             public Dictionary<string, int> requiredResources; // Тип ресурса -> количество
-            public Dictionary<string, int> currentResources;  // Текущий прогресс
-    
+            public Dictionary<string, int> currentResources; // Текущий прогресс
+
             // Время создания/принятия квеста
             public string acceptedTime;
             public string completedTime;
-    
+
             public Quest()
             {
                 requirements = new List<ResourceCost>();
@@ -45,7 +45,7 @@ namespace Gameplay.Systems
                 currentResources = new Dictionary<string, int>();
                 currentKills = 0;
             }
-    
+
             // Метод для проверки выполнения квеста
             public bool CheckCompletion()
             {
@@ -65,14 +65,14 @@ namespace Gameplay.Systems
                         return false;
                 }
             }
-    
+
             private bool CheckResourceCompletion()
             {
                 if (requirements == null || requirements.Count == 0) return false;
-        
+
                 var inventory = Inventory.Instance;
                 if (inventory == null) return false;
-        
+
                 return requirements.All(req => inventory.GetItemCount(req.type) >= req.amount);
             }
         }
@@ -295,10 +295,11 @@ namespace Gameplay.Systems
                         {
                             quest.currentKills = progressData.currentKills;
 
-                            // Восстанавливаем прогресс сбора ресурсов если есть
+                            // Восстанавливаем прогресс сбора ресурсов
                             if (progressData.gatheredResources != null)
                             {
-                                ApplyQuestResourceProgress(quest, progressData.gatheredResources);
+                                // Преобразуем StringIntDictionary в обычный Dictionary
+                                quest.currentResources = progressData.gatheredResources.ToDictionary();
                             }
                         }
 
@@ -313,7 +314,7 @@ namespace Gameplay.Systems
                     }
                 }
 
-                // Восстанавливаем доступные квесты (те, которые не активные и не завершенные)
+                // Восстанавливаем доступные квесты
                 var allQuestIds = GetAllQuestIds();
                 foreach (var questId in allQuestIds)
                 {
@@ -417,21 +418,27 @@ namespace Gameplay.Systems
             // Например, если у нас есть отдельная система отслеживания собранных ресурсов для квестов
             Debug.Log($"Restored resource progress for quest {quest.questId}");
         }
-
-// Добавим также метод для получения данных о прогрессе квестов для сохранения
+        
         public QuestProgressSaveData GetQuestProgressData(string questId)
         {
             var quest = FindQuestById(questId);
             if (quest == null) return null;
 
-            return new QuestProgressSaveData
+            var progressData = new QuestProgressSaveData
             {
                 currentKills = quest.currentKills,
-                gatheredResources = new Dictionary<string, int>() // Можно добавить реальные данные
+                gatheredResources = new Data.Game.StringIntDictionary()
             };
+
+            // Преобразуем обычный Dictionary в StringIntDictionary
+            if (quest.currentResources != null)
+            {
+                progressData.gatheredResources.FromDictionary(quest.currentResources);
+            }
+
+            return progressData;
         }
 
-// Метод для очистки состояния квестов (полезно при новой игре)
         public void ResetQuests()
         {
             _activeQuests.Clear();
@@ -442,7 +449,6 @@ namespace Gameplay.Systems
             OnQuestsUpdated?.Invoke();
         }
 
-// Добавим метод для миграции старых сохранений
         public void MigrateFromOldSave(List<string> oldActiveQuests, List<string> oldCompletedQuests)
         {
             if (oldActiveQuests != null)

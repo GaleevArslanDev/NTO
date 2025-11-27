@@ -12,6 +12,8 @@ namespace UI
         public TMP_Text timestampText;
         public TMP_Text detailsText;
         public Button selectButton;
+        public RawImage screenshotImage;
+        public GameObject corruptedIndicator;
         
         private SaveGameInfo _saveInfo;
         private SaveLoadUI _parentUI;
@@ -25,7 +27,34 @@ namespace UI
             timestampText.text = saveInfo.timestamp;
             detailsText.text = $"Ур. {saveInfo.playerLevel} | {saveInfo.location}";
             
+            // Загрузка и отображение скриншота
+            LoadScreenshot(saveInfo.screenshotData);
+            
+            // Показываем индикатор если сохранение повреждено
+            if (corruptedIndicator != null)
+                corruptedIndicator.SetActive(saveInfo.isCorrupted);
+
             selectButton.onClick.AddListener(OnSelect);
+        }
+        
+        private async void LoadScreenshot(string screenshotData)
+        {
+            if (screenshotImage == null || string.IsNullOrEmpty(screenshotData))
+                return;
+
+            try
+            {
+                var texture = SaveManager.Instance.LoadScreenshotFromBase64(screenshotData);
+                if (texture != null)
+                {
+                    screenshotImage.texture = texture;
+                    screenshotImage.color = Color.white;
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to load screenshot: {e.Message}");
+            }
         }
         
         private string GetDisplayName(string saveName)

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Core;
 using Data.Game;
 using Data.NPC;
@@ -22,11 +25,24 @@ namespace Gameplay.Systems
         [Header("Save Settings")] public string gameVersion = "1.0";
         public int maxManualSaves = 10;
         public float autoSaveInterval = 300f; // 5 minutes
+        
+        [Header("Screenshot Settings")]
+        [SerializeField] private int screenshotWidth = 320;
+        [SerializeField] private int screenshotHeight = 180;
+        [SerializeField] private int screenshotQuality = 75;
+        [SerializeField] private bool enableScreenshots = true;
+        
+        [Header("Validation Settings")]
+        [SerializeField] private bool enableChecksum = true;
+        [SerializeField] private bool backupSaves = true;
+        [SerializeField] private int maxBackupCount = 3;
 
         [Header("UI")] public GameObject saveIndicator;
 
         private string SaveFolder => Path.Combine(Application.persistentDataPath, "Saves");
         private string AutoSavePath => Path.Combine(SaveFolder, "autosave.json");
+        
+        private Coroutine _screenshotCoroutine;
 
         private float _autoSaveTimer;
         private List<string> _manualSaves = new();
@@ -74,6 +90,91 @@ namespace Gameplay.Systems
             if (Input.GetKeyDown(KeyCode.F9))
             {
                 QuickLoad();
+            }
+        }
+        
+        private IEnumerator TakeScreenshotCoroutine(string saveName, System.Action<Texture2D> callback)
+        {
+            // Ждем конец кадра чтобы захватить весь экран
+            yield return new WaitForEndOfFrame();
+
+            try
+            {
+                // Создаем текстуру для скриншота
+                var screenTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+                
+                // Читаем пиксели с экрана
+                screenTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                screenTexture.Apply();
+
+                // Масштабируем до миниатюры
+                var scaledTexture = ScaleTexture(screenTexture, screenshotWidth, screenshotHeight);
+                Destroy(screenTexture);
+
+                callback(scaledTexture);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to take screenshot: {e.Message}");
+                callback(null);
+            }
+        }
+        
+        private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+        {
+            var result = new Texture2D(targetWidth, targetHeight, source.format, false);
+            
+            var scaleX = (float)source.width / targetWidth;
+            var scaleY = (float)source.height / targetHeight;
+
+            for (var y = 0; y < targetHeight; y++)
+            {
+                for (var x = 0; x < targetWidth; x++)
+                {
+                    var sourceX = Mathf.FloorToInt(x * scaleX);
+                    var sourceY = Mathf.FloorToInt(y * scaleY);
+                    var color = source.GetPixel(sourceX, sourceY);
+                    result.SetPixel(x, y, color);
+                }
+            }
+            
+            result.Apply();
+            return result;
+        }
+        
+        private string SaveScreenshotToBase64(Texture2D screenshot)
+        {
+            if (screenshot == null) return string.Empty;
+
+            try
+            {
+                var bytes = screenshot.EncodeToJPG(screenshotQuality);
+                var base64 = Convert.ToBase64String(bytes);
+                Destroy(screenshot);
+                return base64;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to encode screenshot: {e.Message}");
+                return string.Empty;
+            }
+        }
+        
+        public Texture2D LoadScreenshotFromBase64(string base64Data)
+        {
+            if (string.IsNullOrEmpty(base64Data)) return null;
+
+            try
+            {
+                var bytes = Convert.FromBase64String(base64Data);
+                var texture = new Texture2D(2, 2);
+                texture.LoadImage(bytes);
+                return texture;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to decode screenshot: {e.Message}");
+                return null;
             }
         }
 
@@ -239,14 +340,269 @@ namespace Gameplay.Systems
 
         public void CreateManualSave(string saveName)
         {
-            var formattedName = $"manual_{DateTime.Now:yyyyMMdd_HHmmss}";
-            if (!string.IsNullOrEmpty(saveName))
+            if (enableScreenshots)
             {
-                formattedName = $"manual_{saveName}_{DateTime.Now:yyyyMMdd_HHmmss}";
+                StartCoroutine(CreateManualSaveWithScreenshot(saveName));
+            }
+            else
+            {
+                var formattedName = FormatManualSaveName(saveName);
+                SaveGame(formattedName);
+                ShowSaveIndicator();
+            }
+        }
+        
+        private string FormatManualSaveName(string saveName)
+        {
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            return string.IsNullOrEmpty(saveName) 
+                ? $"manual_{timestamp}" 
+                : $"manual_{saveName}_{timestamp}";
+        }
+        
+        private IEnumerator CreateManualSaveWithScreenshot(string saveName)
+        {
+            var formattedName = FormatManualSaveName(saveName);
+            
+            // Показываем индикатор загрузки
+            if (saveIndicator != null)
+                saveIndicator.SetActive(true);
+
+            // Делаем скриншот
+            Texture2D screenshot = null;
+            yield return StartCoroutine(TakeScreenshotCoroutine(formattedName, tex => screenshot = tex));
+
+            // Создаем данные сохранения
+            var saveData = CreateSaveData(formattedName);
+            
+            // Добавляем скриншот если удалось сделать
+            if (screenshot != null)
+            {
+                saveData.screenshotData = SaveScreenshotToBase64(screenshot);
             }
 
-            SaveGame(formattedName);
+            // Сохраняем игру
+            var result = SaveGameData(saveData, formattedName);
+            result.LogResult();
+
+            // Показываем результат
             ShowSaveIndicator();
+            
+            // Обновляем список сохранений
+            LoadSaveList();
+            CleanupOldSaves();
+        }
+        
+        private SaveOperationResult SaveGameData(GameSaveData saveData, string saveName)
+        {
+            try
+            {
+                var filePath = GetSaveFilePath(saveName);
+                
+                // Валидация данных перед сохранением
+                var validationResult = ValidateSaveData(saveData);
+                if (!validationResult.Success)
+                {
+                    return SaveOperationResult.FromError($"Save data validation failed: {validationResult.Message}", 
+                        SaveErrorType.InvalidData);
+                }
+
+                // Создаем бэкап если файл уже существует
+                if (backupSaves && File.Exists(filePath))
+                {
+                    CreateBackup(filePath);
+                }
+
+                // Добавляем контрольную сумму если включено
+                if (enableChecksum)
+                {
+                    saveData.checksum = CalculateChecksum(saveData);
+                }
+
+                // Сериализуем данные
+                var json = JsonUtility.ToJson(saveData, true);
+                
+                // Сохраняем в файл
+                File.WriteAllText(filePath, json);
+                
+                var fileInfo = new FileInfo(filePath);
+                return SaveOperationResult.FromSuccess($"Game saved successfully", filePath, fileInfo.Length);
+            }
+            catch (Exception e)
+            {
+                var errorType = SaveErrorHandler.GetErrorTypeFromException(e);
+                return SaveOperationResult.FromError($"Save failed: {e.Message}", errorType, e);
+            }
+        }
+        
+        private SaveOperationResult LoadGameData(string saveName)
+        {
+            try
+            {
+                var filePath = GetSaveFilePath(saveName);
+                
+                if (!File.Exists(filePath))
+                {
+                    return SaveOperationResult.FromError($"Save file not found: {filePath}", 
+                        SaveErrorType.FileNotFound);
+                }
+
+                // Читаем файл
+                var json = File.ReadAllText(filePath);
+                
+                // Десериализуем данные
+                var saveData = JsonUtility.FromJson<GameSaveData>(json);
+                
+                // Проверяем контрольную сумму если включено
+                if (enableChecksum && !string.IsNullOrEmpty(saveData.checksum))
+                {
+                    var currentChecksum = CalculateChecksum(saveData);
+                    if (currentChecksum != saveData.checksum)
+                    {
+                        return SaveOperationResult.FromError("Save file checksum mismatch - data may be corrupted", 
+                            SaveErrorType.DataCorrupted);
+                    }
+                }
+
+                // Валидация загруженных данных
+                var validationResult = ValidateSaveData(saveData);
+                if (!validationResult.Success)
+                {
+                    return SaveOperationResult.FromError($"Loaded save data validation failed: {validationResult.Message}", 
+                        SaveErrorType.InvalidData);
+                }
+
+                var fileInfo = new FileInfo(filePath);
+                return SaveOperationResult.FromSuccess($"Game loaded successfully", filePath, fileInfo.Length);
+            }
+            catch (Exception e)
+            {
+                var errorType = SaveErrorHandler.GetErrorTypeFromException(e);
+                return SaveOperationResult.FromError($"Load failed: {e.Message}", errorType, e);
+            }
+        }
+
+        private SaveOperationResult ValidateSaveData(GameSaveData saveData)
+        {
+            if (saveData == null)
+                return SaveOperationResult.FromError("Save data is null", SaveErrorType.InvalidData);
+
+            if (string.IsNullOrEmpty(saveData.version))
+                return SaveOperationResult.FromError("Save version is missing", SaveErrorType.InvalidData);
+
+            if (saveData.playerData == null)
+                return SaveOperationResult.FromError("Player data is missing", SaveErrorType.InvalidData);
+
+            // Проверка версии игры
+            if (saveData.gameVersion != gameVersion)
+            {
+                Debug.LogWarning($"Save version mismatch: {saveData.gameVersion} vs {gameVersion}");
+                // Здесь можно добавить логику миграции версий
+            }
+
+            return SaveOperationResult.FromSuccess("Save data validation passed");
+        }
+        
+        private string CalculateChecksum(GameSaveData saveData)
+        {
+            try
+            {
+                // Временно убираем checksum чтобы он не влиял на расчет
+                var originalChecksum = saveData.checksum;
+                saveData.checksum = string.Empty;
+                
+                var json = JsonUtility.ToJson(saveData);
+                using var sha256 = SHA256.Create();
+                var bytes = Encoding.UTF8.GetBytes(json);
+                var hash = sha256.ComputeHash(bytes);
+                
+                // Восстанавливаем checksum
+                saveData.checksum = originalChecksum;
+                
+                return Convert.ToBase64String(hash);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to calculate checksum: {e.Message}");
+                return string.Empty;
+            }
+        }
+        
+        private void CreateBackup(string originalFilePath)
+        {
+            try
+            {
+                var backupDir = Path.Combine(SaveFolder, "Backups");
+                if (!Directory.Exists(backupDir))
+                {
+                    Directory.CreateDirectory(backupDir);
+                }
+
+                var fileName = Path.GetFileName(originalFilePath);
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var backupPath = Path.Combine(backupDir, $"{Path.GetFileNameWithoutExtension(fileName)}_{timestamp}.backup");
+
+                File.Copy(originalFilePath, backupPath);
+
+                // Очистка старых бэкапов
+                CleanupOldBackups(backupDir, fileName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Failed to create backup: {e.Message}");
+            }
+        }
+        
+        private void CleanupOldBackups(string backupDir, string fileName)
+        {
+            try
+            {
+                var backupFiles = Directory.GetFiles(backupDir, $"{Path.GetFileNameWithoutExtension(fileName)}_*.backup")
+                    .OrderByDescending(f => new FileInfo(f).CreationTime)
+                    .ToArray();
+
+                for (var i = maxBackupCount; i < backupFiles.Length; i++)
+                {
+                    File.Delete(backupFiles[i]);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Failed to cleanup old backups: {e.Message}");
+            }
+        }
+        
+        public SaveOperationResult RestoreFromBackup(string saveName)
+        {
+            try
+            {
+                var backupDir = Path.Combine(SaveFolder, "Backups");
+                if (!Directory.Exists(backupDir))
+                {
+                    return SaveOperationResult.FromError("Backup directory not found", SaveErrorType.FileNotFound);
+                }
+
+                var backupFiles = Directory.GetFiles(backupDir, $"{saveName}_*.backup")
+                    .OrderByDescending(f => new FileInfo(f).CreationTime)
+                    .ToArray();
+
+                if (backupFiles.Length == 0)
+                {
+                    return SaveOperationResult.FromError($"No backups found for {saveName}", SaveErrorType.FileNotFound);
+                }
+
+                var latestBackup = backupFiles[0];
+                var originalFile = GetSaveFilePath(saveName);
+
+                File.Copy(latestBackup, originalFile, true);
+
+                return SaveOperationResult.FromSuccess($"Successfully restored from backup: {Path.GetFileName(latestBackup)}", originalFile);
+            }
+            catch (Exception e)
+            {
+                var errorType = SaveErrorHandler.GetErrorTypeFromException(e);
+                return SaveOperationResult.FromError($"Restore failed: {e.Message}", errorType, e);
+            }
         }
 
         private void CleanupOldSaves()
@@ -294,7 +650,7 @@ namespace Gameplay.Systems
             var playerHealth = PlayerHealth.Instance;
             var playerProgression = PlayerProgression.Instance;
 
-            return new PlayerSaveData
+            var playerSaveData = new PlayerSaveData
             {
                 playerID = player.playerID,
                 playerName = player.playerName,
@@ -302,7 +658,6 @@ namespace Gameplay.Systems
                 rotation = playerController.transform.eulerAngles,
                 health = playerHealth.currentHealth,
                 level = player.playerLevel,
-                relationships = player.RelationshipsWithNpCs,
                 dialogueHistory = ConvertDialogueHistory(player.dialogueHistory),
                 dialogueFlags = ConvertDialogueFlags(player.dialogueFlags),
                 progression = new PlayerProgressionSaveData
@@ -311,16 +666,22 @@ namespace Gameplay.Systems
                     fireRateMultiplier = playerProgression.fireRateMultiplier,
                     miningSpeedMultiplier = playerProgression.miningSpeedMultiplier,
                     inventoryCapacity = playerProgression.inventoryCapacity,
-                    collectionRangeMultiplier = playerProgression.collectionRangeMultiplier,
-                    unlockedTechs = playerProgression.GetUnlockedTechsDictionary()
+                    collectionRangeMultiplier = playerProgression.collectionRangeMultiplier
                 }
             };
+
+            // Преобразуем обычный Dictionary в IntIntDictionary
+            playerSaveData.relationships.FromDictionary(player.RelationshipsWithNpCs);
+    
+            // Преобразуем обычный Dictionary в StringBoolDictionary
+            playerSaveData.progression.unlockedTechs.FromDictionary(playerProgression.GetUnlockedTechsDictionary());
+
+            return playerSaveData;
         }
 
-        private Dictionary<int, List<DialogueHistorySaveData>> ConvertDialogueHistory(
-            Dictionary<int, List<PlayerData.DialogueHistory>> history)
+        private IntDialogueHistoryListDictionary ConvertDialogueHistory(Dictionary<int, List<PlayerData.DialogueHistory>> history)
         {
-            var result = new Dictionary<int, List<DialogueHistorySaveData>>();
+            var result = new IntDialogueHistoryListDictionary();
             foreach (var entry in history)
             {
                 var saveList = new List<DialogueHistorySaveData>();
@@ -335,10 +696,8 @@ namespace Gameplay.Systems
                         flagsSet = item.flagsSet
                     });
                 }
-
                 result[entry.Key] = saveList;
             }
-
             return result;
         }
 
@@ -380,20 +739,24 @@ namespace Gameplay.Systems
                     {
                         var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
 
-                        npcs.Add(new NpcSaveData
+                        var npcSaveData = new NpcSaveData
                         {
                             npcID = npcInteraction.npcData.npcID,
                             npcName = npcInteraction.npcData.npcName,
                             position = npcBehaviour.transform.position,
                             rotation = npcBehaviour.transform.eulerAngles,
                             currentState = npcInteraction.npcData.currentState,
-                            relationships = npcInteraction.npcData.Relationships,
                             memories = ConvertMemories(npcInteraction.npcData.memories),
                             currentDialogueIndex = reactiveTrigger?.GetCurrentDialogueIndex() ?? 0,
                             canCall = reactiveTrigger?.CanCall ?? true,
                             lastCallTime = reactiveTrigger?.GetLastCallTime() ?? 0,
                             currentActivity = CreateActivitySaveData(npcInteraction.npcData)
-                        });
+                        };
+
+                        // Преобразуем обычный Dictionary в IntIntDictionary
+                        npcSaveData.relationships.FromDictionary(npcInteraction.npcData.Relationships);
+
+                        npcs.Add(npcSaveData);
                     }
                 }
             }
@@ -439,12 +802,17 @@ namespace Gameplay.Systems
 
             if (buildingManager != null)
             {
+                // Преобразуем обычный Dictionary в StringIntDictionary
+                var buildingLevelsDict = new Dictionary<string, int>();
+                var unlockedBuildingsDict = new Dictionary<string, bool>();
+        
                 foreach (var building in buildingManager.GetAllBuildings())
                 {
-                    buildingData.buildingLevels[building.GetBuildingId()] = building.GetCurrentLevel();
+                    buildingLevelsDict[building.GetBuildingId()] = building.GetCurrentLevel();
                 }
 
-                buildingData.unlockedBuildings = buildingManager.GetUnlockedBuildingsDictionary();
+                buildingData.buildingLevels.FromDictionary(buildingLevelsDict);
+                buildingData.unlockedBuildings.FromDictionary(buildingManager.GetUnlockedBuildingsDictionary());
             }
 
             if (townHall != null)
@@ -455,9 +823,10 @@ namespace Gameplay.Systems
 
             if (farmManager != null)
             {
+                var farmPlotsDict = new Dictionary<string, FarmPlotSaveData>();
                 foreach (var plot in farmManager.GetFarmPlots())
                 {
-                    buildingData.farmPlots[plot.Key] = new FarmPlotSaveData
+                    farmPlotsDict[plot.Key] = new FarmPlotSaveData
                     {
                         plotId = plot.Value.plotId,
                         resourceType = plot.Value.resourceType,
@@ -466,9 +835,34 @@ namespace Gameplay.Systems
                         timer = plot.Value.timer
                     };
                 }
+                buildingData.farmPlots.FromDictionary(farmPlotsDict);
             }
 
             return buildingData;
+        }
+        
+        private Dictionary<int, List<PlayerData.DialogueHistory>> ConvertSaveDialogueHistory(IntDialogueHistoryListDictionary saveHistory)
+        {
+            var result = new Dictionary<int, List<PlayerData.DialogueHistory>>();
+            if (saveHistory == null) return result;
+
+            foreach (var entry in saveHistory.ToDictionary())
+            {
+                var historyList = new List<PlayerData.DialogueHistory>();
+                foreach (var item in entry.Value)
+                {
+                    var history = new PlayerData.DialogueHistory(
+                        item.dialogueTreeName,
+                        item.nodeID,
+                        item.selectedOption,
+                        item.timestamp
+                    );
+                    history.flagsSet = item.flagsSet;
+                    historyList.Add(history);
+                }
+                result[entry.Key] = historyList;
+            }
+            return result;
         }
 
         private TechSaveData CreateTechSaveData()
@@ -485,11 +879,12 @@ namespace Gameplay.Systems
 
             if (inventory != null)
             {
+                var itemsDict = new Dictionary<string, int>();
                 foreach (var slot in inventory.GetAllItems())
                 {
-                    inventoryData.items[slot.type.ToString()] = slot.count;
+                    itemsDict[slot.type.ToString()] = slot.count;
                 }
-
+                inventoryData.items.FromDictionary(itemsDict);
                 inventoryData.capacity = inventory.GetCapacity();
             }
 
@@ -508,23 +903,33 @@ namespace Gameplay.Systems
             var questData = new QuestSaveData();
             var questSystem = QuestSystem.Instance;
             var playerData = PlayerData.Instance;
-    
+
             if (questSystem != null)
             {
                 questData.activeQuests = new List<string>(questSystem.GetActiveQuests().Select(q => q.questId));
                 questData.completedQuests = new List<string>(questSystem.GetCompletedQuests().Select(q => q.questId));
-        
+
                 // Сохраняем прогресс для активных квестов
+                questData.questProgress = new StringQuestProgressDictionary();
+        
                 foreach (var quest in questSystem.GetActiveQuests())
                 {
-                    questData.questProgress[quest.questId] = new QuestProgressSaveData
+                    var progressData = new QuestProgressSaveData
                     {
-                        currentKills = quest.currentKills,
-                        gatheredResources = quest.currentResources ?? new Dictionary<string, int>()
+                        currentKills = quest.currentKills
                     };
+
+                    // Преобразуем обычный Dictionary в StringIntDictionary
+                    progressData.gatheredResources = new Data.Game.StringIntDictionary();
+                    if (quest.currentResources != null)
+                    {
+                        progressData.gatheredResources.FromDictionary(quest.currentResources);
+                    }
+
+                    questData.questProgress[quest.questId] = progressData;
                 }
             }
-    
+
             // Для совместимости с PlayerData
             if (playerData != null)
             {
@@ -533,16 +938,16 @@ namespace Gameplay.Systems
                 {
                     questData.activeQuests = playerData.activeQuests;
                 }
-        
+
                 if (questData.completedQuests.Count == 0 && playerData.completedQuests.Count > 0)
                 {
                     questData.completedQuests = playerData.completedQuests;
                 }
-        
+
                 playerData.activeQuests = questData.activeQuests;
                 playerData.completedQuests = questData.completedQuests;
             }
-    
+
             return questData;
         }
 
@@ -665,7 +1070,10 @@ namespace Gameplay.Systems
                 player.playerID = data.playerID;
                 player.playerName = data.playerName;
                 player.playerLevel = data.level;
-                player.RelationshipsWithNpCs = data.relationships ?? new Dictionary<int, int>();
+        
+                // Преобразуем IntIntDictionary в обычный Dictionary
+                player.RelationshipsWithNpCs = data.relationships?.ToDictionary() ?? new Dictionary<int, int>();
+        
                 player.dialogueHistory = ConvertSaveDialogueHistory(data.dialogueHistory);
                 player.dialogueFlags = ConvertSaveDialogueFlags(data.dialogueFlags);
             }
@@ -677,7 +1085,9 @@ namespace Gameplay.Systems
                 playerProgression.miningSpeedMultiplier = data.progression.miningSpeedMultiplier;
                 playerProgression.inventoryCapacity = data.progression.inventoryCapacity;
                 playerProgression.collectionRangeMultiplier = data.progression.collectionRangeMultiplier;
-                playerProgression.ApplyUnlockedTechs(data.progression.unlockedTechs);
+        
+                // Преобразуем StringBoolDictionary в обычный Dictionary
+                playerProgression.ApplyUnlockedTechs(data.progression.unlockedTechs?.ToDictionary());
             }
         }
 
@@ -742,7 +1152,10 @@ namespace Gameplay.Systems
                     {
                         // Восстанавливаем данные NPC
                         npcInteraction.npcData.currentState = npcSaveData.currentState;
-                        npcInteraction.npcData.Relationships = npcSaveData.relationships ?? new Dictionary<int, int>();
+                
+                        // Преобразуем IntIntDictionary в обычный Dictionary
+                        npcInteraction.npcData.Relationships = npcSaveData.relationships?.ToDictionary() ?? new Dictionary<int, int>();
+                
                         npcInteraction.npcData.memories = ConvertSaveMemories(npcSaveData.memories);
 
                         // Регистрируем в менеджере отношений
@@ -776,7 +1189,8 @@ namespace Gameplay.Systems
             if (buildingManager != null)
             {
                 // Восстанавливаем уровни зданий
-                foreach (var buildingLevel in data.buildingLevels)
+                var buildingLevels = data.buildingLevels?.ToDictionary() ?? new Dictionary<string, int>();
+                foreach (var buildingLevel in buildingLevels)
                 {
                     var building = buildingManager.GetBuilding(buildingLevel.Key);
                     if (building != null)
@@ -786,7 +1200,8 @@ namespace Gameplay.Systems
                 }
 
                 // Восстанавливаем разблокированные здания
-                buildingManager.ApplyUnlockedBuildings(data.unlockedBuildings);
+                var unlockedBuildings = data.unlockedBuildings?.ToDictionary() ?? new Dictionary<string, bool>();
+                buildingManager.ApplyUnlockedBuildings(unlockedBuildings);
             }
 
             if (townHall != null)
@@ -834,7 +1249,8 @@ namespace Gameplay.Systems
                 inventory.ClearInventory();
 
                 // Восстанавливаем предметы
-                foreach (var itemEntry in data.items)
+                var items = data.items?.ToDictionary() ?? new Dictionary<string, int>();
+                foreach (var itemEntry in items)
                 {
                     if (Enum.TryParse<ItemType>(itemEntry.Key, out var itemType))
                     {
@@ -947,6 +1363,9 @@ namespace Gameplay.Systems
         public int playerLevel;
         public string playTime;
         public string location;
-        public Texture2D screenshot; // Можно добавить систему скриншотов
+        public string screenshotData;
+        public bool isCorrupted;
+        public long fileSize;
+        public string checksum;
     }
 }
