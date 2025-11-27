@@ -11,51 +11,51 @@ namespace UI
     public class TechTreeUI : MonoBehaviour
     {
         public static TechTreeUI Instance;
-    
+
         [Header("UI References")]
         public GameObject techTreePanel;
         public Transform nodesContainer;
         public Transform connectionsContainer;
         public GameObject nodePrefab;
         public GameObject connectionPrefab;
-    
+
         [Header("Tech Trees")]
         public TechTree forgeTree;
         public TechTree farmTree;
         public TechTree generalTree;
-    
+
         [Header("UI Elements")]
         public TMP_Text treeNameText;
         public TMP_Text treeDescriptionText;
         public Button forgeTab;
         public Button farmTab;
         public Button generalTab;
-    
+
         [Header("Connection Settings")]
-        public Color defaultConnectionColor = new (0.29f, 0.56f, 0.89f);
+        public Color defaultConnectionColor = new(0.29f, 0.56f, 0.89f);
         public Color unlockedConnectionColor = Color.green;
         public Color lockedConnectionColor = Color.gray;
         public float connectionThickness = 6f;
-    
+
         [Header("Mode Settings")]
         public GameObject upgradeModePanel;
         public TMP_Text upgradeModeText;
         public Button unlockButton;
-    
+
         [Header("Input Settings")]
         public KeyCode toggleKey = KeyCode.T;
-    
+
         [Header("Access Control")]
         public bool allowAllTrees;
         public bool allowUnlock;
         private TechTree _forcedTree;
-        
+
         [Header("Details Panel")]
         [SerializeField] private TechNodeDetailsPanel detailsPanel;
-    
+
         private TechTree _currentTree;
-        private Dictionary<string, GameObject> _nodeObjects = new ();
-        private Dictionary<string, UILineConnection> _connectionObjects = new ();
+        private Dictionary<string, GameObject> _nodeObjects = new();
+        private Dictionary<string, UILineConnection> _connectionObjects = new();
         public bool isUIOpen;
         private bool _isUpgradeMode;
         private TechNode _selectedNode;
@@ -66,7 +66,7 @@ namespace UI
             {
                 Instance = this;
             }
-            
+
             techTreePanel.SetActive(false);
         }
 
@@ -78,7 +78,7 @@ namespace UI
             if (connectionsContainer == null) Debug.LogError("ConnectionsContainer is not assigned!");
             if (nodePrefab == null) Debug.LogError("NodePrefab is not assigned!");
             if (connectionPrefab == null) Debug.LogError("ConnectionPrefab is not assigned!");
-        
+
             forgeTab.onClick.AddListener(() =>
             {
                 CloseTechTree();
@@ -94,7 +94,7 @@ namespace UI
                 CloseTechTree();
                 ShowTechTree(generalTree);
             });
-        
+
             techTreePanel.SetActive(false);
             CloseTechTree();
         }
@@ -102,16 +102,16 @@ namespace UI
         private void Update()
         {
             if (Input.GetKeyDown(toggleKey) && !_isUpgradeMode)
-            { 
+            {
                 ShowTechTreeForViewing();
             }
-    
+
             if (isUIOpen && Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseTechTree();
             }
         }
-    
+
         public void ShowTechTree(TechTree tree, bool upgradeMode = false)
         {
             ClearTree();
@@ -136,14 +136,15 @@ namespace UI
                 upgradeModeText.text = $"Режим прокачки - {npcName}";
             }
 
-            if (UIManager.Instance != null)
+            if (UIManager.Instance != null && !isUIOpen)
                 UIManager.Instance.RegisterUIOpen();
-            
+            isUIOpen = true;
+
             detailsPanel?.HideDetails();
 
             GenerateTreeUI();
         }
-    
+
         private string GetNpcNameForTree(TechTree tree)
         {
             if (tree == forgeTree) return "Брук (Кузница)";
@@ -151,7 +152,7 @@ namespace UI
             if (tree == generalTree) return "Зол (Ратуша)";
             return "Прокачка";
         }
-    
+
         public void ShowTechTreeForViewing()
         {
             allowAllTrees = true;
@@ -164,13 +165,13 @@ namespace UI
             // Скрываем панель NPC режима
             if (upgradeModePanel != null)
                 upgradeModePanel.SetActive(false);
-    
+
             // Показываем табы переключения
             if (forgeTab != null) forgeTab.gameObject.SetActive(true);
             if (farmTab != null) farmTab.gameObject.SetActive(true);
             if (generalTab != null) generalTab.gameObject.SetActive(true);
         }
-    
+
         public void ShowTechTreeForNpc(TechTree tree, string npcName)
         {
             _forcedTree = tree;
@@ -185,61 +186,61 @@ namespace UI
             if (farmTab != null) farmTab.gameObject.SetActive(false);
             if (generalTab != null) generalTab.gameObject.SetActive(false);
         }
-    
+
         private void GenerateTreeUI()
         {
             if (_currentTree == null || _currentTree.nodes == null) return;
-        
+
             // Создаем узлы
             foreach (var node in _currentTree.nodes)
             {
                 CreateNodeUI(node);
             }
-        
+
             // Даем кадр для инициализации RectTransform узлов
             StartCoroutine(DelayedCreateConnections());
         }
-    
+
         private System.Collections.IEnumerator DelayedCreateConnections()
         {
             // Ждем один кадр чтобы все узлы инициализировали свои RectTransform
             yield return null;
-        
+
             // Создаем соединения
             foreach (var node in _currentTree.nodes)
             {
                 CreateConnections(node);
             }
-        
+
             UpdateConnectionColors();
         }
-    
+
         private void CreateNodeUI(TechNode node)
         {
             if (node == null || nodePrefab == null) return;
-        
+
             var nodeObj = Instantiate(nodePrefab, nodesContainer);
             if (nodeObj == null) return;
-        
+
             _nodeObjects[node.nodeId] = nodeObj;
-        
+
             var rect = nodeObj.GetComponent<RectTransform>();
             if (rect == null) return;
-        
+
             rect.anchoredPosition = node.graphPosition;
-        
+
             var nodeUI = nodeObj.GetComponent<TechNodeUI>();
             if (nodeUI == null) return;
             nodeUI.Initialize(node, _currentTree);
             nodeUI.OnNodeUnlocked += OnNodeUnlocked;
             nodeUI.OnNodeSelected += ShowNodeDetails;
-            
+
             if (!_isUpgradeMode)
             {
                 nodeUI.SetViewMode();
             }
         }
-    
+
         private void CreateConnections(TechNode node)
         {
             if (node == null || connectionPrefab == null) return;
@@ -255,16 +256,16 @@ namespace UI
                         Debug.LogWarning($"Start or end node is null for connection {prereqId} -> {node.nodeId}");
                         continue;
                     }
-                
+
                     var startRect = startNode.GetComponent<RectTransform>();
                     var endRect = endNode.GetComponent<RectTransform>();
-                
+
                     if (startRect == null || endRect == null)
                     {
                         Debug.LogWarning($"Start or end RectTransform is null for connection {prereqId} -> {node.nodeId}");
                         continue;
                     }
-                
+
                     // Создаем соединение
                     var connectionObj = Instantiate(connectionPrefab, connectionsContainer);
                     if (connectionObj == null)
@@ -272,7 +273,7 @@ namespace UI
                         Debug.LogError("Failed to instantiate connection prefab");
                         continue;
                     }
-                
+
                     var connection = connectionObj.GetComponent<UILineConnection>();
                     if (connection == null)
                     {
@@ -280,10 +281,10 @@ namespace UI
                         Destroy(connectionObj);
                         continue;
                     }
-                
+
                     connection.SetConnection(startRect, endRect, defaultConnectionColor);
                     connection.SetThickness(connectionThickness);
-                
+
                     var connectionId = $"{prereqId}_{node.nodeId}";
                     _connectionObjects[connectionId] = connection;
                 }
@@ -293,18 +294,18 @@ namespace UI
                 }
             }
         }
-    
+
         private void UpdateConnectionColors()
         {
             foreach (var (connectionId, connection) in _connectionObjects)
             {
                 if (connection == null || !connection.IsValid()) continue;
-            
+
                 var nodeIds = connectionId.Split('_');
                 if (nodeIds.Length < 2) continue;
                 var startNodeId = nodeIds[0];
                 var endNodeId = nodeIds[1];
-                
+
                 var startUnlocked = IsNodeUnlocked(startNodeId);
                 var endUnlocked = IsNodeUnlocked(endNodeId);
 
@@ -317,19 +318,19 @@ namespace UI
                 connection.SetColor(connectionColor);
             }
         }
-    
+
         private bool IsNodeUnlocked(string nodeId)
         {
             if (!_nodeObjects.ContainsKey(nodeId)) return false;
             var nodeUI = _nodeObjects[nodeId].GetComponent<TechNodeUI>();
             return nodeUI != null && nodeUI.IsUnlocked();
         }
-    
+
         private void OnNodeUnlocked()
         {
             UpdateConnectionColors();
         }
-    
+
         private void ClearTree()
         {
             // Отписываемся от событий
@@ -344,19 +345,19 @@ namespace UI
                 Destroy(nodeObj);
             }
             _nodeObjects.Clear();
-        
+
             foreach (var connection in _connectionObjects.Values.Where(connection => connection != null && connection.gameObject != null))
             {
                 Destroy(connection.gameObject);
             }
             _connectionObjects.Clear();
         }
-    
+
         public void RefreshTreeUI()
         {
             ClearTree();
             GenerateTreeUI();
-            
+
             // Если панель деталей открыта, обновляем её
             if (detailsPanel != null && detailsPanel.IsVisible && _currentTree != null)
             {
@@ -368,7 +369,7 @@ namespace UI
                 }
             }
         }
-    
+
         public void ToggleTechTree()
         {
             if (isUIOpen)
@@ -380,7 +381,7 @@ namespace UI
                 OpenTechTree();
             }
         }
-    
+
         public void OpenTechTree()
         {
             techTreePanel.SetActive(true);
@@ -389,7 +390,7 @@ namespace UI
             Cursor.visible = true;
             ShowTechTree(_currentTree);
         }
-    
+
         public void CloseTechTree()
         {
             ClearTree();
@@ -399,16 +400,15 @@ namespace UI
             // Используем UIManager вместо прямого управления
             if (UIManager.Instance != null)
                 UIManager.Instance.RegisterUIClose();
-            _forcedTree = null;
 
             if (_isUpgradeMode)
             {
                 _isUpgradeMode = false;
             }
-            
+
             detailsPanel?.HideDetails();
         }
-        
+
         public void ShowNodeDetails(TechNode node)
         {
             if (detailsPanel != null)
