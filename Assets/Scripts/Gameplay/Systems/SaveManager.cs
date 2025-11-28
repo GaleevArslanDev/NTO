@@ -51,6 +51,7 @@ namespace Gameplay.Systems
 
         private float _autoSaveTimer;
         private List<string> _manualSaves = new();
+        private bool _isQuitting;
 
         public event Action OnGameSaved;
         public event Action OnGameLoaded;
@@ -242,7 +243,7 @@ namespace Gameplay.Systems
             // Делаем скриншот
             Texture2D screenshot = null;
             yield return StartCoroutine(TakeScreenshotCoroutine("autosave", tex => screenshot = tex));
-
+            Debug.Log("Screenshot taken");
             // Создаем данные сохранения
             var saveData = CreateSaveData("autosave");
 
@@ -669,6 +670,7 @@ namespace Gameplay.Systems
 
         private GameSaveData CreateSaveData(string saveName)
         {
+            Debug.Log("Creating save data");
             return new GameSaveData
             {
                 saveName = saveName,
@@ -694,6 +696,7 @@ namespace Gameplay.Systems
             var playerController = PlayerController.Instance;
             var playerHealth = PlayerHealth.Instance;
             var playerProgression = PlayerProgression.Instance;
+            Debug.Log("Player position: " + playerController.transform.position + " rotation: " + playerController.transform.eulerAngles + " health: " + playerHealth.currentHealth + " level: " + player.playerLevel + " dialogue history: " + player.dialogueHistory + " dialogue flags: " + player.dialogueFlags + " relationships: " + player.RelationshipsWithNpCs);
 
             var playerSaveData = new PlayerSaveData
             {
@@ -1396,12 +1399,6 @@ namespace Gameplay.Systems
             {
                 saveIndicator.SetActive(false);
             }
-        }
-
-        private void OnApplicationQuit()
-        {
-            // Автосохранение при выходе
-            AutoSave();
         }
 
         private void OnApplicationPause(bool pauseStatus)
