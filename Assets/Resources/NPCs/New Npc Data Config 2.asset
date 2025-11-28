@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34544832d400cb6ddbe918117bcd4, type: 3}
   m_Name: New Npc Data Config 2
   m_EditorClassIdentifier: 
-  npcName: third
-  npcID: 2
+  npcName: fourth
+  npcID: 3
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
   personality:

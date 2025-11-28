@@ -642,7 +642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f399d9926009494ea2b18ff5e3aaed83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDataConfig: {fileID: 0}
+  npcDataConfig: {fileID: 11400000, guid: efc69612d48106b4a962c90b9d2f866d, type: 2}
 --- !u!195 &47190400
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9420,7 +9420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f399d9926009494ea2b18ff5e3aaed83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDataConfig: {fileID: 0}
+  npcDataConfig: {fileID: 11400000, guid: 6c9f6ba49487efe478f1f4c66005809b, type: 2}
 --- !u!195 &703038438
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -19815,7 +19815,7 @@ Transform:
   m_GameObject: {fileID: 1436688135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -52.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22468,7 +22468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f399d9926009494ea2b18ff5e3aaed83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDataConfig: {fileID: 0}
+  npcDataConfig: {fileID: 11400000, guid: a23334f6694a2dc49bce24c1957a76be, type: 2}
 --- !u!195 &1666105648
 NavMeshAgent:
   m_ObjectHideFlags: 0

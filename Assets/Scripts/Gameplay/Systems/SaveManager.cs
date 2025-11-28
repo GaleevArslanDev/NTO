@@ -1210,7 +1210,7 @@ namespace Gameplay.Systems
                     // Восстанавливаем данные поведения
                     npcBehaviour.ApplySaveData(npcSaveData.behaviourData);
 
-                    // Восстанавливаем реактивные диалоги ПРАВИЛЬНО
+                    // Восстанавливаем реактивные диалоги
                     var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
                     if (reactiveTrigger != null)
                     {
@@ -1221,7 +1221,14 @@ namespace Gameplay.Systems
                             lastCallTime = npcSaveData.lastCallTime
                         };
                         reactiveTrigger.ApplySaveData(reactiveData);
+                
+                        Debug.Log($"Applied reactive data for NPC {npcSaveData.npcID}: " +
+                                  $"canCall={npcSaveData.canCall}, index={npcSaveData.currentDialogueIndex}");
                     }
+                }
+                else
+                {
+                    Debug.LogWarning($"NPC with ID {npcSaveData.npcID} not found in scene");
                 }
             }
         }
