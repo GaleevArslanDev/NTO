@@ -679,6 +679,7 @@ namespace Gameplay.Systems
 
                 playerData = CreatePlayerSaveData(),
                 worldData = CreateWorldSaveData(),
+                enemiesData = CreateEnemiesSaveData(),
                 npcsData = CreateNpcsSaveData(),
                 buildingData = CreateBuildingSaveData(),
                 techData = CreateTechSaveData(),
@@ -1025,6 +1026,15 @@ namespace Gameplay.Systems
 
             return settings;
         }
+        
+        private List<EnemySaveData> CreateEnemiesSaveData()
+        {
+            if (EnemySpawnManager.Instance != null)
+            {
+                return EnemySpawnManager.Instance.GetAllEnemiesSaveData();
+            }
+            return new List<EnemySaveData>();
+        }
 
         private List<string> CreateCollectedResourcesData()
         {
@@ -1085,6 +1095,7 @@ namespace Gameplay.Systems
 
                 ApplyPlayerSaveData(saveData.playerData);
                 ApplyWorldSaveData(saveData.worldData);
+                ApplyEnemiesSaveData(saveData.enemiesData);
                 ApplyNpcsSaveData(saveData.npcsData);
                 ApplyBuildingSaveData(saveData.buildingData);
                 ApplyTechSaveData(saveData.techData);
@@ -1099,6 +1110,22 @@ namespace Gameplay.Systems
             {
                 Debug.LogError($"Error applying save data: {e.Message}");
             }
+        }
+        
+        private void ApplyEnemiesSaveData(List<EnemySaveData> enemiesData)
+        {
+            if (EnemySpawnManager.Instance == null || enemiesData == null) return;
+
+            // Очищаем текущих врагов
+            EnemySpawnManager.Instance.ClearAllEnemies();
+
+            // Восстанавливаем врагов из сохранения
+            foreach (var enemyData in enemiesData)
+            {
+                EnemySpawnManager.Instance.RestoreEnemyFromSave(enemyData);
+            }
+    
+            Debug.Log($"Restored {enemiesData.Count} enemies from save");
         }
 
         private void ApplyPlayerSaveData(PlayerSaveData data)

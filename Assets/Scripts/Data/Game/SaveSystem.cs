@@ -35,6 +35,9 @@ namespace Data.Game
         // Inventory Data
         public InventorySaveData inventoryData;
         
+        // Enemy Data
+        public List<EnemySaveData> enemiesData;
+        
         // Quest Data
         public QuestSaveData questData;
         
@@ -66,6 +69,32 @@ namespace Data.Game
         
         // Progression
         public PlayerProgressionSaveData progression = new PlayerProgressionSaveData();
+    }
+    
+    [System.Serializable]
+    public class EnemySaveData
+    {
+        public string enemyId;
+        public string enemyType;
+        public Vector3 position;
+        public Vector3 rotation;
+        public float health;
+        public EnemyStateSaveData stateData;
+    }
+
+    [System.Serializable]
+    public class EnemyStateSaveData
+    {
+        public bool isDead;
+        public bool isEmerging;
+        public float lastAttackTime;
+        public Vector3 targetPosition;
+    }
+    
+    [System.Serializable]
+    public class EnemySpawnManagerSaveData
+    {
+        public List<string> spawnedEnemyIds = new List<string>();
     }
 
     [System.Serializable]
