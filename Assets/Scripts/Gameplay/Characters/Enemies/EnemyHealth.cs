@@ -41,9 +41,8 @@ namespace Gameplay.Characters.Enemies
 
         private void Start()
         {
-            currentHealth = maxHealth;
             _enemyDeath = GetComponent<EnemyDeath>();
-        
+    
             if (enemyRenderer != null)
             {
                 _originalMaterials = enemyRenderer.materials;
@@ -53,19 +52,78 @@ namespace Gameplay.Characters.Enemies
                     _originalColors[i] = _originalMaterials[i].color;
                 }
             }
-        
+    
             if (damageTextSpawnPoint == null)
             {
                 damageTextSpawnPoint = transform;
             }
+            
+            if (healthBarCanvas != null && currentHealth == maxHealth)
+            {
+                healthBarCanvas.SetActive(false);
+            }
+    
+            // Обновляем UI только если здоровье уже установлено
+            if (currentHealth > 0)
+            {
+                UpdateHealthUI();
+            }
+        }
         
+        public void SetInitialHealth(float health, bool isDead)
+        {
+            Debug.Log($"Setting initial health: {health}, isDead: {isDead}");
+
+            // Устанавливаем здоровье
+            currentHealth = health;
+
+            // Обновляем maxHealth если текущее здоровье больше
+            if (health > maxHealth)
+            {
+                maxHealth = health;
+            }
+
+            // Обновляем UI
             UpdateHealthUI();
+
+            // Активируем полоску здоровья если здоровье не полное и враг жив
+            if (healthBarCanvas != null)
+            {
+                bool shouldShowHealthBar = currentHealth < maxHealth && currentHealth > 0 && !isDead;
+                healthBarCanvas.SetActive(shouldShowHealthBar);
+                Debug.Log($"Health bar active: {shouldShowHealthBar} (health: {currentHealth}/{maxHealth}, isDead: {isDead})");
+            }
+
+            if (isDead)
+            {
+                ForceDeath();
+            }
+            else
+            {
+                // Сбрасываем флаг смерти
+                _isDead = false;
+
+                // Включаем компоненты если они были отключены
+                if (enemyRenderer != null)
+                    enemyRenderer.enabled = true;
         
-            // Скрываем полоску здоровья если полное здоровье
+                enabled = true;
+            }
+        }
+        
+        public void ForceDeath()
+        {
+            if (_isDead) return;
+            _isDead = true;
+    
+            // Отключаем UI
             if (healthBarCanvas != null)
             {
                 healthBarCanvas.SetActive(false);
             }
+    
+            // Уничтожаем объект
+            Destroy(gameObject);
         }
     
         public void TakeDamage(float damage, Vector3 hitPoint = default(Vector3))
@@ -106,16 +164,30 @@ namespace Gameplay.Characters.Enemies
             }
         }
     
-        private void UpdateHealthUI()
+        public void UpdateHealthUI()
         {
-            if (healthSlider == null) return;
-            var healthPercent = currentHealth / maxHealth;
-            healthSlider.value = healthPercent;
-            
-            // Плавное изменение цвета
-            if (healthFill != null)
+            if (healthSlider == null) 
             {
-                healthFill.color = Color.Lerp(lowHealthColor, fullHealthColor, healthPercent);
+                Debug.LogWarning("HealthSlider is null in EnemyHealth");
+                return;
+            }
+
+            try
+            {
+                var healthPercent = currentHealth / maxHealth;
+                healthSlider.value = healthPercent;
+        
+                // Плавное изменение цвета
+                if (healthFill != null)
+                {
+                    healthFill.color = Color.Lerp(lowHealthColor, fullHealthColor, healthPercent);
+                }
+
+                Debug.Log($"Updated health UI: {currentHealth}/{maxHealth} ({healthPercent:P0})");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error updating health UI: {e.Message}");
             }
         }
     

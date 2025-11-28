@@ -21,6 +21,16 @@ namespace Gameplay.Characters.NPC
                 Destroy(gameObject);
             }
         }
+        
+        private void Start()
+        {
+            // Автоматически находим всех NPC при старте
+            var allNpcsInScene = FindObjectsOfType<NpcBehaviour>();
+            foreach (var npc in allNpcsInScene)
+            {
+                RegisterNpc(npc);
+            }
+        }
     
         public void RegisterNpc(NpcBehaviour npc)
         {

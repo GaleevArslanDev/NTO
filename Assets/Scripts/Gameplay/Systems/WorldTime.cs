@@ -90,6 +90,16 @@ namespace Gameplay.Systems
             _currentTime = new GameTimestamp(day, hour, minute);
             OnTimeChanged?.Invoke(_currentTime);
         }
+        
+        public float GetPrivateTimer()
+        {
+            return _timer;
+        }
+
+        public void SetPrivateTimer(float value)
+        {
+            _timer = value;
+        }
     }
 }
 

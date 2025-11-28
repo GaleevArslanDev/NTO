@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Gameplay.Systems;
 using UnityEngine;
 using LocalizationManager.Structs;
 
@@ -42,8 +43,16 @@ namespace LocalizationManager
 
         private void Initialize()
         {
-            // Загрузка сохраненного языка или использование языка системы
-            _currentLanguage = PlayerPrefs.GetString(saveKey, GetSystemLanguage());
+            if (SaveManager.Instance != null && SaveManager.Instance.GetSettingsData() != null)
+            {
+                var settings = SaveManager.Instance.GetSettingsData();
+                _currentLanguage = settings.language;
+            }
+            else
+            {
+                // Используем язык системы как запасной вариант
+                _currentLanguage = GetSystemLanguage();
+            }
 
             if (!availableLanguages.Exists(lang => lang.localizationCode == _currentLanguage))
             {
@@ -75,7 +84,7 @@ namespace LocalizationManager
             if (_localizationData.ContainsKey(languageCode))
             {
                 _currentLanguage = languageCode;
-                PlayerPrefs.SetString(saveKey, languageCode);
+                SaveLanguagePreference(languageCode);
                 OnLanguageChanged?.Invoke(languageCode);
                 return;
             }
@@ -111,7 +120,7 @@ namespace LocalizationManager
 
                 _localizationData[languageCode] = languageDict;
                 _currentLanguage = languageCode;
-                PlayerPrefs.SetString(saveKey, languageCode);
+                SaveLanguagePreference(languageCode);
                 OnLanguageChanged?.Invoke(languageCode);
 
                 Debug.Log($"Language {languageCode} loaded successfully with {languageDict.Count} strings");
@@ -119,6 +128,21 @@ namespace LocalizationManager
             catch (Exception e)
             {
                 Debug.LogError($"Error loading language {languageCode}: {e.Message}");
+            }
+        }
+        
+        private void SaveLanguagePreference(string languageCode)
+        {
+            // Сохраняем в системные настройки через SaveManager
+            if (SaveManager.Instance != null)
+            {
+                var settings = SaveManager.Instance.GetSettingsData();
+                if (settings != null)
+                {
+                    settings.language = languageCode;
+                    // Активируем автосохранение настроек
+                    SaveManager.Instance.AutoSave();
+                }
             }
         }
 

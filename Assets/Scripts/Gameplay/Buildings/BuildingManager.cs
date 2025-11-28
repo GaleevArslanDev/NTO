@@ -34,6 +34,23 @@ namespace Gameplay.Buildings
             // Можно добавить базовые здания, которые разблокированы с начала игры
             // _unlockedBuildings.Add("base_building", true);
         }
+        
+        public Dictionary<string, bool> GetUnlockedBuildingsDictionary()
+        {
+            return new Dictionary<string, bool>(_unlockedBuildings);
+        }
+
+        public void ApplyUnlockedBuildings(Dictionary<string, bool> unlockedBuildings)
+        {
+            _unlockedBuildings = unlockedBuildings ?? new Dictionary<string, bool>();
+    
+            // Активируем/деактивируем здания в соответствии с разблокировкой
+            foreach (var building in _buildings.Values)
+            {
+                var buildingId = building.GetBuildingId();
+                building.gameObject.SetActive(IsBuildingUnlocked(buildingId));
+            }
+        }
 
         public void RegisterBuilding(Building building)
         {

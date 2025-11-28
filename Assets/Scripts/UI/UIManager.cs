@@ -65,7 +65,8 @@ namespace UI
                    (TechTreeUI.Instance != null && TechTreeUI.Instance.isUIOpen) ||
                    (TownHallUI.Instance != null && TownHallUI.Instance.isUiOpen) ||
                    (QuestBoardUI.Instance != null && QuestBoardUI.Instance.isUIOpen) ||
-                   (DialogueManager.Instance != null && DialogueManager.Instance.IsInDialogue);
+                   (DialogueManager.Instance != null && DialogueManager.Instance.IsInDialogue) ||
+                   (ExitGameManager.Instance != null && ExitGameManager.Instance.exitConfirmationPanel.activeInHierarchy);
         }
     }
 }
