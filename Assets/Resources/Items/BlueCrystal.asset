@@ -18,6 +18,6 @@ MonoBehaviour:
   breakTime: 2
   shakeIntensity: 0.3
   floatHeight: 0.5
-  vacuumTime: 10
+  vacuumTime: 1
   enemySpawnChance: 1
   maxSpawnCount: 1

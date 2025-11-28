@@ -25,7 +25,7 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
-    isUnlocked: 1
+    isUnlocked: 0
     effects:
     - effectType: 1
       floatValue: 1.1
@@ -54,7 +54,7 @@ MonoBehaviour:
   - nodeId: damage_3
     nodeName: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0443\u0440\u043E\u043D
       III"
-    description: "+20% \u043A \u0443\u0440\u043E\u043D\u0443"
+    description: "+30% \u043A \u0443\u0440\u043E\u043D\u0443"
     tier: 1
     unlockCost:
     - type: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
-    isUnlocked: 1
+    isUnlocked: 0
     effects:
     - effectType: 4
       floatValue: 1.2
@@ -133,7 +133,7 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
-    isUnlocked: 1
+    isUnlocked: 0
     effects:
     - effectType: 3
       floatValue: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
-    isUnlocked: 1
+    isUnlocked: 0
     effects:
     - effectType: 2
       floatValue: 1.15
