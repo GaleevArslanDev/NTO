@@ -31,7 +31,7 @@ MonoBehaviour:
       floatValue: 1.1
       intValue: 0
       stringValue: 
-    graphPosition: {x: -500, y: 0}
+    graphPosition: {x: -727, y: -318}
     icon: {fileID: 0}
   - nodeId: damage_2
     nodeName: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0443\u0440\u043E\u043D
@@ -49,7 +49,7 @@ MonoBehaviour:
       floatValue: 1.2
       intValue: 0
       stringValue: 
-    graphPosition: {x: -500, y: 200}
+    graphPosition: {x: -288, y: -318}
     icon: {fileID: 0}
   - nodeId: damage_3
     nodeName: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0443\u0440\u043E\u043D
@@ -67,7 +67,7 @@ MonoBehaviour:
       floatValue: 1.2
       intValue: 0
       stringValue: 
-    graphPosition: {x: -500, y: 200}
+    graphPosition: {x: 151, y: -318}
     icon: {fileID: 0}
   - nodeId: collection_range_1
     nodeName: "\u0414\u0430\u043B\u044C\u043D\u0438\u0439 \u0441\u0431\u043E\u0440
@@ -85,7 +85,7 @@ MonoBehaviour:
       floatValue: 1.2
       intValue: 0
       stringValue: 
-    graphPosition: {x: 0, y: 0}
+    graphPosition: {x: -727, y: 418}
     icon: {fileID: 0}
   - nodeId: collection_range_2
     nodeName: "\u0414\u0430\u043B\u044C\u043D\u0438\u0439 \u0441\u0431\u043E\u0440
@@ -103,7 +103,7 @@ MonoBehaviour:
       floatValue: 1.2
       intValue: 0
       stringValue: 
-    graphPosition: {x: 0, y: 0}
+    graphPosition: {x: -288, y: 418}
     icon: {fileID: 0}
   - nodeId: collection_range_3
     nodeName: "\u0414\u0430\u043B\u044C\u043D\u0438\u0439 \u0441\u0431\u043E\u0440
@@ -121,7 +121,7 @@ MonoBehaviour:
       floatValue: 1.2
       intValue: 0
       stringValue: 
-    graphPosition: {x: 0, y: 0}
+    graphPosition: {x: 151, y: 418}
     icon: {fileID: 0}
   - nodeId: inventory_50
     nodeName: "\u0423\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u044B\u0439
@@ -133,13 +133,13 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
-    isUnlocked: 0
+    isUnlocked: 1
     effects:
     - effectType: 3
       floatValue: 0
       intValue: 100
       stringValue: 
-    graphPosition: {x: 300, y: 200}
+    graphPosition: {x: -727, y: 50}
     icon: {fileID: 0}
   - nodeId: inventory_100
     nodeName: "\u0423\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u044B\u0439
@@ -157,7 +157,7 @@ MonoBehaviour:
       floatValue: 0
       intValue: 100
       stringValue: 
-    graphPosition: {x: 300, y: 200}
+    graphPosition: {x: -288, y: 50}
     icon: {fileID: 0}
   - nodeId: inventory_200
     nodeName: "\u0423\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u043D\u044B\u0439
@@ -175,7 +175,7 @@ MonoBehaviour:
       floatValue: 0
       intValue: 100
       stringValue: 
-    graphPosition: {x: 300, y: 200}
+    graphPosition: {x: 151, y: 50}
     icon: {fileID: 0}
   - nodeId: mining_speed_1
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
@@ -196,7 +196,7 @@ MonoBehaviour:
       floatValue: 1.15
       intValue: 0
       stringValue: 
-    graphPosition: {x: 500, y: 0}
+    graphPosition: {x: -727, y: 234}
     icon: {fileID: 0}
   - nodeId: mining_speed_2
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
@@ -211,13 +211,13 @@ MonoBehaviour:
     - type: 0
       amount: 1
     prerequisiteNodes: []
-    isUnlocked: 1
+    isUnlocked: 0
     effects:
     - effectType: 2
       floatValue: 1.15
       intValue: 0
       stringValue: 
-    graphPosition: {x: 500, y: 0}
+    graphPosition: {x: -288, y: 234}
     icon: {fileID: 0}
   - nodeId: mining_speed_3
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
@@ -228,12 +228,64 @@ MonoBehaviour:
     - type: 0
       amount: 0
     prerequisiteNodes: []
+    isUnlocked: 0
+    effects:
+    - effectType: 2
+      floatValue: 1.15
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: 151, y: 234}
+    icon: {fileID: 0}
+  - nodeId: resource_collection1
+    nodeName: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439 \u0441\u0431\u043E\u0440
+      I"
+    description: "+ 2 \u0435\u0434  \u0441 \u0437\u0430\u043B\u0435\u0436\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u043E\u0432"
+    tier: 1
+    unlockCost:
+    - type: 0
+      amount: 0
+    prerequisiteNodes: []
     isUnlocked: 1
     effects:
     - effectType: 2
       floatValue: 1.15
       intValue: 0
       stringValue: 
-    graphPosition: {x: 500, y: 0}
+    graphPosition: {x: -727, y: -134}
+    icon: {fileID: 0}
+  - nodeId: resource_collection2
+    nodeName: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439 \u0441\u0431\u043E\u0440
+      II"
+    description: "+ 5 \u0435\u0434  \u0441 \u0437\u0430\u043B\u0435\u0436\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u043E\u0432"
+    tier: 2
+    unlockCost:
+    - type: 0
+      amount: 0
+    prerequisiteNodes: []
+    isUnlocked: 0
+    effects:
+    - effectType: 2
+      floatValue: 1.15
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: -288, y: -134}
+    icon: {fileID: 0}
+  - nodeId: resource_collection3
+    nodeName: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439 \u0441\u0431\u043E\u0440
+      III"
+    description: "+ 10 \u0435\u0434  \u0441 \u0437\u0430\u043B\u0435\u0436\u0438
+      \u0440\u0435\u0441\u0443\u0440\u0441\u043E\u0432"
+    tier: 3
+    unlockCost:
+    - type: 0
+      amount: 0
+    prerequisiteNodes: []
+    isUnlocked: 0
+    effects:
+    - effectType: 2
+      floatValue: 1.15
+      intValue: 0
+      stringValue: 
+    graphPosition: {x: 151, y: -134}
     icon: {fileID: 0}
   maxTier: 5
