@@ -22,16 +22,12 @@ namespace Gameplay.Characters.NPC
         
         [Header("Reactive Dialogue")]
         public ReactiveDialogueTrigger reactiveTrigger;
-    
-        [Header("UI References")]
-        public GameObject interactionPrompt;
-    
-        private bool _isPlayerInRange;
 
         private void Start()
         {
             // Регистрация в менеджерах
             if (npcData == null) return;
+            
             foreach (var tree in dialogueTrees)
             {
                 if (tree != null)
@@ -67,43 +63,6 @@ namespace Gameplay.Characters.NPC
                 AIAssistant.Instance.OnNpcIgnored(npcData.npcName);
             }
         }
-
-        private void Update()
-        {
-            if (!_isPlayerInRange) return;
-    
-            // E - ТОЛЬКО реактивный диалог (когда NPC зовет)
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                if (reactiveTrigger != null && reactiveTrigger.IsCalling)
-                {
-                    reactiveTrigger.TriggerDialogue();
-                }
-                // Убрана возможность начать диалог по E без вызова
-            }
-            // F - прокачка/услуги (без изменений)
-            else if (Input.GetKeyDown(KeyCode.F))
-            {
-                OpenServices();
-            }
-        }
-        
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!other.CompareTag("Player")) return;
-            _isPlayerInRange = true;
-            ShowInteractionPrompt();
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (!other.CompareTag("Player")) return;
-            _isPlayerInRange = false;
-            HideInteractionPrompt();
-            CloseAllUI();
-        }
-
-        // УБРАН публичный метод StartDialogueWithPlayer - диалоги теперь только реактивные
         
         public void StartSpecificDialogue(string treeName)
         {
@@ -117,7 +76,7 @@ namespace Gameplay.Characters.NPC
             Debug.Log($"Диалог с {npcData.npcName} завершен");
         }
 
-        private void OpenServices()
+        public void OpenServices()
         {
             switch (npcType)
             {
@@ -164,37 +123,6 @@ namespace Gameplay.Characters.NPC
             }
         }
 
-        private void ShowInteractionPrompt()
-        {
-            if (interactionPrompt == null) return;
-            interactionPrompt.SetActive(true);
-            UpdatePromptText();
-        }
-
-        private void HideInteractionPrompt()
-        {
-            if (interactionPrompt != null)
-                interactionPrompt.SetActive(false);
-        }
-
-        private void UpdatePromptText()
-        {
-            var textMesh = interactionPrompt.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (textMesh == null) return;
-
-            var npcName = GetNpcName();
-
-            if (reactiveTrigger != null && reactiveTrigger.IsCalling)
-            {
-                textMesh.text = $"{npcName} (зовет)\nE - Ответить\nF - Услуги";
-            }
-            else
-            {
-                // Только услуги, диалог недоступен
-                textMesh.text = $"{npcName}\nF - Услуги";
-            }
-        }
-
         public string GetNpcName()
         {
             if (npcData != null)
@@ -208,19 +136,6 @@ namespace Gameplay.Characters.NPC
                 NpcType.QuestGiver => "Лип",
                 _ => "NPC"
             };
-        }
-
-        private void CloseAllUI()
-        {
-            var townHallUI = FindObjectOfType<TownHallUI>();
-            if (townHallUI != null)
-                townHallUI.HideDialog();
-            
-            if (TechTreeUI.Instance != null)
-                TechTreeUI.Instance.CloseTechTree();
-            
-            if (QuestBoardUI.Instance != null)
-                QuestBoardUI.Instance.CloseQuestUI();
         }
 
         private void OnDestroy()
