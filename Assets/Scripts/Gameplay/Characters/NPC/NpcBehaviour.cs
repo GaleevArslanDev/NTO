@@ -10,26 +10,25 @@ namespace Gameplay.Characters.NPC
 {
     public class NpcBehaviour : MonoBehaviour
     {
-        [Header("NPC Data")]
-        public NpcDataConfig npcDataConfig;
-    
+        [Header("NPC Data")] public NpcDataConfig npcDataConfig;
+
         private NavMeshAgent _agent;
         private ScheduleManager _scheduleManager;
         private RelationshipManager _relationshipManager;
         private NpcInteraction _interaction;
-    
+
         // Состояния
         private NpcState _currentState = NpcState.Idle;
         private Activity _currentActivity;
         private Coroutine _currentActivityRoutine;
-    
+
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
             _scheduleManager = FindObjectOfType<ScheduleManager>();
             _relationshipManager = FindObjectOfType<RelationshipManager>();
             _interaction = GetComponent<NpcInteraction>();
-        
+
             // Настройка NPCInteraction из NPCDataConfig
             if (npcDataConfig == null || _interaction == null) return;
             // Создаем runtime данные для взаимодействия
@@ -37,13 +36,13 @@ namespace Gameplay.Characters.NPC
             _interaction.dialogueTrees = npcDataConfig.dialogueTrees;
             _interaction.portrait = npcDataConfig.portrait;
             _interaction.defaultVoice = npcDataConfig.defaultVoice;
-            
+
             if (_agent != null)
             {
                 _agent.speed = npcDataConfig.movementSpeed;
             }
         }
-    
+
         private void Start()
         {
             // Регистрация в менеджерах
@@ -51,55 +50,55 @@ namespace Gameplay.Characters.NPC
             {
                 _relationshipManager.RegisterNpc(_interaction.npcData);
             }
-        
+
             // Запуск оптимизированной корутины поведения
             StartCoroutine(OptimizedBehaviorRoutine());
         }
-    
+
         private IEnumerator OptimizedBehaviorRoutine()
         {
             var waitCheck = new WaitForSeconds(1f);
-        
+
             while (true)
             {
                 yield return waitCheck;
-            
+
                 if (_scheduleManager == null || npcDataConfig == null) continue;
-            
+
                 var newActivity = _scheduleManager.GetCurrentActivity(_interaction.npcData);
-            
+
                 // Если активность изменилась, прерываем текущую и начинаем новую
                 if (IsSameActivity(_currentActivity, newActivity)) continue;
                 if (_currentActivityRoutine != null)
                 {
                     StopCoroutine(_currentActivityRoutine);
                 }
-                
+
                 _currentActivity = newActivity;
                 _currentActivityRoutine = StartCoroutine(ExecuteActivity(newActivity));
             }
         }
-    
+
         private static bool IsSameActivity(Activity a, Activity b)
         {
-            return a.type == b.type && 
+            return a.type == b.type &&
                    Vector3.Distance(a.location, b.location) < 1f &&
                    a.targetNpc == b.targetNpc;
         }
-    
+
         private IEnumerator ExecuteActivity(Activity activity)
         {
             _currentState = GetNpcStateForActivity(activity.type);
-        
+
             // Двигаемся к цели
             yield return StartCoroutine(MoveToLocation(activity.location));
-        
+
             // Выполняем активность
             var activityTimer = activity.duration;
             while (activityTimer > 0 && IsSameActivity(_currentActivity, activity))
             {
                 activityTimer -= Time.deltaTime;
-            
+
                 switch (activity.type)
                 {
                     case ActivityType.Work:
@@ -114,29 +113,29 @@ namespace Gameplay.Characters.NPC
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-            
+
                 yield return null;
             }
         }
-    
+
         private IEnumerator MoveToLocation(Vector3 destination)
         {
             if (_agent == null || !_agent.enabled) yield break;
-        
+
             _currentState = NpcState.Walking;
             _agent.SetDestination(destination);
-        
+
             const float timeout = 10f;
             var timer = 0f;
-        
-            while (timer < timeout && 
+
+            while (timer < timeout &&
                    (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance))
             {
                 timer += Time.deltaTime;
                 yield return null;
             }
         }
-    
+
         private static NpcState GetNpcStateForActivity(ActivityType activityType)
         {
             return activityType switch
@@ -150,12 +149,12 @@ namespace Gameplay.Characters.NPC
                 _ => NpcState.Idle
             };
         }
-    
+
         private NpcData CreateRuntimeNpcData()
         {
             var runtimeData = new NpcData(
-                npcDataConfig.npcName, 
-                npcDataConfig.npcID, 
+                npcDataConfig.npcName,
+                npcDataConfig.npcID,
                 npcDataConfig.homeLocation
             )
             {
@@ -165,30 +164,35 @@ namespace Gameplay.Characters.NPC
                     // Инициализация расписания из NPCDataConfig
                     dailySchedule = new[]
                     {
-                        new ScheduleEntry { 
-                            time = TimeOfDay.Morning, 
-                            activity = ActivityType.Work, 
-                            location = npcDataConfig.workLocation 
+                        new ScheduleEntry
+                        {
+                            time = TimeOfDay.Morning,
+                            activity = ActivityType.Work,
+                            location = npcDataConfig.workLocation
                         },
-                        new ScheduleEntry { 
-                            time = TimeOfDay.Noon, 
-                            activity = ActivityType.Eating, 
-                            location = npcDataConfig.eatingLocation 
+                        new ScheduleEntry
+                        {
+                            time = TimeOfDay.Noon,
+                            activity = ActivityType.Eating,
+                            location = npcDataConfig.eatingLocation
                         },
-                        new ScheduleEntry { 
-                            time = TimeOfDay.Afternoon, 
-                            activity = ActivityType.Work, 
-                            location = npcDataConfig.workLocation 
+                        new ScheduleEntry
+                        {
+                            time = TimeOfDay.Afternoon,
+                            activity = ActivityType.Work,
+                            location = npcDataConfig.workLocation
                         },
-                        new ScheduleEntry { 
-                            time = TimeOfDay.Evening, 
-                            activity = ActivityType.Leisure, 
-                            location = npcDataConfig.leisureLocation 
+                        new ScheduleEntry
+                        {
+                            time = TimeOfDay.Evening,
+                            activity = ActivityType.Leisure,
+                            location = npcDataConfig.leisureLocation
                         },
-                        new ScheduleEntry { 
-                            time = TimeOfDay.Night, 
-                            activity = ActivityType.Home, 
-                            location = npcDataConfig.homeLocation 
+                        new ScheduleEntry
+                        {
+                            time = TimeOfDay.Night,
+                            activity = ActivityType.Home,
+                            location = npcDataConfig.homeLocation
                         }
                     }
                 }
@@ -196,25 +200,25 @@ namespace Gameplay.Characters.NPC
 
             return runtimeData;
         }
-    
+
         // Для отладки
         private void OnDrawGizmosSelected()
         {
             if (npcDataConfig == null) return;
-        
+
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(npcDataConfig.workLocation, 1f);
-        
+
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(npcDataConfig.eatingLocation, 1f);
-        
+
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(npcDataConfig.leisureLocation, 1f);
-        
+
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(npcDataConfig.homeLocation, 1f);
         }
-        
+
         public NpcBehaviourSaveData GetSaveData()
         {
             return new NpcBehaviourSaveData
@@ -229,6 +233,8 @@ namespace Gameplay.Characters.NPC
         public void ApplySaveData(NpcBehaviourSaveData saveData)
         {
             if (saveData == null) return;
+            Debug.Log($"Applying save data for NPC {npcDataConfig.npcName}");
+            Debug.Log($"Position: {saveData.position}");
 
             // Восстанавливаем позицию и поворот
             transform.position = saveData.position;
@@ -287,7 +293,7 @@ namespace Gameplay.Characters.NPC
             return 0f;
         }
     }
-    
+
     [System.Serializable]
     public class NpcBehaviourSaveData
     {
@@ -296,5 +302,4 @@ namespace Gameplay.Characters.NPC
         public NpcState currentState;
         public ActivitySaveData currentActivity;
     }
-
 }

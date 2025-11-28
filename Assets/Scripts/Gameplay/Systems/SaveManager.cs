@@ -790,10 +790,9 @@ namespace Gameplay.Systems
                         {
                             npcID = npcInteraction.npcData.npcID,
                             npcName = npcInteraction.npcData.npcName,
-                            position = npcBehaviour.transform.position,
-                            rotation = npcBehaviour.transform.eulerAngles,
                             currentState = npcInteraction.npcData.currentState,
-                            memories = ConvertMemories(npcInteraction.npcData.memories)
+                            memories = ConvertMemories(npcInteraction.npcData.memories),
+                            behaviourData = npcBehaviour.GetSaveData()
                         };
 
                         // Сохраняем данные реактивного диалога
@@ -1208,30 +1207,20 @@ namespace Gameplay.Systems
                 var npcBehaviour = npcManager.GetNpcByID(npcSaveData.npcID);
                 if (npcBehaviour != null)
                 {
-                    // Восстанавливаем позицию и поворот
-                    npcBehaviour.transform.position = npcSaveData.position;
-                    npcBehaviour.transform.eulerAngles = npcSaveData.rotation;
+                    // Восстанавливаем данные поведения
+                    npcBehaviour.ApplySaveData(npcSaveData.behaviourData);
 
-                    var npcInteraction = npcBehaviour.GetComponent<NpcInteraction>();
-                    if (npcInteraction?.npcData != null)
+                    // Восстанавливаем реактивные диалоги ПРАВИЛЬНО
+                    var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
+                    if (reactiveTrigger != null)
                     {
-                        npcInteraction.npcData.currentState = npcSaveData.currentState;
-                        npcInteraction.npcData.Relationships = 
-                            npcSaveData.relationships?.ToDictionary() ?? new Dictionary<int, int>();
-                        npcInteraction.npcData.memories = ConvertSaveMemories(npcSaveData.memories);
-
-                        // Восстанавливаем реактивные диалоги
-                        var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
-                        if (reactiveTrigger != null)
+                        var reactiveData = new ReactiveDialogueSaveData
                         {
-                            var reactiveData = new ReactiveDialogueSaveData
-                            {
-                                currentDialogueIndex = npcSaveData.currentDialogueIndex,
-                                canCall = npcSaveData.canCall,
-                                lastCallTime = npcSaveData.lastCallTime
-                            };
-                            reactiveTrigger.ApplySaveData(reactiveData);
-                        }
+                            currentDialogueIndex = npcSaveData.currentDialogueIndex,
+                            canCall = npcSaveData.canCall,
+                            lastCallTime = npcSaveData.lastCallTime
+                        };
+                        reactiveTrigger.ApplySaveData(reactiveData);
                     }
                 }
             }

@@ -55,18 +55,23 @@ namespace Gameplay.Characters.NPC
             _npcInteraction = GetComponent<NpcInteraction>();
             _audioSource = GetComponent<AudioSource>();
             _player = GameObject.FindGameObjectWithTag("Player")?.transform;
-            
-            // Создаем или находим коллайдер зоны вызова
+    
             SetupCallZoneCollider();
-            
+    
             if (_player == null)
             {
                 Debug.LogWarning($"ReactiveDialogueCaller: Player not found on {gameObject.name}");
                 enabled = false;
             }
-            
+    
             if (callIcon != null)
                 callIcon.SetActive(false);
+        
+            // Запускаем корутину проверки вызовов если можем звать
+            if (_canCall)
+            {
+                StartCoroutine(CallCooldownRoutine());
+            }
         }
 
         private void SetupCallZoneCollider()
@@ -329,8 +334,24 @@ namespace Gameplay.Characters.NPC
 
         private IEnumerator CallCooldownRoutine()
         {
-            var cooldown = Random.Range(minCallCooldown, maxCallCooldown);
-            yield return new WaitForSeconds(cooldown);
+            // Если lastCallTime > 0, вычисляем оставшееся время кулдауна
+            if (_lastCallTime > 0)
+            {
+                var timeSinceLastCall = Time.time - _lastCallTime;
+                var remainingCooldown = Mathf.Max(0, minCallCooldown - timeSinceLastCall);
+        
+                if (remainingCooldown > 0)
+                {
+                    yield return new WaitForSeconds(remainingCooldown);
+                }
+            }
+            else
+            {
+                // Случайный кулдаун при первом запуске
+                var cooldown = Random.Range(minCallCooldown, maxCallCooldown);
+                yield return new WaitForSeconds(cooldown);
+            }
+    
             _canCall = true;
         }
 
@@ -447,19 +468,27 @@ namespace Gameplay.Characters.NPC
         public void ApplySaveData(ReactiveDialogueSaveData saveData)
         {
             if (saveData == null) return;
-    
+            Debug.Log($"Calling: {_canCall} {_isCalling} {saveData.lastCallTime} ");
+
             _currentDialogueIndex = saveData.currentDialogueIndex;
             _canCall = saveData.canCall;
             _lastCallTime = saveData.lastCallTime;
-    
+
             // Сбрасываем состояние если нужно
             if (_callRoutine != null)
             {
                 StopCoroutine(_callRoutine);
                 _callRoutine = null;
             }
-    
+
             _isCalling = false;
+    
+            // Перезапускаем корутины если NPC может звать
+            if (_canCall)
+            {
+                StartCoroutine(CallCooldownRoutine());
+            }
+
             if (callIcon != null)
                 callIcon.SetActive(false);
         }

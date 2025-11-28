@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core;
+using Gameplay.Characters.NPC;
 using UnityEngine;
 
 namespace Data.Game
@@ -109,23 +110,21 @@ namespace Data.Game
     {
         public int npcID;
         public string npcName;
-        public Vector3 position;
-        public Vector3 rotation;
         public NpcState currentState;
-        
+    
         // Relationships
         public IntIntDictionary relationships = new IntIntDictionary();
-        
+    
         // Memories
         public List<MemorySaveData> memories = new List<MemorySaveData>();
-        
+    
         // Reactive Dialogue
         public int currentDialogueIndex;
         public bool canCall = true;
         public float lastCallTime;
-        
-        // Schedule
-        public ActivitySaveData currentActivity = new ActivitySaveData();
+    
+        // Behaviour Data
+        public NpcBehaviourSaveData behaviourData;
     }
 
     [System.Serializable]
