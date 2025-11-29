@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Data.Game;
+using Gameplay.Systems;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -50,6 +51,12 @@ namespace Gameplay.Items
             }
         
             OnInventoryChanged?.Invoke(type, GetItemCount(type));
+            
+            if (count >= 5 || type == ItemType.CrystalRed || type == ItemType.CrystalBlue)
+            {
+                if (SaveManager.Instance != null)
+                    SaveManager.Instance.AutoSave();
+            }
         }
     
         public void RemoveItem(ItemType type, int count = 1)
@@ -82,6 +89,11 @@ namespace Gameplay.Items
         public void UpdateCapacity(int newCapacity)
         {
             _capacity = newCapacity;
+        }
+
+        public void ClearInventory()
+        {
+            items.Clear();
         }
     
         public int GetCapacity() => _capacity;

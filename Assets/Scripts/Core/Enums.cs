@@ -87,7 +87,8 @@
         CollectionRangeMultiplier,
         PassiveIncome,
         UnlockBuilding,
-        UnlockUpgradeTier
+        UnlockUpgradeTier,
+        CollectedAmountMultiplier
     }
     
     public enum Trait

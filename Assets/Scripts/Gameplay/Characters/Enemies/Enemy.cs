@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Data.Game;
 using Gameplay.Characters.Player;
 using Gameplay.Systems;
 using UI;
@@ -35,8 +36,6 @@ namespace Gameplay.Characters.Enemies
         protected Collider EnemyCollider;
         protected EnemyHealth EnemyHealth;
     
-        protected bool IsEmerging = true;
-        protected bool IsDead;
         protected bool CanAttack = true;
     
         protected float LastAttackTime;
@@ -46,6 +45,9 @@ namespace Gameplay.Characters.Enemies
         protected readonly int MoveHash = Animator.StringToHash("Move");
         protected readonly int AttackHash = Animator.StringToHash("Attack");
         protected readonly int DieHash = Animator.StringToHash("Die");
+        
+        public bool IsDead { get; protected set; }
+        public bool IsEmerging { get; protected set; }
     
         protected virtual void Awake()
         {
@@ -113,6 +115,102 @@ namespace Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
             CancelInvoke();
+        }
+        
+        public float GetLastAttackTime()
+        {
+            return LastAttackTime;
+        }
+
+        public Vector3 GetTargetPosition()
+        {
+            return TargetPosition;
+        }
+        
+        public virtual void SetInitialState(float health, EnemyStateSaveData stateData, Vector3 position)
+        {
+            // Останавливаем все корутины чтобы избежать конфликта
+            StopAllCoroutines();
+
+            this.health = health;
+            IsDead = stateData.isDead;
+            IsEmerging = stateData.isEmerging;
+            LastAttackTime = stateData.lastAttackTime;
+            TargetPosition = stateData.targetPosition;
+
+            // Восстанавливаем здоровье через EnemyHealth
+            var enemyHealth = GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.maxHealth = health > enemyHealth.maxHealth ? health : enemyHealth.maxHealth;
+                enemyHealth.SetInitialHealth(health, stateData.isDead);
+            }
+
+            // Устанавливаем позицию и состояние
+            if (stateData.isEmerging)
+            {
+                // Если враг появлялся, пропускаем анимацию и устанавливаем в целевую позицию
+                SkipEmergenceAnimation(position);
+            }
+            else if (!stateData.isDead)
+            {
+                transform.position = position;
+                if (Agent != null && Agent.enabled)
+                {
+                    Agent.Warp(position);
+                }
+            }
+
+            // Если враг мертв, уничтожаем его
+            if (IsDead)
+            {
+                if (enemyHealth != null)
+                {
+                    enemyHealth.ForceDeath();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
+        private void SkipEmergenceAnimation(Vector3 position)
+        {
+            // Останавливаем все корутины появления
+            StopAllCoroutines();
+
+            // Немедленно завершаем появление
+            IsEmerging = false;
+            transform.position = position;
+
+            // Включаем необходимые компоненты
+            if (EnemyCollider != null)
+                EnemyCollider.enabled = true;
+
+            if (Agent != null)
+            {
+                Agent.enabled = true;
+                Agent.Warp(position);
+            }
+
+            // Принудительно обновляем UI здоровья
+            if (EnemyHealth != null)
+            {
+                // Обновляем UI
+                EnemyHealth.UpdateHealthUI();
+        
+                // Активируем полоску здоровья если нужно
+                if (EnemyHealth.healthBarCanvas != null)
+                {
+                    bool shouldShow = EnemyHealth.currentHealth < EnemyHealth.maxHealth && 
+                                      EnemyHealth.currentHealth > 0 && !IsDead;
+                    EnemyHealth.healthBarCanvas.SetActive(shouldShow);
+                }
+            }
+
+            // Вызываем метод завершения появления
+            OnEmergenceComplete();
         }
     
         protected virtual IEnumerator EmergeFromGround()

@@ -15,6 +15,7 @@ namespace Data.Inventory
         public float shakeIntensity = 0.3f;
         public float floatHeight = 0.5f;
         public float vacuumTime = 1f;
+        public int amount = 1;
     
         [Header("Enemy Spawn Settings")]
         [Range(0f, 1f)]

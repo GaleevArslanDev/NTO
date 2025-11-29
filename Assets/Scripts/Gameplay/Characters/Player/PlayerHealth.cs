@@ -7,6 +7,8 @@ namespace Gameplay.Characters.Player
 {
     public class PlayerHealth : MonoBehaviour
     {
+        public static PlayerHealth Instance;
+        
         [Header("Health Settings")]
         public float maxHealth = 100f;
         public float currentHealth;
@@ -31,6 +33,18 @@ namespace Gameplay.Characters.Player
         private PlayerController _playerController;
         private CharacterController _characterController;
 
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        
         private void Start()
         {
             currentHealth = maxHealth;

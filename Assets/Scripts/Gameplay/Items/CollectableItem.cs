@@ -1,5 +1,6 @@
 using System.Collections;
 using Data.Inventory;
+using Gameplay.Characters.Player;
 using Gameplay.Systems;
 using UI;
 using UnityEngine;
@@ -16,22 +17,42 @@ namespace Gameplay.Items
         [SerializeField] private CollectableSlider breakProgressSlider;
         [SerializeField] private Canvas breakCanvas;
         
+        [Header("Persistence")]
+        [SerializeField] private string resourceId; // Уникальный ID для сохранения
+        
         private bool _isCollected;
         private bool _isBeingBroken;
         private float _currentBreakProgress;
         private Rigidbody _rb;
         private Collider _coll;
         private Vector3 _originalPosition;
+        private bool _hasCheckedCollection = false;
 
         private void Start()
         {
+            if (string.IsNullOrEmpty(resourceId))
+            {
+                resourceId = $"{transform.position.x}_{transform.position.y}_{transform.position.z}";
+            }
+            
             _rb = GetComponent<Rigidbody>();
             _coll = GetComponent<Collider>();
             _originalPosition = transform.position;
+            
+            if (breakCanvas != null)
+            {
+                breakCanvas.worldCamera = Camera.main;
+                breakProgressUI.SetActive(false);
+            }
 
-            if (breakCanvas == null) return;
-            breakCanvas.worldCamera = Camera.main;
-            breakProgressUI.SetActive(false);
+            // Подписываемся на событие применения данных
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.OnDataApplied += OnResourceDataApplied;
+            }
+
+            // Проверяем статус сразу или ждем применения данных
+            CheckResourceStatus();
         }
 
         private void Update()
@@ -149,6 +170,11 @@ namespace Gameplay.Items
             {
                 breakProgressUI.SetActive(false);
             }
+            
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.MarkResourceCollected(resourceId);
+            }
         
             if (AIAssistant.Instance != null && data != null)
             {
@@ -201,7 +227,8 @@ namespace Gameplay.Items
     
             if (Inventory.Instance != null)
             {
-                Inventory.Instance.AddItem(data.type);
+                Debug.Log($"Adding {data.type} x{data.amount}");
+                Inventory.Instance.AddItem(data.type, data.amount * PlayerProgression.Instance.collectedAmountMultiplier);
             }
             else
             {
@@ -210,8 +237,58 @@ namespace Gameplay.Items
     
             Destroy(gameObject);
         }
+        
+        private void CheckResourceStatus()
+        {
+            if (_hasCheckedCollection) return;
+
+            if (ResourceManager.Instance == null)
+            {
+                Debug.LogWarning("ResourceManager not found, cannot check resource status");
+                return;
+            }
+
+            // Если данные уже применены, проверяем сразу
+            if (ResourceManager.Instance.IsDataApplied)
+            {
+                CheckIfCollected();
+            }
+            // Иначе ждем события OnDataApplied
+        }
+        
+        private void OnResourceDataApplied()
+        {
+            CheckIfCollected();
+        }
+        
+        private void CheckIfCollected()
+        {
+            if (_hasCheckedCollection) return;
+
+            if (ResourceManager.Instance != null && 
+                ResourceManager.Instance.IsResourceCollected(resourceId))
+            {
+                // Ресурс уже собран - уничтожаем
+                Debug.Log($"Resource {resourceId} was already collected, destroying");
+                Destroy(gameObject);
+            }
+            else
+            {
+                // Ресурс не собран - активируем
+                _hasCheckedCollection = true;
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.OnDataApplied -= OnResourceDataApplied;
+            }
+        }
     
         public bool CanBeCollected => _currentBreakProgress >= 1f;
         public bool IsBeingBroken => _isBeingBroken;
+        public string GetResourceId() => resourceId;
     }
 }

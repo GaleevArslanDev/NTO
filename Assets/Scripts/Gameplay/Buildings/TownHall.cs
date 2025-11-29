@@ -2,6 +2,7 @@
 using Data.Game;
 using Data.Tech;
 using Gameplay.Items;
+using Gameplay.Systems;
 using UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -127,6 +128,9 @@ namespace Gameplay.Buildings
             _isUpgrading = false;
             onUpgradeCompleted?.Invoke();
             onLevelChanged?.Invoke(_currentLevel);
+            
+            if (SaveManager.Instance != null)
+                SaveManager.Instance.AutoSave();
         }
 
         private void UpdateVisualModel()
@@ -160,6 +164,8 @@ namespace Gameplay.Buildings
         {
             return _currentLevel >= levels.Length ? null : levels[_currentLevel].requiredResources;
         }
+        
+        public void SetLevel(int level) => _currentLevel = level;
 
         public int GetCurrentLevel() => _currentLevel;
         public int GetMaxLevel() => maxLevel;
