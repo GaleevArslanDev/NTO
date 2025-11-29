@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8376264657343539758}
   - component: {fileID: -3232946274732645159}
   - component: {fileID: 2063699540502633297}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Crystal5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 223.26079, y: 5.740835, z: 175.01765}
-  m_LocalScale: {x: 153.13246, y: 153.13242, z: 153.13242}
+  m_LocalScale: {x: 153.13245, y: 153.13248, z: 153.13249}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1124686950290045269}
@@ -133,6 +133,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8752478903419331879}
     m_Modifications:
+    - target: {fileID: 850664841168773742, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505135263295910695, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3668538081823857087, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893774022779757830, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6027410578990955083, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7309367541833500415, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -216,6 +240,10 @@ PrefabInstance:
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 7867147051833078564, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Name
