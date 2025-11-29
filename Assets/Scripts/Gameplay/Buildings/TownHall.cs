@@ -19,6 +19,7 @@ namespace Gameplay.Buildings
         [Header("Town Hall Settings")]
         [SerializeField] private int maxLevel = 5;
         [SerializeField] private TownHallLevel[] levels;
+        [SerializeField] private GameObject baseModel;
     
         [Header("Events")]
         public UnityEvent onUpgradeStarted;
@@ -135,6 +136,7 @@ namespace Gameplay.Buildings
 
         private void UpdateVisualModel()
         {
+            baseModel.SetActive(_currentLevel == 0);
             // Отключаем все модели
             foreach (var t in levels)
             {
