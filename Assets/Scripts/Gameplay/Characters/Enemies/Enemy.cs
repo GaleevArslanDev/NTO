@@ -127,8 +127,11 @@ namespace Gameplay.Characters.Enemies
             return TargetPosition;
         }
         
-        public virtual void SetInitialState(float health, EnemyStateSaveData stateData)
+        public virtual void SetInitialState(float health, EnemyStateSaveData stateData, Vector3 position)
         {
+            // Останавливаем все корутины чтобы избежать конфликта
+            StopAllCoroutines();
+
             this.health = health;
             IsDead = stateData.isDead;
             IsEmerging = stateData.isEmerging;
@@ -143,6 +146,21 @@ namespace Gameplay.Characters.Enemies
                 enemyHealth.SetInitialHealth(health, stateData.isDead);
             }
 
+            // Устанавливаем позицию и состояние
+            if (stateData.isEmerging)
+            {
+                // Если враг появлялся, пропускаем анимацию и устанавливаем в целевую позицию
+                SkipEmergenceAnimation(position);
+            }
+            else if (!stateData.isDead)
+            {
+                transform.position = position;
+                if (Agent != null && Agent.enabled)
+                {
+                    Agent.Warp(position);
+                }
+            }
+
             // Если враг мертв, уничтожаем его
             if (IsDead)
             {
@@ -155,33 +173,16 @@ namespace Gameplay.Characters.Enemies
                     Destroy(gameObject);
                 }
             }
-            else if (stateData.isEmerging)
-            {
-                // Если враг появлялся при сохранении, пропускаем анимацию
-                SkipEmergenceAnimation();
-            }
-            else
-            {
-                // Если враг уже появился, сразу завершаем появление
-                IsEmerging = false;
-                if (EnemyCollider != null)
-                    EnemyCollider.enabled = true;
-                if (Agent != null)
-                {
-                    Agent.enabled = true;
-                    Agent.Warp(TargetPosition);
-                }
-            }
         }
 
-        private void SkipEmergenceAnimation()
+        private void SkipEmergenceAnimation(Vector3 position)
         {
             // Останавливаем все корутины появления
             StopAllCoroutines();
 
             // Немедленно завершаем появление
             IsEmerging = false;
-            transform.position = TargetPosition;
+            transform.position = position;
 
             // Включаем необходимые компоненты
             if (EnemyCollider != null)
@@ -190,7 +191,7 @@ namespace Gameplay.Characters.Enemies
             if (Agent != null)
             {
                 Agent.enabled = true;
-                Agent.Warp(TargetPosition);
+                Agent.Warp(position);
             }
 
             // Принудительно обновляем UI здоровья

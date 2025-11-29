@@ -99,6 +99,34 @@ namespace Gameplay.Systems
             }
         }
 
+        public void LoadSaveAfterSceneLoad(string saveName)
+        {
+            if (string.IsNullOrEmpty(saveName)) return;
+
+            // Ждем завершения загрузки сцены и инициализации всех систем
+            StartCoroutine(LoadSaveAfterDelay(saveName, 0.1f));
+        }
+
+        private IEnumerator LoadSaveAfterDelay(string saveName, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            if (LoadGame(saveName))
+            {
+                Debug.Log($"Save loaded after scene transition: {saveName}");
+            }
+            else
+            {
+                Debug.LogError($"Failed to load save after scene transition: {saveName}");
+            }
+        }
+
+        public bool SaveExists(string saveName)
+        {
+            var filePath = GetSaveFilePath(saveName);
+            return File.Exists(filePath);
+        }
+
         private IEnumerator TakeScreenshotCoroutine(string saveName, System.Action<Texture2D> callback)
         {
             // Ждем конец кадра чтобы захватить весь экран
@@ -366,11 +394,12 @@ namespace Gameplay.Systems
                 return new SaveGameInfo
                 {
                     saveName = saveName,
+                    screenshotData = saveData.screenshotData,
                     timestamp = saveData.timestamp,
                     gameVersion = saveData.gameVersion,
                     playerLevel = saveData.playerData.level,
-                    playTime = "Unknown", // Можно добавить расчет времени игры
-                    location = "Town" // Можно добавить определение локации
+                    playTime = "Unknown",
+                    location = "Town"
                 };
             }
             catch
@@ -697,7 +726,10 @@ namespace Gameplay.Systems
             var playerController = PlayerController.Instance;
             var playerHealth = PlayerHealth.Instance;
             var playerProgression = PlayerProgression.Instance;
-            Debug.Log("Player position: " + playerController.transform.position + " rotation: " + playerController.transform.eulerAngles + " health: " + playerHealth.currentHealth + " level: " + player.playerLevel + " dialogue history: " + player.dialogueHistory + " dialogue flags: " + player.dialogueFlags + " relationships: " + player.RelationshipsWithNpCs);
+            Debug.Log("Player position: " + playerController.transform.position + " rotation: " +
+                      playerController.transform.eulerAngles + " health: " + playerHealth.currentHealth + " level: " +
+                      player.playerLevel + " dialogue history: " + player.dialogueHistory + " dialogue flags: " +
+                      player.dialogueFlags + " relationships: " + player.RelationshipsWithNpCs);
 
             var playerSaveData = new PlayerSaveData
             {
@@ -784,7 +816,7 @@ namespace Gameplay.Systems
                 {
                     var npcInteraction = npcBehaviour.GetComponent<NpcInteraction>();
                     var reactiveTrigger = npcBehaviour.GetComponent<ReactiveDialogueTrigger>();
-            
+
                     if (npcInteraction?.npcData != null)
                     {
                         var npcSaveData = new NpcSaveData
@@ -1026,13 +1058,14 @@ namespace Gameplay.Systems
 
             return settings;
         }
-        
+
         private List<EnemySaveData> CreateEnemiesSaveData()
         {
             if (EnemySpawnManager.Instance != null)
             {
                 return EnemySpawnManager.Instance.GetAllEnemiesSaveData();
             }
+
             return new List<EnemySaveData>();
         }
 
@@ -1090,43 +1123,92 @@ namespace Gameplay.Systems
 
             try
             {
-                // Сначала инициализируем системы, если они еще не инициализированы
+                Debug.Log("Starting save data application...");
+
                 InitializeSystems();
 
-                ApplyPlayerSaveData(saveData.playerData);
-                ApplyWorldSaveData(saveData.worldData);
-                ApplyEnemiesSaveData(saveData.enemiesData);
-                ApplyNpcsSaveData(saveData.npcsData);
-                ApplyBuildingSaveData(saveData.buildingData);
-                ApplyTechSaveData(saveData.techData);
-                ApplyInventorySaveData(saveData.inventoryData);
-                ApplyQuestSaveData(saveData.questData);
+                // 1. Сначала применяем настройки и базовые данные
                 ApplySettingsSaveData(saveData.settingsData);
+                ApplyWorldSaveData(saveData.worldData);
+
+                // 2. Затем применяем игровые данные
+                ApplyPlayerSaveData(saveData.playerData);
+                ApplyInventorySaveData(saveData.inventoryData);
+                ApplyTechSaveData(saveData.techData);
+                ApplyBuildingSaveData(saveData.buildingData);
+                ApplyQuestSaveData(saveData.questData);
+
+                // 3. Затем ресурсы
                 ApplyCollectedResourcesData(saveData.collectedResourceIds);
 
-                Debug.Log("Save data applied successfully");
+                // 4. Затем NPC
+                ApplyNpcsSaveData(saveData.npcsData);
+
+                // 5. Убедимся, что EnemySpawnManager готов перед загрузкой врагов
+                StartCoroutine(WaitForEnemySpawnManagerAndRestore(saveData.enemiesData));
+
+                Debug.Log("Save data application process started successfully");
             }
             catch (Exception e)
             {
                 Debug.LogError($"Error applying save data: {e.Message}");
             }
         }
-        
+
+        private IEnumerator WaitForEnemySpawnManagerAndRestore(List<EnemySaveData> enemiesData)
+        {
+            // Ждем пока EnemySpawnManager станет активным и включенным
+            float timeout = 5f;
+            float timer = 0f;
+
+            while (EnemySpawnManager.Instance == null ||
+                   !EnemySpawnManager.Instance.gameObject.activeInHierarchy ||
+                   !EnemySpawnManager.Instance.enabled)
+            {
+                timer += Time.deltaTime;
+                if (timer >= timeout)
+                {
+                    Debug.LogError("EnemySpawnManager not ready after " + timeout + " seconds!");
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            // Даем дополнительное время для инициализации
+            yield return new WaitForSeconds(0.2f);
+
+            Debug.Log($"Starting enemy restoration for {enemiesData?.Count ?? 0} enemies");
+
+            if (EnemySpawnManager.Instance != null)
+            {
+                EnemySpawnManager.Instance.RestoreAllEnemies(enemiesData);
+            }
+            else
+            {
+                Debug.LogError("EnemySpawnManager instance is null!");
+            }
+        }
+
         private void ApplyEnemiesSaveData(List<EnemySaveData> enemiesData)
         {
-            if (EnemySpawnManager.Instance == null || enemiesData == null) return;
-
-            // Очищаем текущих врагов
-            EnemySpawnManager.Instance.ClearAllEnemies();
-
-            // Восстанавливаем врагов из сохранения
-            foreach (var enemyData in enemiesData)
+            if (EnemySpawnManager.Instance == null)
             {
-                EnemySpawnManager.Instance.RestoreEnemyFromSave(enemyData);
+                Debug.LogWarning("EnemySpawnManager not found, cannot restore enemies");
+                return;
             }
-    
-            Debug.Log($"Restored {enemiesData.Count} enemies from save");
+
+            if (enemiesData == null || enemiesData.Count == 0)
+            {
+                Debug.Log("No enemy data to restore");
+                return;
+            }
+
+            // Используем улучшенный метод массового восстановления
+            EnemySpawnManager.Instance.RestoreAllEnemies(enemiesData);
+            Debug.Log($"Enemy restore process started for {enemiesData.Count} enemies");
         }
+
 
         private void ApplyPlayerSaveData(PlayerSaveData data)
         {
@@ -1143,10 +1225,10 @@ namespace Gameplay.Systems
                 {
                     characterController.enabled = false;
                 }
-        
+
                 playerController.transform.position = data.position;
                 playerController.transform.eulerAngles = data.rotation;
-        
+
                 // Включаем обратно
                 if (characterController != null)
                 {
@@ -1248,7 +1330,7 @@ namespace Gameplay.Systems
                             lastCallTime = npcSaveData.lastCallTime
                         };
                         reactiveTrigger.ApplySaveData(reactiveData);
-                
+
                         Debug.Log($"Applied reactive data for NPC {npcSaveData.npcID}: " +
                                   $"canCall={npcSaveData.canCall}, index={npcSaveData.currentDialogueIndex}");
                     }
@@ -1401,9 +1483,11 @@ namespace Gameplay.Systems
         {
             if (ResourceManager.Instance != null)
             {
-                ResourceManager.Instance.SetCollectedResources(
+                // Используем новый метод для немедленного применения
+                ResourceManager.Instance.ApplyCollectedResourcesImmediately(
                     new HashSet<string>(collectedResourceIds)
                 );
+                Debug.Log($"Applied {collectedResourceIds?.Count ?? 0} collected resource IDs");
             }
         }
 

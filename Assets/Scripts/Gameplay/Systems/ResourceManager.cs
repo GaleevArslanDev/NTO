@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.Systems
@@ -8,7 +9,10 @@ namespace Gameplay.Systems
         public static ResourceManager Instance;
         
         private HashSet<string> _collectedResources = new HashSet<string>();
+        private bool _isDataApplied = false;
         
+        public System.Action OnDataApplied;
+
         private void Awake()
         {
             if (Instance == null)
@@ -20,6 +24,16 @@ namespace Gameplay.Systems
             {
                 Destroy(gameObject);
             }
+        }
+
+        // Новый метод для принудительного применения данных
+        public void ApplyCollectedResourcesImmediately(HashSet<string> collectedResources)
+        {
+            _collectedResources = collectedResources ?? new HashSet<string>();
+            _isDataApplied = true;
+            OnDataApplied?.Invoke();
+            
+            Debug.Log($"Applied {_collectedResources.Count} collected resources immediately");
         }
         
         public void MarkResourceCollected(string resourceId)
@@ -40,6 +54,10 @@ namespace Gameplay.Systems
         public void SetCollectedResources(HashSet<string> collectedResources)
         {
             _collectedResources = collectedResources ?? new HashSet<string>();
+            _isDataApplied = true;
+            OnDataApplied?.Invoke();
         }
+
+        public bool IsDataApplied => _isDataApplied;
     }
 }

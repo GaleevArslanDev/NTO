@@ -126,7 +126,6 @@ namespace UI
             _isUpgradeMode = upgradeMode && allowUnlock;
 
             techTreePanel.SetActive(true);
-            isUIOpen = true;
 
             if (upgradeModePanel != null)
                 upgradeModePanel.SetActive(_isUpgradeMode);
@@ -137,8 +136,10 @@ namespace UI
                 upgradeModeText.text = $"Режим прокачки - {npcName}";
             }
 
-            if (UIManager.Instance != null)
+            if (UIManager.Instance != null && !isUIOpen)
                 UIManager.Instance.RegisterUIOpen();
+            
+            isUIOpen = true;
             
             detailsPanel?.HideDetails();
 

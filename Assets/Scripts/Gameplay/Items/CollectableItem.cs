@@ -25,27 +25,33 @@ namespace Gameplay.Items
         private Rigidbody _rb;
         private Collider _coll;
         private Vector3 _originalPosition;
+        private bool _hasCheckedCollection = false;
 
         private void Start()
         {
-            // Генерируем ID если не задан
             if (string.IsNullOrEmpty(resourceId))
             {
                 resourceId = $"{transform.position.x}_{transform.position.y}_{transform.position.z}";
             }
+            
             _rb = GetComponent<Rigidbody>();
             _coll = GetComponent<Collider>();
             _originalPosition = transform.position;
             
-            if (ResourceManager.Instance != null && 
-                ResourceManager.Instance.IsResourceCollected(resourceId))
+            if (breakCanvas != null)
             {
-                Destroy(gameObject);
+                breakCanvas.worldCamera = Camera.main;
+                breakProgressUI.SetActive(false);
             }
 
-            if (breakCanvas == null) return;
-            breakCanvas.worldCamera = Camera.main;
-            breakProgressUI.SetActive(false);
+            // Подписываемся на событие применения данных
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.OnDataApplied += OnResourceDataApplied;
+            }
+
+            // Проверяем статус сразу или ждем применения данных
+            CheckResourceStatus();
         }
 
         private void Update()
@@ -227,6 +233,55 @@ namespace Gameplay.Items
             }
     
             Destroy(gameObject);
+        }
+        
+        private void CheckResourceStatus()
+        {
+            if (_hasCheckedCollection) return;
+
+            if (ResourceManager.Instance == null)
+            {
+                Debug.LogWarning("ResourceManager not found, cannot check resource status");
+                return;
+            }
+
+            // Если данные уже применены, проверяем сразу
+            if (ResourceManager.Instance.IsDataApplied)
+            {
+                CheckIfCollected();
+            }
+            // Иначе ждем события OnDataApplied
+        }
+        
+        private void OnResourceDataApplied()
+        {
+            CheckIfCollected();
+        }
+        
+        private void CheckIfCollected()
+        {
+            if (_hasCheckedCollection) return;
+
+            if (ResourceManager.Instance != null && 
+                ResourceManager.Instance.IsResourceCollected(resourceId))
+            {
+                // Ресурс уже собран - уничтожаем
+                Debug.Log($"Resource {resourceId} was already collected, destroying");
+                Destroy(gameObject);
+            }
+            else
+            {
+                // Ресурс не собран - активируем
+                _hasCheckedCollection = true;
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.OnDataApplied -= OnResourceDataApplied;
+            }
         }
     
         public bool CanBeCollected => _currentBreakProgress >= 1f;
