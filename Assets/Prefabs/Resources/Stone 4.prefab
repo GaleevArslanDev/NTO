@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.008614133, y: 0.7070543, z: 0.7070543, w: 0.008614133}
   m_LocalPosition: {x: 219.82745, y: 6.3909335, z: 170.02095}
-  m_LocalScale: {x: 100.00004, y: 100.00002, z: 100.000015}
+  m_LocalScale: {x: 74.63185, y: 74.63181, z: 74.63181}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1757753217801627178}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce26377e156d1f4ea59a5ff4af76bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
+  data: {fileID: 11400000, guid: 622fe107b170dcd4da424b885ea2759f, type: 2}
   breakProgressUI: {fileID: 2133113447699152287}
   breakProgressSlider: {fileID: 2232781138980116820}
   breakCanvas: {fileID: 2592367289499916461}
@@ -132,6 +132,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3145546254578683864}
     m_Modifications:
+    - target: {fileID: 850664841168773742, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505135263295910695, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3668538081823857087, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893774022779757830, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6027410578990955083, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7309367541833500415, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -163,6 +187,10 @@ PrefabInstance:
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.000008093437
       objectReference: {fileID: 0}
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -212,9 +240,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 7867147051833078564, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
