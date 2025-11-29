@@ -2673,7 +2673,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
-      selectedSlot: 0
+      selectedSlot: 3
       selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
