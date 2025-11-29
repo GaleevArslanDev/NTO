@@ -1,5 +1,6 @@
 using System.Collections;
 using Data.Inventory;
+using Gameplay.Characters.Player;
 using Gameplay.Systems;
 using UI;
 using UnityEngine;
@@ -225,7 +226,8 @@ namespace Gameplay.Items
     
             if (Inventory.Instance != null)
             {
-                Inventory.Instance.AddItem(data.type);
+                Debug.Log($"Adding {data.type} x{data.amount}");
+                Inventory.Instance.AddItem(data.type, data.amount * PlayerProgression.Instance.collectedAmountMultiplier);
             }
             else
             {

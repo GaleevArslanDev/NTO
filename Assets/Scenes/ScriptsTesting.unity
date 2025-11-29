@@ -1724,6 +1724,7 @@ MonoBehaviour:
   miningSpeedMultiplier: 1
   inventoryCapacity: 50
   collectionRangeMultiplier: 1
+  collectedAmountMultiplier: 1
 --- !u!4 &132261841
 Transform:
   m_ObjectHideFlags: 0
@@ -30604,9 +30605,7 @@ MonoBehaviour:
   maxLevel: 5
   levels:
   - requiredResources:
-    - type: 0
-      amount: 1
-    - type: 2
+    - type: 1
       amount: 1
     upgradeTime: 0
     levelModel: {fileID: 0}

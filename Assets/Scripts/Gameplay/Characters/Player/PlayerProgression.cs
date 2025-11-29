@@ -27,6 +27,7 @@ namespace Gameplay.Characters.Player
         public float miningSpeedMultiplier = 1f;
         public int inventoryCapacity = 50;
         public float collectionRangeMultiplier = 1f;
+        public int collectedAmountMultiplier = 1;
     
         private Dictionary<string, bool> _unlockedTechs = new();
 
@@ -135,7 +136,10 @@ namespace Gameplay.Characters.Player
                         collectionRangeMultiplier *= effect.floatValue;
                         UpdateMtbStats();
                         break;
-                    
+                    case EffectType.CollectedAmountMultiplier:
+                        collectedAmountMultiplier = effect.intValue;
+                        UpdateMtbStats();
+                        break;
                     case EffectType.PassiveIncome:
                         // Активируем пассивный доход
                         if (FarmManager.Instance != null)
