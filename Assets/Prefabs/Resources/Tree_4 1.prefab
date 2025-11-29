@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7419967562159012996}
   - component: {fileID: -5226154895619341106}
   - component: {fileID: 6855456764363702385}
+  - component: {fileID: 1890733300378721533}
   m_Layer: 0
   m_Name: Tree_4 1
   m_TagString: Untagged
@@ -103,6 +104,28 @@ MonoBehaviour:
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 0}
 --- !u!64 &6855456764363702385
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5792187855839802925}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3972166743513975802, guid: 3d01276fe5086f34292a11da61aae6f0, type: 3}
+--- !u!64 &1890733300378721533
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
