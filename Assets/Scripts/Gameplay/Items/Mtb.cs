@@ -14,6 +14,7 @@ namespace Gameplay.Items
         [SerializeField] private LayerMask itemLayer = 1;
         [SerializeField] private ParticleSystem vacuumParticles;
         [SerializeField] private float vacuumSpeedMultiplier = 1f;
+        [SerializeField] private float vacuumSpeed = 1f;
     
         [Header("Weapon Settings")]
         [SerializeField] private float weaponRange = 50f;
@@ -41,6 +42,7 @@ namespace Gameplay.Items
         private float _baseVacuumRadius;
         private float _baseWeaponFireRate;
         private float _baseVacuumSpeedMultiplier;
+        private float _baseVacuumSpeed;
 
         private void Awake()
         {
