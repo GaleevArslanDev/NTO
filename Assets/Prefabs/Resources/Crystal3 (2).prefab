@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 219.37, y: 5, z: 176.25}
-  m_LocalScale: {x: 153.13246, y: 153.13242, z: 153.13242}
+  m_LocalScale: {x: 153.13245, y: 153.13246, z: 153.13246}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5822188711130509525}
@@ -154,6 +154,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3740328736801827052}
     m_Modifications:
+    - target: {fileID: 850664841168773742, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505135263295910695, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3668538081823857087, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893774022779757830, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6027410578990955083, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7309367541833500415, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -238,9 +262,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 7867147051833078564, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

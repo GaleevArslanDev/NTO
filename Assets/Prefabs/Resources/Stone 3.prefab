@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7917419576698313127}
   - component: {fileID: 4920983511589887917}
   - component: {fileID: 4787819406392098513}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Stone 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.008614133, y: 0.7070543, z: 0.7070543, w: 0.008614133}
   m_LocalPosition: {x: 219.82964, y: 6.3909335, z: 166.31287}
-  m_LocalScale: {x: 99.568375, y: 99.568344, z: 99.56832}
+  m_LocalScale: {x: 106.699, y: 106.69896, z: 106.69891}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6089710296535863540}
@@ -134,27 +134,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 850664841168773742, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3505135263295910695, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3668538081823857087, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4893774022779757830, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6027410578990955083, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7309367541833500415, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7721590355733483046, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Pivot.x
@@ -250,11 +250,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7867147051833078564, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986577417025705363, guid: ae12576f5f5d70149821fb0031c8ba9d, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
