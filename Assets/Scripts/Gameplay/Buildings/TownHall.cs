@@ -134,7 +134,7 @@ namespace Gameplay.Buildings
                 SaveManager.Instance.AutoSave();
         }
 
-        private void UpdateVisualModel()
+        public void UpdateVisualModel()
         {
             baseModel.SetActive(_currentLevel == 0);
             // Отключаем все модели
