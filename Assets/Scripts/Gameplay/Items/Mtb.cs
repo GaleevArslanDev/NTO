@@ -13,10 +13,7 @@ namespace Gameplay.Items
         [SerializeField] private float vacuumRadius = 5f;
         [SerializeField] private LayerMask itemLayer = 1;
         [SerializeField] private ParticleSystem vacuumParticles;
-        [SerializeField] private float vacuumSpeed = 10f;
-    
-        [Header("Animation")]
-        [SerializeField] private float collectionDelay = 0.1f;
+        [SerializeField] private float vacuumSpeedMultiplier = 1f;
     
         [Header("Weapon Settings")]
         [SerializeField] private float weaponRange = 50f;
@@ -43,7 +40,7 @@ namespace Gameplay.Items
         private float _baseWeaponDamage;
         private float _baseVacuumRadius;
         private float _baseWeaponFireRate;
-        private float _baseVacuumSpeed;
+        private float _baseVacuumSpeedMultiplier;
 
         private void Awake()
         {
@@ -58,6 +55,8 @@ namespace Gameplay.Items
             _baseWeaponDamage = weaponDamage;
             _baseWeaponFireRate = fireRate;
             _baseVacuumRadius = vacuumRadius;
+            _baseVacuumSpeedMultiplier = vacuumSpeedMultiplier;
+        
             _baseVacuumSpeed = vacuumSpeed;
         }
 
@@ -135,7 +134,7 @@ namespace Gameplay.Items
                 {
                     if (_currentTargetItem != null)
                     {
-                        _currentTargetItem.StopBreaking();
+                        _currentTargetItem.StopBreaking(_currentTargetItem.data.vacuumTime * (1f / vacuumSpeedMultiplier));
                     }
             
                     _currentTargetItem = newTarget;
@@ -147,12 +146,12 @@ namespace Gameplay.Items
             {
                 if (!_currentTargetItem.IsBeingBroken)
                 {
-                    _currentTargetItem.StartBreaking();
+                    _currentTargetItem.StartBreaking(vacuumSpeedMultiplier);
                 }
             }
             else if (Input.GetMouseButtonUp(1))
             {
-                _currentTargetItem.StopBreaking();
+                _currentTargetItem.StopBreaking(_currentTargetItem.data.vacuumTime * (1f / vacuumSpeedMultiplier));
             }
         }
     
@@ -226,7 +225,7 @@ namespace Gameplay.Items
             weaponDamage = _baseWeaponDamage * damageMult;
             fireRate = _baseWeaponFireRate * weaponFireRateMult;
             vacuumRadius = _baseVacuumRadius * collectionRangeMult;
-            vacuumSpeed = _baseVacuumSpeed * miningSpeedMult;
+            vacuumSpeedMultiplier = _baseVacuumSpeedMultiplier * miningSpeedMult;
         }
     
         private IEnumerator VacuumRoutine(CollectableItem item)
@@ -236,9 +235,9 @@ namespace Gameplay.Items
             SetParticleColor(item.data.particleColor);
             vacuumParticles.Play();
             
-            item.StartCollection(transform);
+            item.StartCollection(transform, vacuumSpeedMultiplier);
             
-            yield return new WaitForSeconds(collectionDelay);
+            yield return new WaitForSeconds(item.data.vacuumTime * (1f / vacuumSpeedMultiplier));
     
             _isVacuuming = false;
         }

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2728418908265659618}
   - component: {fileID: 2340166205375782692}
   - component: {fileID: -5756120375981339861}
+  - component: {fileID: 2007215736329100849}
+  - component: {fileID: 6951454754608786627}
   m_Layer: 0
   m_Name: Tree 2
   m_TagString: Untagged
@@ -27,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7299927515567815162}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071069, y: -0, z: 0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 233.65, y: 3.35, z: 175.29208}
-  m_LocalScale: {x: 250, y: 250, z: 250}
+  m_LocalScale: {x: 250.00003, y: 250.00006, z: 250.00009}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &2728418908265659618
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,7 +99,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce26377e156d1f4ea59a5ff4af76bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
+  data: {fileID: 11400000, guid: 2adb0ae5237baf245b191fa9d5ebf956, type: 2}
   breakProgressUI: {fileID: 0}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 0}
+--- !u!64 &2007215736329100849
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7299927515567815162}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2494185979427425891, guid: de24efe550b347e429280e626e350e7e, type: 3}
+--- !u!64 &6951454754608786627
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7299927515567815162}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2494185979427425891, guid: de24efe550b347e429280e626e350e7e, type: 3}

@@ -1,4 +1,5 @@
-﻿using Gameplay.Buildings;
+﻿using System;
+using Gameplay.Buildings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +42,14 @@ namespace UI
             }
         }
 
+        private void Update()
+        {
+            if (isUiOpen && Input.GetKeyDown(KeyCode.Escape))
+            {
+                HideDialog();
+            }
+        }
+
         private void Start()
         {
             upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
@@ -51,14 +60,15 @@ namespace UI
 
         public void ShowDialog(TownHall townHall)
         {
-            isUiOpen = true;
             _townHall = townHall;
             UpdateDialog();
             dialogPanel.SetActive(true);
 
             // Используем UIManager
             if (UIManager.Instance != null)
-                UIManager.Instance.RegisterUIOpen();
+                if (!isUiOpen)
+                    UIManager.Instance.RegisterUIOpen();
+            isUiOpen = true;
         }
 
         public void HideDialog()

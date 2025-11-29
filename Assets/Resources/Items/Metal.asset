@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   particleColor: {r: 1, g: 0.6640479, b: 0, a: 1}
-  icon: {fileID: 0}
+  icon: {fileID: 969036438, guid: cd2fa64b6aa64a14cae01c216e8001a9, type: 3}
   breakTime: 4
   shakeIntensity: 0.3
   floatHeight: 0.5
+  vacuumTime: 1
   enemySpawnChance: 0.1
   maxSpawnCount: 1
