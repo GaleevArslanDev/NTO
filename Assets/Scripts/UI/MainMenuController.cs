@@ -123,11 +123,11 @@ namespace UI
         
         private string GetDisplayName(string saveName)
         {
-            if (saveName == "autosave") return "Автосохранение";
-            if (saveName == "quicksave") return "Быстрое сохранение";
+            if (saveName == "autosave") return LocalizationManager.LocalizationManager.Instance.GetString("save_autosave");
+            if (saveName == "quicksave") return LocalizationManager.LocalizationManager.Instance.GetString("save_quicksave");
             if (saveName.StartsWith("manual_"))
             {
-                return saveName.Replace("manual_", "Сохранение ");
+                return saveName.Replace("manual_", LocalizationManager.LocalizationManager.Instance.GetString("save_manual"));
             }
             return saveName;
         }

@@ -133,7 +133,7 @@ namespace UI
             if (_isUpgradeMode && upgradeModeText != null)
             {
                 string npcName = GetNpcNameForTree(tree);
-                upgradeModeText.text = $"Режим прокачки - {npcName}";
+                upgradeModeText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-tree_upgrade-mode", npcName);
             }
 
             if (UIManager.Instance != null && !isUIOpen)
@@ -147,10 +147,10 @@ namespace UI
 
         private string GetNpcNameForTree(TechTree tree)
         {
-            if (tree == forgeTree) return "Брук (Кузница)";
-            if (tree == farmTree) return "Горк (Ферма)";
-            if (tree == generalTree) return "Зол (Ратуша)";
-            return "Прокачка";
+            if (tree == forgeTree) return LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction_blacksmith");
+            if (tree == farmTree) return LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction_farmer");
+            if (tree == generalTree) return "";
+            return LocalizationManager.LocalizationManager.Instance.GetString("upgrade");
         }
 
         public void ShowTechTreeForViewing()

@@ -86,7 +86,7 @@ namespace UI
 
             if (npcMode && npcModeTitle != null)
             {
-                npcModeTitle.text = $"Квесты - {npcName}";
+                npcModeTitle.text = LocalizationManager.LocalizationManager.Instance.GetString("quests-npc", npcName);
             }
 
             if (UIManager.Instance != null)
@@ -168,7 +168,7 @@ namespace UI
                 completeButton.interactable = _selectedQuest.isActive && !_selectedQuest.isCompleted;
             
                 acceptButton.GetComponentInChildren<TMP_Text>().text = 
-                    _selectedQuest.isCompleted ? "Завершено" : "Принять";
+                    _selectedQuest.isCompleted ? LocalizationManager.LocalizationManager.Instance.GetString("completed") : LocalizationManager.LocalizationManager.Instance.GetString("accept");
             }
             else
             {

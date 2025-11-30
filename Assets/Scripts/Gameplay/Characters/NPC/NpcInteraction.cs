@@ -131,7 +131,7 @@ namespace Gameplay.Characters.NPC
             return npcType switch
             {
                 NpcType.Mayor => LocalizationManager.LocalizationManager.Instance.GetString("zol"),
-                NpcType.Blacksmith => LocalizationManager.LocalizationManager.Instance.GetString("bruk"), 
+                NpcType.Blacksmith => LocalizationManager.LocalizationManager.Instance.GetString("brook"), 
                 NpcType.Farmer => LocalizationManager.LocalizationManager.Instance.GetString("gork"),
                 NpcType.QuestGiver => LocalizationManager.LocalizationManager.Instance.GetString("lip"),
                 _ => "NPC"
