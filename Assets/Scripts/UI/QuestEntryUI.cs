@@ -24,8 +24,8 @@ namespace UI
         {
             _quest = quest;
         
-            titleText.text = quest.title;
-            descriptionText.text = quest.description;
+            titleText.text = quest.GetLocalizedTitle();
+            descriptionText.text = quest.GetLocalizedDescription();
         
             // Отображаем прогресс
             if (showProgress && quest.type == QuestType.KillEnemies)

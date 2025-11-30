@@ -126,20 +126,25 @@ namespace Gameplay.Dialogue
         private void UpdateDialogueUI(DialogueNode node, string npcName)
         {
             if (node == null) return;
-        
-            npcNameText.text = npcName;
+    
+            // Локализуем имя NPC
+            string localizedNpcName = LocalizationManager.LocalizationManager.Instance.GetString($"npc_{npcName.ToLower()}");
+            npcNameText.text = string.IsNullOrEmpty(localizedNpcName) ? npcName : localizedNpcName;
+    
             SetEmotionIcon(node.emotion);
-        
+
             if (_typingCoroutine != null)
                 StopCoroutine(_typingCoroutine);
-            
-            _typingCoroutine = StartCoroutine(TypeText(node.npcText, node.typingSpeed));
         
+            // Используем локализованный текст
+            string textToDisplay = node.GetLocalizedText();
+            _typingCoroutine = StartCoroutine(TypeText(textToDisplay, node.typingSpeed));
+
             if (node.voiceLine != null && voiceSource != null)
             {
                 voiceSource.PlayOneShot(node.voiceLine);
             }
-        
+    
             UpdateOptions();
         }
     
@@ -165,7 +170,7 @@ namespace Gameplay.Dialogue
             StopCoroutine(_typingCoroutine);
             if (DialogueManager.Instance.CurrentNode != null)
             {
-                dialogueText.text = DialogueManager.Instance.CurrentNode.npcText;
+                dialogueText.text = DialogueManager.Instance.CurrentNode.GetLocalizedText();
             }
             _isTyping = false;
         }
@@ -214,18 +219,18 @@ namespace Gameplay.Dialogue
         private void CreateOptionButton(DialogueOption option, int index)
         {
             if (optionButtonPrefab == null) return;
-        
+    
             var buttonObj = Instantiate(optionButtonPrefab, optionsContainer);
             var button = buttonObj.GetComponent<Button>();
             var buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-        
+    
             if (buttonText != null)
-                buttonText.text = option.optionText;
-        
+                buttonText.text = option.GetLocalizedText(); // Используем локализованный текст
+    
             SetupOptionColor(button, option);
-        
+    
             button.onClick.AddListener(() => OnOptionSelected(option));
-        
+    
             SetupButtonNavigation(button, index);
         }
     
@@ -238,7 +243,7 @@ namespace Gameplay.Dialogue
             var buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
         
             if (buttonText != null)
-                buttonText.text = "[Попрощаться]";
+                buttonText.text = LocalizationManager.LocalizationManager.Instance.GetString("say-goodbye");
             button.onClick.AddListener(() => DialogueManager.Instance.EndDialogue());
         }
     

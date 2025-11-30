@@ -92,7 +92,7 @@ namespace Gameplay.Characters.NPC
                     {
                         TechTreeUI.Instance.ShowTechTreeForNpc(
                             PlayerProgression.Instance.forgeTechTree, 
-                            "Брук (Кузница)"
+                            LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction_blacksmith")
                         );
                     }
                     break;
@@ -102,7 +102,7 @@ namespace Gameplay.Characters.NPC
                     {
                         TechTreeUI.Instance.ShowTechTreeForNpc(
                             PlayerProgression.Instance.farmTechTree, 
-                            "Горк (Ферма)"
+                            LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction_farmer")
                         );
                     }
                     break;
@@ -130,10 +130,10 @@ namespace Gameplay.Characters.NPC
         
             return npcType switch
             {
-                NpcType.Mayor => "Зол",
-                NpcType.Blacksmith => "Брук", 
-                NpcType.Farmer => "Горк",
-                NpcType.QuestGiver => "Лип",
+                NpcType.Mayor => LocalizationManager.LocalizationManager.Instance.GetString("zol"),
+                NpcType.Blacksmith => LocalizationManager.LocalizationManager.Instance.GetString("bruk"), 
+                NpcType.Farmer => LocalizationManager.LocalizationManager.Instance.GetString("gork"),
+                NpcType.QuestGiver => LocalizationManager.LocalizationManager.Instance.GetString("lip"),
                 _ => "NPC"
             };
         }

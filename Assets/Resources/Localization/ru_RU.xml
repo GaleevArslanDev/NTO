@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <!-- Главное меню -->
-    <string name="menu_play">Играть</string>
-    <string name="menu_settings">Настройки</string>
-    <string name="menu_quit">Выход</string>
+    <!-- Main Menu -->
+    <string name="main_menu_start">Начать игру</string>
+    <string name="main_menu_load">Загрузить игру</string>
+    <string name="main_menu_settings">Настройки</string>
+    <string name="main_menu_exit">Выход</string>
 
-    <!-- Настройки -->
-    <string name="settings_language">Язык</string>
-    <string name="settings_volume">Громкость</string>
+    <!-- UI Common -->
+    <string name="ui_yes">Да</string>
+    <string name="ui_no">Нет</string>
+    <string name="ui_ok">OK</string>
+    <string name="ui_cancel">Отмена</string>
+    <string name="ui_close">Закрыть</string>
+    <string name="ui_back">Назад</string>
 
-    <!-- Игровые тексты -->
-    <string name="game_pickup_item">Подобран: {0}</string>
-    <string name="game_inventory">Инвентарь</string>
-    <string name="game_collected">Собрано: {0} {1}</string>
+    <!-- NPC Names -->
+    <string name="npc_mayor">Зол</string>
+    <string name="npc_blacksmith">Брук</string>
+    <string name="npc_farmer">Горк</string>
+    <string name="npc_questgiver">Лип</string>
 
-    <!-- Вариативные фразы -->
-    <string name="npc_greeting">Приветствую, путник!</string>
-    <string name="npc_greeting_1">Добро пожаловать!</string>
-    <string name="npc_greeting_2">Рад видеть тебя!</string>
-
-    <!-- Предметы -->
+    <!-- Item Types -->
     <string name="item_crystal_red">Красный кристалл</string>
     <string name="item_crystal_blue">Синий кристалл</string>
     <string name="item_stone">Камень</string>
-    <string name="item_wood">Дерево</string>
+    <string name="item_wood">Древесина</string>
     <string name="item_metal">Металл</string>
+
+    <!-- Building Names -->
+    <string name="building_townhall">Ратуша</string>
+    <string name="building_forge">Кузница</string>
+    <string name="building_farm">Ферма</string>
+
+    <!-- Tech Tree -->
+    <string name="tech_mining_speed">Скорость добычи</string>
+    <string name="tech_damage_boost">Усиление урона</string>
+    <string name="tech_inventory_capacity">Вместимость инвентаря</string>
+
+    <!-- Quest System -->
+    <string name="quest_gather_wood_title">Заготовка древесины</string>
+    <string name="quest_gather_wood_desc">Соберите {0} единиц дерева для развития поселения.</string>
+    <string name="quest_kill_beetles_title">Очистка территории</string>
+    <string name="quest_kill_beetles_desc">Уничтожьте {0} жуков, угрожающих нашему поселению.</string>
+
+    <!-- Dialogue -->
+    <string name="dialogue_greeting">Приветствую, путник!</string>
+    <string name="dialogue_farewell">До скорой встречи!</string>
+
+    <!-- AI Assistant -->
+    <string name="assistant_welcome">Добро пожаловать в игру!</string>
+    <string name="assistant_low_health">Ваше здоровье на низком уровне!</string>
 </resources>

@@ -33,7 +33,7 @@ namespace UI
             _tree = tree;
             _isUnlocked = node.isUnlocked;
     
-            nodeNameText.text = node.nodeName;
+            nodeNameText.text = node.GetLocalizedName();
             nodeIcon.sprite = node.icon;
     
             // Отображаем стоимость
@@ -83,7 +83,7 @@ namespace UI
 
             if (_isUnlocked)
             {
-                costText.text = "Разблокирован";
+                costText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_unlocked");
                 unlockButton.gameObject.SetActive(false);
                 unlockButton.interactable = false;
                 return;
@@ -95,7 +95,7 @@ namespace UI
             {
                 var hasEnough = Inventory.Instance.GetItemCount(cost.type) >= cost.amount;
                 var color = hasEnough ? "green" : "red";
-                costString += $"<color={color}>{cost.type}: {cost.amount}</color>\n";
+                costString += $"<color={color}>{LocalizationManager.LocalizationManager.Instance.GetString(cost.type.ToString())}: {cost.amount}</color>\n";
             }
             costText.text = costString;
     
@@ -105,15 +105,15 @@ namespace UI
                 string reason;
                 if (_node.tier > TownHall.Instance.GetUnlockedTechTier())
                 {
-                    reason = $"Требуется уровень ратуши: {_node.tier}";
+                    reason = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_no-town-hall-tier", _node.tier.ToString());
                 }
                 else if (!TechTreeUI.Instance.allowUnlock)
                 {
-                    reason = "Доступно только у NPC";
+                    reason = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_available_in_town");
                 }
                 else
                 {
-                    reason = "Не выполнены условия";
+                    reason = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_no-prerequisites");
                 }
                 costText.text = reason;
             }

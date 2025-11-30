@@ -10,22 +10,28 @@ namespace LocalizationManager
     {
         public static LocalizationManager Instance { get; private set; }
 
-        [Header("Settings")] [SerializeField] private string defaultLanguage = "ru-RU";
+        [Header("Settings")]
+        [SerializeField] private string defaultLanguage = "ru-RU";
         [SerializeField] private string saveKey = "SelectedLanguage";
 
-        [Header("Available Languages")] [SerializeField]
-        private List<Localization> availableLanguages = new List<Localization>
+        [Header("Available Languages")]
+        [SerializeField] private List<Localization> availableLanguages = new List<Localization>
         {
             new Localization { localizationCode = "ru-RU", stringsFileName = "ru_RU" },
-            new Localization { localizationCode = "en-US", stringsFileName = "en_US" }
+            new Localization { localizationCode = "en-US", stringsFileName = "en_US" },
+            new Localization { localizationCode = "zh-CN", stringsFileName = "zh_CN" }
         };
 
         private Dictionary<string, Dictionary<string, string>> _localizationData = new();
-
         private string _currentLanguage;
 
-        // Событие при смене языка
         public event Action<string> OnLanguageChanged;
+
+        // Кэш для часто используемых строк
+        private Dictionary<string, string> _cachedStrings = new();
+        
+        // Поддержка плейсхолдеров
+        private readonly char[] _placeholderChars = { '{', '}' };
 
         private void Awake()
         {
@@ -43,6 +49,7 @@ namespace LocalizationManager
 
         private void Initialize()
         {
+            // Загружаем язык из сохранений или используем системный
             if (SaveManager.Instance != null && SaveManager.Instance.GetSettingsData() != null)
             {
                 var settings = SaveManager.Instance.GetSettingsData();
@@ -50,7 +57,6 @@ namespace LocalizationManager
             }
             else
             {
-                // Используем язык системы как запасной вариант
                 _currentLanguage = GetSystemLanguage();
             }
 
@@ -68,6 +74,9 @@ namespace LocalizationManager
             {
                 SystemLanguage.Russian => "ru-RU",
                 SystemLanguage.English => "en-US",
+                SystemLanguage.Chinese => "zh-CN",
+                SystemLanguage.ChineseSimplified => "zh-CN",
+                SystemLanguage.ChineseTraditional => "zh-CN",
                 _ => defaultLanguage
             };
         }
@@ -80,7 +89,9 @@ namespace LocalizationManager
                 return;
             }
 
-            // Если язык уже загружен, просто переключаемся
+            // Очищаем кэш
+            _cachedStrings.Clear();
+
             if (_localizationData.ContainsKey(languageCode))
             {
                 _currentLanguage = languageCode;
@@ -89,7 +100,6 @@ namespace LocalizationManager
                 return;
             }
 
-            // Загрузка нового языка
             var localization = availableLanguages.Find(lang => lang.localizationCode == languageCode);
             var xml = Resources.Load<TextAsset>($"Localization/{localization.stringsFileName}");
 
@@ -115,6 +125,8 @@ namespace LocalizationManager
                     if (!string.IsNullOrEmpty(key))
                     {
                         languageDict[key] = value;
+                        // Кэшируем строку
+                        _cachedStrings[key] = value;
                     }
                 }
 
@@ -130,17 +142,15 @@ namespace LocalizationManager
                 Debug.LogError($"Error loading language {languageCode}: {e.Message}");
             }
         }
-        
+
         private void SaveLanguagePreference(string languageCode)
         {
-            // Сохраняем в системные настройки через SaveManager
             if (SaveManager.Instance != null)
             {
                 var settings = SaveManager.Instance.GetSettingsData();
                 if (settings != null)
                 {
                     settings.language = languageCode;
-                    // Активируем автосохранение настроек
                     SaveManager.Instance.AutoSave();
                 }
             }
@@ -148,21 +158,20 @@ namespace LocalizationManager
 
         public string GetString(string key, params object[] args)
         {
+            // Пытаемся получить из кэша
+            if (_cachedStrings.TryGetValue(key, out var cachedValue))
+            {
+                return FormatString(cachedValue, args);
+            }
+
+            // Ищем в загруженных данных
             if (_localizationData.TryGetValue(_currentLanguage, out var languageDict))
             {
                 if (languageDict.TryGetValue(key, out var value))
                 {
-                    // Поддержка плейсхолдеров {0}, {1}, etc.
-                    if (args.Length <= 0) return value;
-                    try
-                    {
-                        return string.Format(value, args);
-                    }
-                    catch (FormatException)
-                    {
-                        Debug.LogWarning($"Format error in localized string: {key}");
-                        return value;
-                    }
+                    // Кэшируем найденное значение
+                    _cachedStrings[key] = value;
+                    return FormatString(value, args);
                 }
             }
 
@@ -170,11 +179,27 @@ namespace LocalizationManager
             return $"[{key}]";
         }
 
-        // Метод для вариативности фраз (случайный выбор из доступных вариантов)
+        private string FormatString(string value, object[] args)
+        {
+            if (args.Length == 0) return value;
+
+            try
+            {
+                return string.Format(value, args);
+            }
+            catch (FormatException)
+            {
+                Debug.LogWarning($"Format error in localized string. Value: {value}, Args: {string.Join(", ", args)}");
+                return value;
+            }
+        }
+
+        // Метод для получения случайного варианта из группы ключей
         public string GetRandomString(string baseKey)
         {
-            if (!_localizationData.TryGetValue(_currentLanguage, out var languageDict)) return $"[{baseKey}]";
-            // Ищем варианты: baseKey, baseKey_1, baseKey_2, etc.
+            if (!_localizationData.TryGetValue(_currentLanguage, out var languageDict))
+                return $"[{baseKey}]";
+
             var variants = new List<string>();
 
             // Основной ключ
@@ -194,7 +219,21 @@ namespace LocalizationManager
             return variants.Count > 0 ? variants[UnityEngine.Random.Range(0, variants.Count)] : $"[{baseKey}]";
         }
 
-        // Получение списка доступных языков
+        // Метод для проверки существования ключа
+        public bool HasKey(string key)
+        {
+            return _localizationData.TryGetValue(_currentLanguage, out var languageDict) && 
+                   languageDict.ContainsKey(key);
+        }
+
+        // Метод для получения всех ключей (полезно для отладки)
+        public List<string> GetAllKeys()
+        {
+            return _localizationData.TryGetValue(_currentLanguage, out var languageDict) 
+                ? new List<string>(languageDict.Keys) 
+                : new List<string>();
+        }
+
         public List<Localization> GetAvailableLanguages()
         {
             return new List<Localization>(availableLanguages);
@@ -210,15 +249,21 @@ namespace LocalizationManager
             LoadLanguage(languageCode);
         }
 
-        // Получение отображаемого имени языка
         public static string GetLanguageDisplayName(string languageCode)
         {
-            switch (languageCode)
+            return languageCode switch
             {
-                case "ru-RU": return "Русский";
-                case "en-US": return "English";
-                default: return languageCode;
-            }
+                "ru-RU" => "Русский",
+                "en-US" => "English",
+                "zh-CN" => "中文",
+                _ => languageCode
+            };
+        }
+
+        // Метод для принудительной перезагрузки языка (например, при добавлении новых ключей)
+        public void ReloadCurrentLanguage()
+        {
+            LoadLanguage(_currentLanguage);
         }
     }
 }

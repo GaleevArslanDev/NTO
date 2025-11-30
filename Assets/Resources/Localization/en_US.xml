@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- Main Menu -->
-    <string name="menu_play">Play</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_quit">Quit</string>
+    <string name="main_menu_start">Start Game</string>
+    <string name="main_menu_load">Load Game</string>
+    <string name="main_menu_settings">Settings</string>
+    <string name="main_menu_exit">Exit</string>
 
-    <!-- Settings -->
-    <string name="settings_language">Language</string>
-    <string name="settings_volume">Volume</string>
+    <!-- UI Common -->
+    <string name="ui_yes">Yes</string>
+    <string name="ui_no">No</string>
+    <string name="ui_ok">OK</string>
+    <string name="ui_cancel">Cancel</string>
+    <string name="ui_close">Close</string>
+    <string name="ui_back">Back</string>
 
-    <!-- Game Texts -->
-    <string name="game_pickup_item">Picked up: {0}</string>
-    <string name="game_inventory">Inventory</string>
-    <string name="game_collected">Collected: {0} {1}</string>
+    <!-- NPC Names -->
+    <string name="npc_mayor">Zol</string>
+    <string name="npc_blacksmith">Brook</string>
+    <string name="npc_farmer">Gork</string>
+    <string name="npc_questgiver">Lip</string>
 
-    <!-- Variant Phrases -->
-    <string name="npc_greeting">Greetings, traveler!</string>
-    <string name="npc_greeting_1">Welcome!</string>
-    <string name="npc_greeting_2">Good to see you!</string>
-
-    <!-- Items -->
+    <!-- Item Types -->
     <string name="item_crystal_red">Red Crystal</string>
     <string name="item_crystal_blue">Blue Crystal</string>
     <string name="item_stone">Stone</string>
     <string name="item_wood">Wood</string>
     <string name="item_metal">Metal</string>
+
+    <!-- Building Names -->
+    <string name="building_townhall">Town Hall</string>
+    <string name="building_forge">Forge</string>
+    <string name="building_farm">Farm</string>
+
+    <!-- Tech Tree -->
+    <string name="tech_mining_speed">Mining Speed</string>
+    <string name="tech_damage_boost">Damage Boost</string>
+    <string name="tech_inventory_capacity">Inventory Capacity</string>
+
+    <!-- Quest System -->
+    <string name="quest_gather_wood_title">Wood Gathering</string>
+    <string name="quest_gather_wood_desc">Collect {0} units of wood for settlement development.</string>
+    <string name="quest_kill_beetles_title">Territory Clearing</string>
+    <string name="quest_kill_beetles_desc">Destroy {0} beetles threatening our settlement.</string>
+
+    <!-- Dialogue -->
+    <string name="dialogue_greeting">Greetings, traveler!</string>
+    <string name="dialogue_farewell">See you soon!</string>
+
+    <!-- AI Assistant -->
+    <string name="assistant_welcome">Welcome to the game!</string>
+    <string name="assistant_low_health">Your health is low!</string>
 </resources>
