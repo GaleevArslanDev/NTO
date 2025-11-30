@@ -183,14 +183,6 @@ namespace Gameplay.Characters.Player
                 FarmManager.Instance.UnlockFarmPlot(plotId, resourceType, productionRate);
             }
         }
-
-        public void UpgradeFarmPlot(string plotId, float newProductionRate)
-        {
-            if (FarmManager.Instance != null)
-            {
-                FarmManager.Instance.UpgradeFarmPlot(plotId, newProductionRate);
-            }
-        }
         
         public Dictionary<string, bool> GetUnlockedTechsDictionary()
         {
@@ -202,7 +194,7 @@ namespace Gameplay.Characters.Player
             _unlockedTechs = unlockedTechs ?? new Dictionary<string, bool>();
 
             // Применяем разблокированные технологии
-            ApplyAllUnlockedTechs();
+            ApplyAllUnlockedTechs(); 
         }
 
         public TechSaveData GetTechSaveData()

@@ -123,6 +123,12 @@ namespace Gameplay.Buildings
             UpdateVisualModel();
         
             ApplyBuildingUpgrades();
+            
+            // Уведомляем FarmManager об изменении эпохи
+            if (FarmManager.Instance != null)
+            {
+                FarmManager.Instance.OnEraChanged();
+            }
         
             AIAssistant.Instance.OnBuildingUpgraded("TownHall");
         
