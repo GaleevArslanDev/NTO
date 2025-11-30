@@ -232,7 +232,7 @@ MonoBehaviour:
   - nodeId: mining_speed_1
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
       I"
-    description: "+10% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
+    description: "+25% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
     tier: 1
     unlockCost:
     - type: 2
@@ -243,7 +243,7 @@ MonoBehaviour:
     isUnlocked: 0
     effects:
     - effectType: 2
-      floatValue: 1.1
+      floatValue: 1.25
       intValue: 0
       stringValue: 
     graphPosition: {x: -727, y: 234}
@@ -251,7 +251,7 @@ MonoBehaviour:
   - nodeId: mining_speed_2
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
       II"
-    description: "+25% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
+    description: "+50% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
     tier: 2
     unlockCost:
     - type: 3
@@ -267,7 +267,7 @@ MonoBehaviour:
     isUnlocked: 0
     effects:
     - effectType: 2
-      floatValue: 1.25
+      floatValue: 1.5
       intValue: 0
       stringValue: 
     graphPosition: {x: -288, y: 234}
@@ -275,7 +275,7 @@ MonoBehaviour:
   - nodeId: mining_speed_3
     nodeName: "\u0411\u044B\u0441\u0442\u0440\u0430\u044F \u0434\u043E\u0431\u044B\u0447\u0430
       III"
-    description: "+50% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
+    description: "+100% \u043A \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438 \u0434\u043E\u0431\u044B\u0447\u0438"
     tier: 3
     unlockCost:
     - type: 0
@@ -293,7 +293,7 @@ MonoBehaviour:
     isUnlocked: 0
     effects:
     - effectType: 2
-      floatValue: 1.5
+      floatValue: 2
       intValue: 0
       stringValue: 
     graphPosition: {x: 151, y: 234}
@@ -311,9 +311,9 @@ MonoBehaviour:
     prerequisiteNodes: []
     isUnlocked: 0
     effects:
-    - effectType: 2
-      floatValue: 1.15
-      intValue: 0
+    - effectType: 8
+      floatValue: 0
+      intValue: 2
       stringValue: 
     graphPosition: {x: -727, y: -134}
     icon: {fileID: 0}
@@ -335,9 +335,9 @@ MonoBehaviour:
     - resource_collection1
     isUnlocked: 0
     effects:
-    - effectType: 2
-      floatValue: 1.15
-      intValue: 0
+    - effectType: 8
+      floatValue: 0
+      intValue: 5
       stringValue: 
     graphPosition: {x: -288, y: -134}
     icon: {fileID: 0}
@@ -362,9 +362,9 @@ MonoBehaviour:
     - resource_collection2
     isUnlocked: 0
     effects:
-    - effectType: 2
-      floatValue: 1.15
-      intValue: 0
+    - effectType: 8
+      floatValue: 0
+      intValue: 10
       stringValue: 
     graphPosition: {x: 151, y: -134}
     icon: {fileID: 0}

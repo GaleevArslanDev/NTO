@@ -118,8 +118,10 @@ namespace Gameplay.Buildings
             if (_currentLevel > 0 && levels[_currentLevel - 1].levelModel != null)
                 levels[_currentLevel - 1].levelModel.SetActive(false);
 
+            UnlockUpgradeTier(levels[_currentLevel].unlocksTechTier);
+
             _currentLevel++;
-        
+
             UpdateVisualModel();
         
             ApplyBuildingUpgrades();
