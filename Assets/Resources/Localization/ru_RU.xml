@@ -1,53 +1,241 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <!-- Main Menu -->
-    <string name="main_menu_start">Начать игру</string>
-    <string name="main_menu_load">Загрузить игру</string>
-    <string name="main_menu_settings">Настройки</string>
-    <string name="main_menu_exit">Выход</string>
+	<!-- Main Menu -->
+	<string name="main_menu_start">Начать игру</string>
+	<string name="main_menu_load">Загрузить игру</string>
+	<string name="main_menu_settings">Настройки</string>
+	<string name="main_menu_exit">Выход</string>
 
-    <!-- UI Common -->
-    <string name="ui_yes">Да</string>
-    <string name="ui_no">Нет</string>
-    <string name="ui_ok">OK</string>
-    <string name="ui_cancel">Отмена</string>
-    <string name="ui_close">Закрыть</string>
-    <string name="ui_back">Назад</string>
+	<!-- UI Common -->
+	<string name="ui_yes">Да</string>
+	<string name="ui_no">Нет</string>
+	<string name="ui_ok">OK</string>
+	<string name="ui_cancel">Отмена</string>
+	<string name="ui_close">Закрыть</string>
+	<string name="ui_back">Назад</string>
 
-    <!-- NPC Names -->
-    <string name="npc_mayor">Зол</string>
-    <string name="npc_blacksmith">Брук</string>
-    <string name="npc_farmer">Горк</string>
-    <string name="npc_questgiver">Лип</string>
+	<!-- NPC Names -->
+	<string name="npc_mayor">Зол</string>
+	<string name="npc_blacksmith">Брук</string>
+	<string name="npc_farmer">Горк</string>
+	<string name="npc_questgiver">Лип</string>
 
-    <!-- Item Types -->
-    <string name="item_crystal_red">Красный кристалл</string>
-    <string name="item_crystal_blue">Синий кристалл</string>
-    <string name="item_stone">Камень</string>
-    <string name="item_wood">Древесина</string>
-    <string name="item_metal">Металл</string>
+	<!-- Item Types -->
+	<string name="item_crystal_red">Красный кристалл</string>
+	<string name="item_crystal_blue">Синий кристалл</string>
+	<string name="item_stone">Камень</string>
+	<string name="item_wood">Древесина</string>
+	<string name="item_metal">Металл</string>
 
-    <!-- Building Names -->
-    <string name="building_townhall">Ратуша</string>
-    <string name="building_forge">Кузница</string>
-    <string name="building_farm">Ферма</string>
+	<!-- Building Names -->
+	<string name="building_townhall">Ратуша</string>
+	<string name="building_forge">Кузница</string>
+	<string name="building_farm">Ферма</string>
+	<string name="building_tasks">Доска объявлений</string>
 
-    <!-- Tech Tree -->
-    <string name="tech_mining_speed">Скорость добычи</string>
-    <string name="tech_damage_boost">Усиление урона</string>
-    <string name="tech_inventory_capacity">Вместимость инвентаря</string>
+	<!-- Tech Tree -->
+	<string name="tech_mining_speed">Скорость добычи</string>
+	<string name="tech_damage_boost">Усиление урона</string>
+	<string name="tech_inventory_capacity">Вместимость инвентаря</string>
+	<string name="tech_mining_range">Дальность добычи</string>
+	<string name="tech_resource_per_deposit">Ресурсов с залежи</string>
 
-    <!-- Quest System -->
-    <string name="quest_gather_wood_title">Заготовка древесины</string>
-    <string name="quest_gather_wood_desc">Соберите {0} единиц дерева для развития поселения.</string>
-    <string name="quest_kill_beetles_title">Очистка территории</string>
-    <string name="quest_kill_beetles_desc">Уничтожьте {0} жуков, угрожающих нашему поселению.</string>
+	<!-- Quest System -->
+	<string name="quest_gather_wood_title">Заготовка древесины</string>
+	<string name="quest_gather_wood_desc">Соберите {0} единиц дерева для развития поселения.</string>
+	<string name="quest_kill_beetles_title">Очистка территории</string>
+	<string name="quest_kill_beetles_desc">Уничтожьте {0} жуков, угрожающих нашему поселению.</string>
 
-    <!-- Dialogue -->
-    <string name="dialogue_greeting">Приветствую, путник!</string>
-    <string name="dialogue_farewell">До скорой встречи!</string>
+	<!-- Dialogue Common -->
+	<string name="dialogue_greeting">Приветствую, путник!</string>
+	<string name="dialogue_farewell">До скорой встречи!</string>
 
-    <!-- AI Assistant -->
-    <string name="assistant_welcome">Добро пожаловать в игру!</string>
-    <string name="assistant_low_health">Ваше здоровье на низком уровне!</string>
+	<!-- AI Assistant -->
+	<string name="assistant_welcome">Добро пожаловать в игру!</string>
+	<string name="assistant_low_health">Ваше здоровье на низком уровне!</string>
+
+	<!-- Reactive Dialogues - Gork (Farmer) -->
+	<string name="reaction_gork_hate_100">Отворачивается спиной. "Уходи. Твоя поступь отравляет землю."</string>
+	<string name="reaction_gork_hostile_80">Не смотрит на тебя. "Здесь нечего тебе делать. Иди своей дорогой."</string>
+	<string name="reaction_gork_hostile_50">"Что опять нужно? Урожай проверяешь? Не вышло."</string>
+	<string name="reaction_gork_neutral_20">Кивает головой. "Земля дышит. Я слушаю."</string>
+	<string name="reaction_gork_neutral_0">"Привет. Почва сегодня податливая. Работа идет."</string>
+	<string name="reaction_gork_friendly_20">"Эй, смотри, первые всходы Козонита. Красиво, да?"</string>
+	<string name="reaction_gork_friendly_50">"Геннадий! Подходи, посмотри на этот гибридный плод! Вырос сам!"</string>
+	<string name="reaction_gork_friendship_60">Широко улыбается. "Дружище! Держи, специально для тебя отложил самый сочный урожай. Знаю, любишь."</string>
+	<string name="reaction_gork_friendship_80">"Без тебя эта долина была бы пустой. Спасибо, что остался."</string>
+	<string name="reaction_gork_friendship_100">Кладет руку тебе на плечо. "Ты теперь часть этой земли. Часть нашей семьи. Всегда возвращайся."</string>
+
+	<!-- Reactive Dialogues - Brook (Blacksmith) -->
+	<string name="reaction_brook_hate_100">Отворачивается, бормоча. "Разрушитель... уйди от моих творений."</string>
+	<string name="reaction_brook_hostile_80">"Твои идеи ведут к хаосу. Я не хочу с тобой работать."</string>
+	<string name="reaction_brook_hostile_50">"О... опять ты. Пришел проверить, не взорвалась ли моя мастерская?"</string>
+	<string name="reaction_brook_neutral_20">"Привет. Работа кипит. Не мешай."</string>
+	<string name="reaction_brook_neutral_0">"Геннадий! Как новый модифицированный бластер? Лучше, да?"</string>
+	<string name="reaction_brook_friendly_20">"Отлично, что ты зашел! Смотри на эту схему — это же гениально!"</string>
+	<string name="reaction_brook_friendly_50">"Друг! Лови прототип портативного щита! Держится... в теории пять минут!"</string>
+	<string name="reaction_brook_friendship_60">"Ты единственный, кто верит в мои безумные идеи! Спасибо!"</string>
+	<string name="reaction_brook_friendship_80">"Знаешь, без твоей поддержки я бы, наверное, бросил это дело. Ты вдохновляешь."</string>
+	<string name="reaction_brook_friendship_100">"Мы с тобой как кибер-братья! Вместе мы превратим эту планету в технологическое чудо!"</string>
+
+	<!-- Reactive Dialogues - Zol (Elder) -->
+	<string name="reaction_zol_hate_100">Смотрит сквозь тебя. "Ты — ошибка в узоре. Камень сожалеет."</string>
+	<string name="reaction_zol_hostile_80">"Твое присутствие нарушает гармонию. Уйди от Святилища."</string>
+	<string name="reaction_zol_hostile_50">"Зачем ты пришел? Силу черпать или совесть усыплять?"</string>
+	<string name="reaction_zol_neutral_20">"Вселенная полна загадок. И ты — одна из них."</string>
+	<string name="reaction_zol_neutral_0">"Приближайся, дитя звезд. Камень шепчет сегодня о переплетении судеб."</string>
+	<string name="reaction_zol_friendly_20">"Твои шаги становятся тише. Ты учишься слушать."</string>
+	<string name="reaction_zol_friendly_50">"Садись, Геннадий. Отдохни. Позволь истории этого места обнять тебя."</string>
+	<string name="reaction_zol_friendship_60">"В твоих глазах я вижу не солдата, а хранителя. Камень не ошибся."</string>
+	<string name="reaction_zol_friendship_80">"Ты стал мостом между нашими мирами. Спасибо, что остался."</string>
+	<string name="reaction_zol_friendship_100">"Ты — надежда нашего будущего. Я горжусь, что могу назвать тебя другом."</string>
+
+	<!-- Reactive Dialogues - Lip (Adventurer) -->
+	<string name="reaction_lip_hate_100">Убегает с криком. "Держись от меня подальше!"</string>
+	<string name="reaction_lip_hostile_80">"Ты... ты всех обманул! Я больше не хочу с тобой разговаривать!"</string>
+	<string name="reaction_lip_hostile_50">"О... это ты. Я как раз занят. Очень занят."</string>
+	<string name="reaction_lip_neutral_20">"Привет. Я нашел блестящий камушек. Покажу... но ненадолго."</string>
+	<string name="reaction_lip_neutral_0">"Геннадий! Геннадий! Я нашел странную пещеру, хочешь, покажу на карте?"</string>
+	<string name="reaction_lip_friendly_20">"Ты лучший! Расскажи еще про свой корабль! Как он летел?"</string>
+	<string name="reaction_lip_friendly_50">"Смотри, что я нашел! Это похоже на деталь от твоего скафандра! Держи!"</string>
+	<string name="reaction_lip_friendship_60">"Когда я вырасту, я буду таким же храбрым, как ты! Обещаю!"</string>
+	<string name="reaction_lip_friendship_80">"Знаешь, ты для меня как старший брат! Спасибо, что не гонишь меня."</string>
+	<string name="reaction_lip_friendship_100">"Я всегда буду прикрывать твою спину! Мы же напарники, да?"</string>
+
+	<!-- Dialogues with Options - Gork -->
+	<string name="dialogue_gork_1_npc">Северный участок. Земля спит. По старым меркам — ждать сезон, пока она проснется сама.</string>
+	<string name="dialogue_gork_1_option_a">Будем ждать. Твои предки знали лучше.</string>
+	<string name="dialogue_gork_1_option_b">У меня есть инструменты. Мы можем раздробить камни.</string>
+	<string name="dialogue_gork_1_reaction_a">Правильно. Терпение — тоже удобрение. Земля чувствует уважение.</string>
+	<string name="dialogue_gork_1_reaction_b">Грубая сила... Ладно. Но не удивляйся, если вкус у плодов будет горьким.</string>
+
+	<string name="dialogue_gork_2_npc">На листьях появились кристальные жуки. Старый способ — ждать, пока их съедят светляки.</string>
+	<string name="dialogue_gork_2_option_a">Природа сама найдет баланс. Будем ждать.</string>
+	<string name="dialogue_gork_2_option_b">Я могу быстро их устранить с помощью ультразвука.</string>
+	<string name="dialogue_gork_2_reaction_a">Мудро. Мы не хозяева здесь, а часть цикла.</string>
+	<string name="dialogue_gork_2_reaction_b">Эх... вмешательство. Но урожай будет спасен.</string>
+
+	<string name="dialogue_gork_3_npc">Нашел в амбаре семя времен моего прадеда. Шансы малы, но оно может дать уникальный плод.</string>
+	<string name="dialogue_gork_3_option_a">Посади его с почестями. Дадим шанс истории.</string>
+	<string name="dialogue_gork_3_option_b">Лучше использовать современные, проверенные семена.</string>
+	<string name="dialogue_gork_3_reaction_a">Отличная мысль! Пусть предки увидят, что мы помним.</string>
+	<string name="dialogue_gork_3_reaction_b">Прагматично... что ж, пусть будет так.</string>
+
+	<string name="dialogue_gork_4_npc">Дождей не было слишком долго. Мы можем молиться Камню или построить оросительную систему.</string>
+	<string name="dialogue_gork_4_option_a">Давай сохраним традиции. Помолимся Камню.</string>
+	<string name="dialogue_gork_4_option_b">Время действовать. Строим систему орошения.</string>
+	<string name="dialogue_gork_4_reaction_a">Верный путь. Иногда нужно просить, а не брать.</string>
+	<string name="dialogue_gork_4_reaction_b">Ты всегда полагаешься только на свои руки...</string>
+
+	<string name="dialogue_gork_5_npc">Возле твоего корабля выросло странное растение. Оно может быть полезным... или ядовитым.</string>
+	<string name="dialogue_gork_5_option_a">Выкорчуем его. Нельзя рисковать местной экосистемой.</string>
+	<string name="dialogue_gork_5_option_b">Давай изучим его. Возможно, это новая культура!</string>
+	<string name="dialogue_gork_5_reaction_a">Благоразумно. Чужое - не всегда значит хорошее.</string>
+	<string name="dialogue_gork_5_reaction_b">Опасно... но твое любопытство иногда приводит к интересным результатам.</string>
+
+	<!-- Dialogues with Options - Brook -->
+	<string name="dialogue_brook_1_npc">Твой МТБ - это древность! Дай я встрою импульсный ускоритель! Правда, он может расплавиться...</string>
+	<string name="dialogue_brook_1_option_a">Вперед! Риск — благородное дело!</string>
+	<string name="dialogue_brook_1_option_b">Давай лучше просто заточим лезвие.</string>
+	<string name="dialogue_brook_1_reaction_a">ДА! Вот это дух! Будет невероятно круто!</string>
+	<string name="dialogue_brook_1_reaction_b">Фу... Скукотища. Но... надежно.</string>
+
+	<string name="dialogue_brook_2_npc">Нашел нестабильное ядро от твоего корабля! Можно использовать для защиты... или мы все взлетим на воздух!</string>
+	<string name="dialogue_brook_2_option_a">Включи его! Великие открытия требуют смелости!</string>
+	<string name="dialogue_brook_2_option_b">Это слишком опасно. Обезвредь его.</string>
+	<string name="dialogue_brook_2_reaction_a">Я ЗНАЛ, ЧТО ТЫ ПОНЯЛ! Это будет величайший эксперимент!</string>
+	<string name="dialogue_brook_2_reaction_b">Эх, ладно... зато кузница теперь будет работать в три раза быстрее.</string>
+
+	<string name="dialogue_brook_3_npc">Придумал дизайн новой брони! Она будет прочной, но громоздкой.</string>
+	<string name="dialogue_brook_3_option_a">Отлично! Мне нужна максимальная защита!</string>
+	<string name="dialogue_brook_3_option_b">Сделай ее легче. Важна маневренность.</string>
+	<string name="dialogue_brook_3_reaction_a">Супер! Буду клепать! Ты будешь непробиваем!</string>
+	<string name="dialogue_brook_3_reaction_b">Практично, как всегда... что ж, будет тебе мобильность.</string>
+
+	<string name="dialogue_brook_4_npc">Могу создать робота-помощника для рутинной работы! Но он может выйти из-под контроля...</string>
+	<string name="dialogue_brook_4_option_a">Создавай! Технологии должны служить нам!</string>
+	<string name="dialogue_brook_4_option_b">Слишком рискованно. Обойдемся своими силами.</string>
+	<string name="dialogue_brook_4_reaction_a">Ура! Наконец-то у меня будет ассистент! Или... мы все умрем. В любом случае - интересно!</string>
+	<string name="dialogue_brook_4_reaction_b">Ты совсем не веришь в прогресс...</string>
+
+	<string name="dialogue_brook_5_npc">Теоретически... мы можем создать реактор на Козоните! Он обеспечит энергией все поселение!</string>
+	<string name="dialogue_brook_5_option_a">Это революционно! Начинаем проект немедленно!</string>
+	<string name="dialogue_brook_5_option_b">Сначала нужны тщательные расчеты. Слишком опасно.</string>
+	<string name="dialogue_brook_5_reaction_a">Да! Мы войдем в историю! Ну... или в учебники по техногенным катастрофам!</string>
+	<string name="dialogue_brook_5_reaction_b">Все великие открытия требовали риска... но ты, как всегда, прав.</string>
+
+	<!-- Dialogues with Options - Zol -->
+	<string name="dialogue_zol_1_npc">Твои сородичи вернутся. Как мы должны ответить? Стать стеной? Или стать водой?</string>
+	<string name="dialogue_zol_1_option_a">Мы усиливаем защиту. Наша цель — отстоять, а не уничтожать.</string>
+	<string name="dialogue_zol_1_option_b">Лучшая защита — нападение. Ударим первыми.</string>
+	<string name="dialogue_zol_1_reaction_a">Мудро. Сила защиты рождается из любви к тому, что защищаешь.</string>
+	<string name="dialogue_zol_1_reaction_b">Тень в твоем сердце говорит громче тебя самого. Пусть будет так.</string>
+
+	<string name="dialogue_zol_2_npc">Мы нашли древний артефакт — кристалл, хранящий голоса первых Рассов.</string>
+	<string name="dialogue_zol_2_option_a">Он должен остаться в Святилище. Мы не вправе его использовать.</string>
+	<string name="dialogue_zol_2_option_b">Мы должны использовать любые преимущества.</string>
+	<string name="dialogue_zol_2_reaction_a">Верно. Некоторые тайны должны оставаться тайнами.</string>
+	<string name="dialogue_zol_2_reaction_b">Печально... но, возможно, ты прав. Выживание требует жертв.</string>
+
+	<string name="dialogue_zol_3_npc">Мы захватили двух солдат твоего народа. Они напуганы.</string>
+	<string name="dialogue_zol_3_option_a">Прояви милосердие. Сохрани им жизни.</string>
+	<string name="dialogue_zol_3_option_b">Они видели слишком много. Это необходимо...</string>
+	<string name="dialogue_zol_3_reaction_a">Сострадание — признак великой силы. Возможно, их сердца еще можно обратить.</string>
+	<string name="dialogue_zol_3_reaction_b">Тяжелый выбор... Я исполню твою волю, но Камень запомнит это.</string>
+
+	<string name="dialogue_zol_4_npc">В древних текстах есть упоминание о 'звездном пришельце'. Как ты думаешь, это о тебе?</string>
+	<string name="dialogue_zol_4_option_a">Я здесь, чтобы помочь. Рассвет уже наступил.</string>
+	<string name="dialogue_zol_4_option_b">Если закат необходим для выживания, то я стану им.</string>
+	<string name="dialogue_zol_4_reaction_a">Ты принимаешь свою судьбу с открытым сердцем. Это хорошо.</string>
+	<string name="dialogue_zol_4_reaction_b">Не позволяй тьме поглотить тебя, дитя мое.</string>
+
+	<string name="dialogue_zol_5_npc">Камень позволяет отматывать время, но каждая такая манипуляция ослабляет его.</string>
+	<string name="dialogue_zol_5_option_a">Используем эту силу только в самых отчаянных ситуациях.</string>
+	<string name="dialogue_zol_5_option_b">Сила дана чтобы ее использовать. Будем применять когда нужно.</string>
+	<string name="dialogue_zol_5_reaction_a">Благоразумие - величайшая добродетель хранителя.</string>
+	<string name="dialogue_zol_5_reaction_b">Легкомысленное обращение со временем может стоить нам всего.</string>
+
+	<!-- Dialogues with Options - Lip -->
+	<string name="dialogue_lip_1_npc">Я нашел пещеру с фиолетовым паром! Там наверняка сокровища! Пойдем?</string>
+	<string name="dialogue_lip_1_option_a">Хорошо, но будь осторожен и слушайся меня.</string>
+	<string name="dialogue_lip_1_option_b">Это слишком опасно. Иди помоги Горку.</string>
+	<string name="dialogue_lip_1_reaction_a">УРА! Я буду как твой оруженосец! Самый лучший оруженосец!</string>
+	<string name="dialogue_lip_1_reaction_b">Фу... Ты как все взрослые. Скучно.</string>
+
+	<string name="dialogue_lip_2_npc">Нашел старый генератор! Мы можем починить его и сделать тайную базу!</string>
+	<string name="dialogue_lip_2_option_a">Отличная находка! Давай разберем его вместе.</string>
+	<string name="dialogue_lip_2_option_b">Это хлам, Лип. Он может быть опасен.</string>
+	<string name="dialogue_lip_2_reaction_a">Да! Я буду тебе помогать! Настоящая инженерия!</string>
+	<string name="dialogue_lip_2_reaction_b">Но он же такой крутой... ладно.</string>
+
+	<string name="dialogue_lip_3_npc">Весь в синяках. "Старшие ребята опять забрали мои находки!"</string>
+	<string name="dialogue_lip_3_option_a">Силу нужно применять, чтобы защищать слабых. Я научу тебя.</string>
+	<string name="dialogue_lip_3_option_b">Драка — не выход. Решай проблемы словами.</string>
+	<string name="dialogue_lip_3_reaction_a">Правда? Спасибо! Я научусь и больше никто меня не тронет!</string>
+	<string name="dialogue_lip_3_reaction_b">Словами... Но они меня не слушают! Теперь они будут считать меня слабаком.</string>
+
+	<string name="dialogue_lip_4_npc">Я обнаружил туннель за границей поселения! Мы могли бы использовать его для разведки!</string>
+	<string name="dialogue_lip_4_option_a">Покажи мне! Это может быть полезно.</string>
+	<string name="dialogue_lip_4_option_b">Это опасно. Сообщим старейшинам и запечатаем его.</string>
+	<string name="dialogue_lip_4_reaction_a">Отлично! Я знал, что ты поймешь! Это будет наша тайна!</string>
+	<string name="dialogue_lip_4_reaction_b">И снова взрослые все испортят...</string>
+
+	<string name="dialogue_lip_5_npc">Я хочу отправиться в лес один! Дай мне задание!</string>
+	<string name="dialogue_lip_5_option_a">Хорошо, собери редкие травы с северного холма.</string>
+	<string name="dialogue_lip_5_option_b">Ты еще слишком молод. Оставайся в поселении.</string>
+	<string name="dialogue_lip_5_reaction_a">Есть! Выполню лучше всех! Я не подведу!</string>
+	<string name="dialogue_lip_5_reaction_b">Я уже не ребенок! Я могу помочь!</string>
+
+	<!-- Plot Choices -->
+	<string name="plot_choice_1_npc">Протокол 'Чистая Доска'. Уничтожьте ксеножизнь.</string>
+	<string name="plot_choice_1_option_a">Понял. Приступаю к зачистке.</string>
+	<string name="plot_choice_1_option_b">Я не буду этого делать. Они безобидны.</string>
+	<string name="plot_choice_1_reaction_a">Зол появляется в дверях, его голос полон скорби: "И ты тоже... Камень ошибся в тебе."</string>
+	<string name="plot_choice_1_reaction_b">Зол кладет руку на твое плечо: "Ты сделал правильный выбор. Теперь ты один из нас."</string>
+
+	<string name="plot_choice_2_npc">Камень показывает, что следующая атака будет фатальной. Мы можем изменить прошлое...</string>
+	<string name="plot_choice_2_option_a">Мы не вправе играть с временем. Примем вызов судьбы.</string>
+	<string name="plot_choice_2_option_b">Мы должны спасти своих. Используем аномалию.</string>
+	<string name="plot_choice_2_reaction_a">Зол с гордостью смотрит на тебя: "Мужество встречать будущее - вот истинная сила."</string>
+	<string name="plot_choice_2_reaction_b">Зол выглядит постаревшим: "Цена будет ужасна... но если другого выхода нет..."</string>
 </resources>

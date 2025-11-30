@@ -1,53 +1,241 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <!-- Main Menu -->
-    <string name="main_menu_start">Start Game</string>
-    <string name="main_menu_load">Load Game</string>
-    <string name="main_menu_settings">Settings</string>
-    <string name="main_menu_exit">Exit</string>
+	<!-- Main Menu -->
+	<string name="main_menu_start">Start Game</string>
+	<string name="main_menu_load">Load Game</string>
+	<string name="main_menu_settings">Settings</string>
+	<string name="main_menu_exit">Exit</string>
 
-    <!-- UI Common -->
-    <string name="ui_yes">Yes</string>
-    <string name="ui_no">No</string>
-    <string name="ui_ok">OK</string>
-    <string name="ui_cancel">Cancel</string>
-    <string name="ui_close">Close</string>
-    <string name="ui_back">Back</string>
+	<!-- UI Common -->
+	<string name="ui_yes">Yes</string>
+	<string name="ui_no">No</string>
+	<string name="ui_ok">OK</string>
+	<string name="ui_cancel">Cancel</string>
+	<string name="ui_close">Close</string>
+	<string name="ui_back">Back</string>
 
-    <!-- NPC Names -->
-    <string name="npc_mayor">Zol</string>
-    <string name="npc_blacksmith">Brook</string>
-    <string name="npc_farmer">Gork</string>
-    <string name="npc_questgiver">Lip</string>
+	<!-- NPC Names -->
+	<string name="npc_mayor">Zol</string>
+	<string name="npc_blacksmith">Brook</string>
+	<string name="npc_farmer">Gork</string>
+	<string name="npc_questgiver">Lip</string>
 
-    <!-- Item Types -->
-    <string name="item_crystal_red">Red Crystal</string>
-    <string name="item_crystal_blue">Blue Crystal</string>
-    <string name="item_stone">Stone</string>
-    <string name="item_wood">Wood</string>
-    <string name="item_metal">Metal</string>
+	<!-- Item Types -->
+	<string name="item_crystal_red">Red Crystal</string>
+	<string name="item_crystal_blue">Blue Crystal</string>
+	<string name="item_stone">Stone</string>
+	<string name="item_wood">Wood</string>
+	<string name="item_metal">Metal</string>
 
-    <!-- Building Names -->
-    <string name="building_townhall">Town Hall</string>
-    <string name="building_forge">Forge</string>
-    <string name="building_farm">Farm</string>
+	<!-- Building Names -->
+	<string name="building_townhall">Town Hall</string>
+	<string name="building_forge">Forge</string>
+	<string name="building_farm">Farm</string>
+	<string name="building_tasks">Bulletin Board</string>
 
-    <!-- Tech Tree -->
-    <string name="tech_mining_speed">Mining Speed</string>
-    <string name="tech_damage_boost">Damage Boost</string>
-    <string name="tech_inventory_capacity">Inventory Capacity</string>
+	<!-- Tech Tree -->
+	<string name="tech_mining_speed">Mining Speed</string>
+	<string name="tech_damage_boost">Damage Boost</string>
+	<string name="tech_inventory_capacity">Inventory Capacity</string>
+	<string name="tech_mining_range">Mining Range</string>
+	<string name="tech_resource_per_deposit">Resources per Deposit</string>
 
-    <!-- Quest System -->
-    <string name="quest_gather_wood_title">Wood Gathering</string>
-    <string name="quest_gather_wood_desc">Collect {0} units of wood for settlement development.</string>
-    <string name="quest_kill_beetles_title">Territory Clearing</string>
-    <string name="quest_kill_beetles_desc">Destroy {0} beetles threatening our settlement.</string>
+	<!-- Quest System -->
+	<string name="quest_gather_wood_title">Wood Gathering</string>
+	<string name="quest_gather_wood_desc">Gather {0} units of wood for the settlement development.</string>
+	<string name="quest_kill_beetles_title">Territory Clearing</string>
+	<string name="quest_kill_beetles_desc">Eliminate {0} beetles threatening our settlement.</string>
 
-    <!-- Dialogue -->
-    <string name="dialogue_greeting">Greetings, traveler!</string>
-    <string name="dialogue_farewell">See you soon!</string>
+	<!-- Dialogue Common -->
+	<string name="dialogue_greeting">Greetings, traveler!</string>
+	<string name="dialogue_farewell">See you soon!</string>
 
-    <!-- AI Assistant -->
-    <string name="assistant_welcome">Welcome to the game!</string>
-    <string name="assistant_low_health">Your health is low!</string>
+	<!-- AI Assistant -->
+	<string name="assistant_welcome">Welcome to the game!</string>
+	<string name="assistant_low_health">Your health is low!</string>
+
+	<!-- Reactive Dialogues - Gork (Farmer) -->
+	<string name="reaction_gork_hate_100">Turns his back. "Go away. Your footsteps poison the earth."</string>
+	<string name="reaction_gork_hostile_80">Doesn't look at you. "There's nothing for you here. Go your own way."</string>
+	<string name="reaction_gork_hostile_50">"What do you want now? Checking the harvest? It didn't work out."</string>
+	<string name="reaction_gork_neutral_20">Nods his head. "The earth is breathing. I'm listening."</string>
+	<string name="reaction_gork_neutral_0">"Hello. The soil is pliable today. Work is going well."</string>
+	<string name="reaction_gork_friendly_20">"Hey, look, the first sprouts of Kozonite. Beautiful, isn't it?"</string>
+	<string name="reaction_gork_friendly_50">"Gennady! Come here, look at this hybrid fruit! It grew by itself!"</string>
+	<string name="reaction_gork_friendship_60">Smiles widely. "Buddy! Here, I saved the juiciest harvest especially for you. I know you love it."</string>
+	<string name="reaction_gork_friendship_80">"Without you, this valley would be empty. Thank you for staying."</string>
+	<string name="reaction_gork_friendship_100">Puts a hand on your shoulder. "You are now part of this land. Part of our family. Always come back."</string>
+
+	<!-- Reactive Dialogues - Brook (Blacksmith) -->
+	<string name="reaction_brook_hate_100">Turns away, muttering. "Destroyer... get away from my creations."</string>
+	<string name="reaction_brook_hostile_80">"Your ideas lead to chaos. I don't want to work with you."</string>
+	<string name="reaction_brook_hostile_50">"Oh... it's you again. Came to check if my workshop exploded?"</string>
+	<string name="reaction_brook_neutral_20">"Hello. Work is in full swing. Don't bother me."</string>
+	<string name="reaction_brook_neutral_0">"Gennady! How's the new modified blaster? Better, right?"</string>
+	<string name="reaction_brook_friendly_20">"Great that you dropped by! Look at this scheme - it's genius!"</string>
+	<string name="reaction_brook_friendly_50">"Friend! Catch the prototype of the portable shield! It holds... in theory, five minutes!"</string>
+	<string name="reaction_brook_friendship_60">"You are the only one who believes in my crazy ideas! Thank you!"</string>
+	<string name="reaction_brook_friendship_80">"You know, without your support, I probably would have given up. You inspire me."</string>
+	<string name="reaction_brook_friendship_100">"We are like cyber-brothers! Together we will turn this planet into a technological marvel!"</string>
+
+	<!-- Reactive Dialogues - Zol (Elder) -->
+	<string name="reaction_zol_hate_100">Looks through you. "You are a mistake in the pattern. The Stone regrets."</string>
+	<string name="reaction_zol_hostile_80">"Your presence disrupts the harmony. Leave the Sanctuary."</string>
+	<string name="reaction_zol_hostile_50">"Why have you come? To draw power or to silence your conscience?"</string>
+	<string name="reaction_zol_neutral_20">"The universe is full of mysteries. And you are one of them."</string>
+	<string name="reaction_zol_neutral_0">"Come closer, child of the stars. The Stone whispers today about the intertwining of fates."</string>
+	<string name="reaction_zol_friendly_20">"Your steps are becoming quieter. You are learning to listen."</string>
+	<string name="reaction_zol_friendly_50">"Sit down, Gennady. Rest. Let the history of this place embrace you."</string>
+	<string name="reaction_zol_friendship_60">"In your eyes, I see not a soldier, but a guardian. The Stone was not mistaken."</string>
+	<string name="reaction_zol_friendship_80">"You have become a bridge between our worlds. Thank you for staying."</string>
+	<string name="reaction_zol_friendship_100">"You are the hope of our future. I am proud to call you my friend."</string>
+
+	<!-- Reactive Dialogues - Lip (Adventurer) -->
+	<string name="reaction_lip_hate_100">Runs away screaming. "Stay away from me!"</string>
+	<string name="reaction_lip_hostile_80">"You... you deceived everyone! I don't want to talk to you anymore!"</string>
+	<string name="reaction_lip_hostile_50">"Oh... it's you. I'm just busy. Very busy."</string>
+	<string name="reaction_lip_neutral_20">"Hello. I found a shiny pebble. I'll show you... but not for long."</string>
+	<string name="reaction_lip_neutral_0">"Gennady! Gennady! I found a strange cave, want me to show you on the map?"</string>
+	<string name="reaction_lip_friendly_20">"You are the best! Tell me more about your ship! How did it fly?"</string>
+	<string name="reaction_lip_friendly_50">"Look what I found! It looks like a part from your spacesuit! Here, take it!"</string>
+	<string name="reaction_lip_friendship_60">"When I grow up, I will be as brave as you! I promise!"</string>
+	<string name="reaction_lip_friendship_80">"You know, you are like an older brother to me! Thank you for not chasing me away."</string>
+	<string name="reaction_lip_friendship_100">"I will always cover your back! We are partners, right?"</string>
+
+	<!-- Dialogues with Options - Gork -->
+	<string name="dialogue_gork_1_npc">Northern plot. The earth is asleep. By old standards - wait a season until it wakes up on its own.</string>
+	<string name="dialogue_gork_1_option_a">We will wait. Your ancestors knew better.</string>
+	<string name="dialogue_gork_1_option_b">I have tools. We can crush the stones.</string>
+	<string name="dialogue_gork_1_reaction_a">Right. Patience is also a fertilizer. The earth feels respect.</string>
+	<string name="dialogue_gork_1_reaction_b">Brute force... Okay. But don't be surprised if the fruits taste bitter.</string>
+
+	<string name="dialogue_gork_2_npc">Crystal beetles have appeared on the leaves. The old way is to wait until they are eaten by fireflies.</string>
+	<string name="dialogue_gork_2_option_a">Nature will find its own balance. We will wait.</string>
+	<string name="dialogue_gork_2_option_b">I can quickly eliminate them with ultrasound.</string>
+	<string name="dialogue_gork_2_reaction_a">Wisely. We are not masters here, but part of the cycle.</string>
+	<string name="dialogue_gork_2_reaction_b">Sigh... intervention. But the harvest will be saved.</string>
+
+	<string name="dialogue_gork_3_npc">Found a seed from the time of my great-grandfather in the barn. The chances are small, but it can yield a unique fruit.</string>
+	<string name="dialogue_gork_3_option_a">Plant it with honors. Let's give history a chance.</string>
+	<string name="dialogue_gork_3_option_b">Better to use modern, proven seeds.</string>
+	<string name="dialogue_gork_3_reaction_a">Great idea! Let the ancestors see that we remember.</string>
+	<string name="dialogue_gork_3_reaction_b">Pragmatic... well, so be it.</string>
+
+	<string name="dialogue_gork_4_npc">There has been no rain for too long. We can pray to the Stone or build an irrigation system.</string>
+	<string name="dialogue_gork_4_option_a">Let's preserve traditions. Let's pray to the Stone.</string>
+	<string name="dialogue_gork_4_option_b">Time to act. Let's build the irrigation system.</string>
+	<string name="dialogue_gork_4_reaction_a">The right path. Sometimes you need to ask, not take.</string>
+	<string name="dialogue_gork_4_reaction_b">You always rely only on your hands...</string>
+
+	<string name="dialogue_gork_5_npc">A strange plant has grown near your ship. It could be useful... or poisonous.</string>
+	<string name="dialogue_gork_5_option_a">Let's uproot it. We can't risk the local ecosystem.</string>
+	<string name="dialogue_gork_5_option_b">Let's study it. Maybe it's a new crop!</string>
+	<string name="dialogue_gork_5_reaction_a">Prudent. Alien doesn't always mean good.</string>
+	<string name="dialogue_gork_5_reaction_b">Dangerous... but your curiosity sometimes leads to interesting results.</string>
+
+	<!-- Dialogues with Options - Brook -->
+	<string name="dialogue_brook_1_npc">Your MTB is ancient! Let me build in a pulse accelerator! True, it might melt...</string>
+	<string name="dialogue_brook_1_option_a">Go ahead! Risk is a noble thing!</string>
+	<string name="dialogue_brook_1_option_b">Let's just sharpen the blade instead.</string>
+	<string name="dialogue_brook_1_reaction_a">YES! That's the spirit! It will be incredibly cool!</string>
+	<string name="dialogue_brook_1_reaction_b">Ugh... Boring. But... reliable.</string>
+
+	<string name="dialogue_brook_2_npc">Found an unstable core from your ship! Can be used for protection... or we'll all blow up!</string>
+	<string name="dialogue_brook_2_option_a">Turn it on! Great discoveries require courage!</string>
+	<string name="dialogue_brook_2_option_b">It's too dangerous. Neutralize it.</string>
+	<string name="dialogue_brook_2_reaction_a">I KNEW YOU'D UNDERSTAND! This will be the greatest experiment!</string>
+	<string name="dialogue_brook_2_reaction_b">Oh, well... but the forge will now work three times faster.</string>
+
+	<string name="dialogue_brook_3_npc">Came up with a design for new armor! It will be sturdy, but bulky.</string>
+	<string name="dialogue_brook_3_option_a">Great! I need maximum protection!</string>
+	<string name="dialogue_brook_3_option_b">Make it lighter. Maneuverability is important.</string>
+	<string name="dialogue_brook_3_reaction_a">Super! I'll rivet it! You will be impenetrable!</string>
+	<string name="dialogue_brook_3_reaction_b">Practical, as always... well, you'll have mobility.</string>
+
+	<string name="dialogue_brook_4_npc">I can create a robot assistant for routine work! But it might go out of control...</string>
+	<string name="dialogue_brook_4_option_a">Create it! Technology should serve us!</string>
+	<string name="dialogue_brook_4_option_b">Too risky. We'll manage on our own.</string>
+	<string name="dialogue_brook_4_reaction_a">Hooray! Finally, I'll have an assistant! Or... we'll all die. In any case - interesting!</string>
+	<string name="dialogue_brook_4_reaction_b">You don't believe in progress at all...</string>
+
+	<string name="dialogue_brook_5_npc">Theoretically... we can create a reactor on Kozonite! It will provide energy for the entire settlement!</string>
+	<string name="dialogue_brook_5_option_a">This is revolutionary! Let's start the project immediately!</string>
+	<string name="dialogue_brook_5_option_b">First, we need thorough calculations. Too dangerous.</string>
+	<string name="dialogue_brook_5_reaction_a">Yes! We will go down in history! Well... or in textbooks on technogenic catastrophes!</string>
+	<string name="dialogue_brook_5_reaction_b">All great discoveries required risk... but you, as always, are right.</string>
+
+	<!-- Dialogues with Options - Zol -->
+	<string name="dialogue_zol_1_npc">Your kin will return. How should we respond? Become a wall? Or become water?</string>
+	<string name="dialogue_zol_1_option_a">We will strengthen the defense. Our goal is to defend, not to destroy.</string>
+	<string name="dialogue_zol_1_option_b">The best defense is attack. Let's strike first.</string>
+	<string name="dialogue_zol_1_reaction_a">Wisely. The strength of defense is born from love for what you defend.</string>
+	<string name="dialogue_zol_1_reaction_b">The shadow in your heart speaks louder than you. So be it.</string>
+
+	<string name="dialogue_zol_2_npc">We found an ancient artifact - a crystal that holds the voices of the first Rasses.</string>
+	<string name="dialogue_zol_2_option_a">It must remain in the Sanctuary. We have no right to use it.</string>
+	<string name="dialogue_zol_2_option_b">We must use any advantage.</string>
+	<string name="dialogue_zol_2_reaction_a">True. Some secrets must remain secrets.</string>
+	<string name="dialogue_zol_2_reaction_b">Sad... but perhaps you are right. Survival requires sacrifices.</string>
+
+	<string name="dialogue_zol_3_npc">We captured two soldiers of your people. They are frightened.</string>
+	<string name="dialogue_zol_3_option_a">Show mercy. Spare their lives.</string>
+	<string name="dialogue_zol_3_option_b">They have seen too much. It is necessary...</string>
+	<string name="dialogue_zol_3_reaction_a">Compassion is a sign of great strength. Perhaps their hearts can still be turned.</string>
+	<string name="dialogue_zol_3_reaction_b">A heavy choice... I will fulfill your will, but the Stone will remember this.</string>
+
+	<string name="dialogue_zol_4_npc">In the ancient texts, there is a mention of a 'stellar alien'. Do you think it's about you?</string>
+	<string name="dialogue_zol_4_option_a">I am here to help. The dawn has already come.</string>
+	<string name="dialogue_zol_4_option_b">If sunset is necessary for survival, then I will become it.</string>
+	<string name="dialogue_zol_4_reaction_a">You accept your destiny with an open heart. That is good.</string>
+	<string name="dialogue_zol_4_reaction_b">Do not let the darkness consume you, my child.</string>
+
+	<string name="dialogue_zol_5_npc">The Stone allows to rewind time, but each such manipulation weakens it.</string>
+	<string name="dialogue_zol_5_option_a">Let's use this power only in the most desperate situations.</string>
+	<string name="dialogue_zol_5_option_b">Power is given to be used. We will use it when needed.</string>
+	<string name="dialogue_zol_5_reaction_a">Prudence is the greatest virtue of a guardian.</string>
+	<string name="dialogue_zol_5_reaction_b">Frivolous handling of time may cost us everything.</string>
+
+	<!-- Dialogues with Options - Lip -->
+	<string name="dialogue_lip_1_npc">I found a cave with purple steam! There must be treasures there! Let's go?</string>
+	<string name="dialogue_lip_1_option_a">Okay, but be careful and obey me.</string>
+	<string name="dialogue_lip_1_option_b">It's too dangerous. Go help Gork.</string>
+	<string name="dialogue_lip_1_reaction_a">HOORAY! I will be like your squire! The best squire!</string>
+	<string name="dialogue_lip_1_reaction_b">Ugh... You're like all adults. Boring.</string>
+
+	<string name="dialogue_lip_2_npc">Found an old generator! We can fix it and make a secret base!</string>
+	<string name="dialogue_lip_2_option_a">Great find! Let's take it apart together.</string>
+	<string name="dialogue_lip_2_option_b">It's junk, Lip. It might be dangerous.</string>
+	<string name="dialogue_lip_2_reaction_a">Yes! I will help you! Real engineering!</string>
+	<string name="dialogue_lip_2_reaction_b">But it's so cool... okay.</string>
+
+	<string name="dialogue_lip_3_npc">All bruised. "The older kids took my findings again!"</string>
+	<string name="dialogue_lip_3_option_a">Strength should be used to protect the weak. I will teach you.</string>
+	<string name="dialogue_lip_3_option_b">Fighting is not the way. Solve problems with words.</string>
+	<string name="dialogue_lip_3_reaction_a">Really? Thank you! I will learn and no one will touch me anymore!</string>
+	<string name="dialogue_lip_3_reaction_b">With words... But they don't listen to me! Now they will think I'm a weakling.</string>
+
+	<string name="dialogue_lip_4_npc">I discovered a tunnel beyond the settlement! We could use it for reconnaissance!</string>
+	<string name="dialogue_lip_4_option_a">Show me! It might be useful.</string>
+	<string name="dialogue_lip_4_option_b">It's dangerous. Let's report to the elders and seal it.</string>
+	<string name="dialogue_lip_4_reaction_a">Great! I knew you'd understand! This will be our secret!</string>
+	<string name="dialogue_lip_4_reaction_b">And again the adults will ruin everything...</string>
+
+	<string name="dialogue_lip_5_npc">I want to go to the forest alone! Give me a mission!</string>
+	<string name="dialogue_lip_5_option_a">Okay, gather rare herbs from the northern hill.</string>
+	<string name="dialogue_lip_5_option_b">You are too young. Stay in the settlement.</string>
+	<string name="dialogue_lip_5_reaction_a">Yes! I will do it better than anyone! I won't let you down!</string>
+	<string name="dialogue_lip_5_reaction_b">I'm not a child anymore! I can help!</string>
+
+	<!-- Plot Choices -->
+	<string name="plot_choice_1_npc">Protocol 'Clean Slate'. Destroy the xeno-life.</string>
+	<string name="plot_choice_1_option_a">Understood. Proceeding with the cleanup.</string>
+	<string name="plot_choice_1_option_b">I will not do this. They are harmless.</string>
+	<string name="plot_choice_1_reaction_a">Zol appears in the doorway, his voice full of sorrow: "You too... The Stone was wrong about you."</string>
+	<string name="plot_choice_1_reaction_b">Zol puts a hand on your shoulder: "You made the right choice. Now you are truly one of us."</string>
+
+	<string name="plot_choice_2_npc">The Stone shows that the next attack will be fatal. We can change the past...</string>
+	<string name="plot_choice_2_option_a">We have no right to play with time. Let's accept the challenge of fate.</string>
+	<string name="plot_choice_2_option_b">We must save our own. Let's use the anomaly.</string>
+	<string name="plot_choice_2_reaction_a">Zol looks at you with pride: "Courage to meet the future - that is true strength."</string>
+	<string name="plot_choice_2_reaction_b">Zol looks aged: "The price will be terrible... but if there is no other way..."</string>
 </resources>
