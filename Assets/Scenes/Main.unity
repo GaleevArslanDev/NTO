@@ -61962,6 +61962,7 @@ Animation:
   - {fileID: 4241242628387246618, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
   - {fileID: -1627176864280068879, guid: 0aadab05f4cbb8342a2433b3ce161752, type: 3}
   - {fileID: 377389750117157208, guid: 462ab43adc58d5342b8b2dc2afe5ba65, type: 3}
+  - {fileID: 4462440687661492304, guid: 22d75a69bd65c8440a53bc4eeed48a69, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
