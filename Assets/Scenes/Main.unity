@@ -889,8 +889,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcType: 2
   npcData:
-    npcName: 
-    npcID: 0
+    npcName: Gork
+    npcID: 1
     memories: []
     schedule:
       dailySchedule:
@@ -30894,7 +30894,7 @@ MonoBehaviour:
   npcType: 3
   npcData:
     npcName: 
-    npcID: 0
+    npcID: 3
     memories: []
     schedule:
       dailySchedule:
@@ -31679,7 +31679,7 @@ MonoBehaviour:
   npcType: 0
   npcData:
     npcName: 
-    npcID: 0
+    npcID: 4
     memories: []
     schedule:
       dailySchedule:
@@ -40550,7 +40550,7 @@ MonoBehaviour:
   npcType: 1
   npcData:
     npcName: 
-    npcID: 0
+    npcID: 2
     memories: []
     schedule:
       dailySchedule:
