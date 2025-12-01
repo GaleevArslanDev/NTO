@@ -165,7 +165,7 @@ namespace UI
             {
                 statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_available");
                 unlockButton.interactable = true;
-                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("unavailable");
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("upgrade");
             }
 
             // Проверяем уровень ратуши

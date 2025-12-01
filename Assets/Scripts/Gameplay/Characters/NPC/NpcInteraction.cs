@@ -130,10 +130,10 @@ namespace Gameplay.Characters.NPC
         
             return npcType switch
             {
-                NpcType.Mayor => LocalizationManager.LocalizationManager.Instance.GetString("zol"),
-                NpcType.Blacksmith => LocalizationManager.LocalizationManager.Instance.GetString("brook"), 
-                NpcType.Farmer => LocalizationManager.LocalizationManager.Instance.GetString("gork"),
-                NpcType.QuestGiver => LocalizationManager.LocalizationManager.Instance.GetString("lip"),
+                NpcType.Mayor => LocalizationManager.LocalizationManager.Instance.GetString("npc_mayor"),
+                NpcType.Blacksmith => LocalizationManager.LocalizationManager.Instance.GetString("npc_blacksmith"), 
+                NpcType.Farmer => LocalizationManager.LocalizationManager.Instance.GetString("npc_farmer"),
+                NpcType.QuestGiver => LocalizationManager.LocalizationManager.Instance.GetString("npc_questgiver"),
                 _ => "NPC"
             };
         }

@@ -147,14 +147,20 @@ namespace UI
         private void Start()
         {
             speechBubble.alpha = 0;
-        
+    
             if (_mainCamera != null)
                 _lastCameraForward = _mainCamera.transform.forward;
-        
+    
             // Запускаем полную инициализацию
             StartCoroutine(FullInitialization());
             InitializeLocalizedComments();
-            
+    
+            // Инициализируем словарь категорий
+            foreach (var category in commentCategories)
+            {
+                _commentsDict[category.categoryName] = category;
+            }
+    
             if (_localizationManager != null)
             {
                 _localizationManager.OnLanguageChanged += OnLanguageChanged;
@@ -169,11 +175,14 @@ namespace UI
 
         private void InitializeLocalizedComments()
         {
+            _commentsDict.Clear(); // Очищаем словарь
+    
             // Инициализируем систему вариативности для каждой категории
             foreach (var category in commentCategories)
             {
                 category.availableKeys = new List<string>(category.localizationKeys);
                 _recentlySpokenCategories[category.categoryName] = new Queue<string>();
+                _commentsDict[category.categoryName] = category; // Добавляем в словарь
             }
         }
 
