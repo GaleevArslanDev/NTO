@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 233.65, y: 3.35, z: 161.90283}
-  m_LocalScale: {x: 250, y: 250.00014, z: 250.00012}
+  m_LocalScale: {x: 267.97098, y: 267.9712, z: 267.97122}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -103,6 +103,7 @@ MonoBehaviour:
   breakProgressUI: {fileID: 0}
   breakProgressSlider: {fileID: 0}
   breakCanvas: {fileID: 0}
+  resourceId: 
 --- !u!64 &4840950318124919027
 MeshCollider:
   m_ObjectHideFlags: 0
