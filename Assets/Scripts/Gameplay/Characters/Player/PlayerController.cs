@@ -1,3 +1,5 @@
+using Data.Game;
+using Gameplay.Systems;
 using UI;
 using UnityEngine;
 
@@ -31,6 +33,7 @@ namespace Gameplay.Characters.Player
         private float _standingHeight;
         private Vector3 _standingCameraPosition;
         private float _currentSpeed; 
+        private float _currentMouseSensitivity;
         public static PlayerController Instance { get; private set; }
 
         private void Awake()
@@ -54,10 +57,21 @@ namespace Gameplay.Characters.Player
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            
+            if (GameSettings.Instance != null)
+            {
+                _currentMouseSensitivity = GameSettings.Instance.MouseSensitivity;
+                GameSettings.Instance.OnSettingsChanged += OnSettingsChanged;
+            }
         
             _standingHeight = _characterController.height;
             if (playerCamera != null)
                 _standingCameraPosition = playerCamera.localPosition;
+        }
+        
+        private void OnSettingsChanged(SettingsSaveData settings)
+        {
+            _currentMouseSensitivity = settings.mouseSensitivity;
         }
 
         private void Update()
@@ -107,8 +121,13 @@ namespace Gameplay.Characters.Player
         {
             if (playerCamera == null) return;
         
-            var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+            var mouseX = Input.GetAxis("Mouse X") * _currentMouseSensitivity * Time.deltaTime;
+            var mouseY = Input.GetAxis("Mouse Y") * _currentMouseSensitivity * Time.deltaTime;
+            
+            if (GameSettings.Instance != null && GameSettings.Instance.InvertMouseY)
+            {
+                mouseY = -mouseY;
+            }
 
             _xRotation -= mouseY;
             _xRotation = Mathf.Clamp(_xRotation, -maxLookAngle, maxLookAngle);
@@ -169,6 +188,14 @@ namespace Gameplay.Characters.Player
             var raycastOrigin = transform.position + Vector3.up * crouchHeight;
         
             return !Physics.Raycast(raycastOrigin, Vector3.up, raycastDistance);
+        }
+        
+        private void OnDestroy()
+        {
+            if (GameSettings.Instance != null)
+            {
+                GameSettings.Instance.OnSettingsChanged -= OnSettingsChanged;
+            }
         }
     }
 }

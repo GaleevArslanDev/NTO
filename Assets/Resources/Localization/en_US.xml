@@ -13,6 +13,7 @@
 	<string name="ui_no">No</string>
 	<string name="ui_ok">OK</string>
 	<string name="ui_yes">Yes</string>
+	<string name="ui_apply">Apply</string>c
 
 	<!-- 3. SAVE/LOAD -->
 	<string name="save_autosave">Autosave</string>
@@ -284,7 +285,7 @@
 	<string name="ai-agent-phrases_metal-1">Metal is the foundation of civilization! And weapons...</string>
 	<string name="ai-agent-phrases_metal-2">Sturdy, reliable, like my algorithms!</string>
 	<string name="ai-agent-phrases_metal-3">So much useful stuff can be made from this!</string>
-	<string name="ai-agent-phrases_metal-4">Fe-labulous! More iron for the collection!</string>
+	<string name="ai-agent-phrases_metal-4">Fe-bulous! More iron for the collection!</string>
 	<string name="ai-agent-phrases_metal-5">Careful! May cause chemical addiction to collecting!</string>
 	<string name="ai-agent-phrases_metal-6">Metal! Heavy, but valuable... like my jokes.</string>
 	<string name="ai-agent-phrases_metal-7">Metal is like pizza, only you can't eat it. And not as tasty.</string>
@@ -351,7 +352,7 @@
 	<string name="ai-agent-phrases_random-8">Remember: life has no 'save' button, but this game does!</string>
 	<string name="ai-agent-phrases_random-9">The universe is infinite... like my jokes!</string>
 	<string name="ai-agent-phrases_random-10">Your ad could be here... or my witticism.</string>
-	<string name="ai-agent-phrases_random-11">If a tree falls in the forest and I'm not there, does it make a sound? What if I am there, but have no ears?</string>
+	<string name="ai-agent-phrases_random-11">If a tree falls in the forest, and I'm not there, does it make a sound? What if I am there, but have no ears?</string>
 	<string name="ai-agent-phrases_random-12">Sometimes I wonder: what if I'm just a line of code in someone's game?</string>
 	<string name="ai-agent-phrases_random-13">Just advice: breathe. It's good for your health!</string>
 	<string name="ai-agent-phrases_random-14">Did you know the average cloud weighs as much as 100 elephants? Useless, but interesting!</string>
@@ -371,4 +372,48 @@
 	<!-- 15. AI ASSISTANT MESSAGES -->
 	<string name="assistant_low_health">Your health is low!</string>
 	<string name="assistant_welcome">Welcome to the game!</string>
+
+	<!-- 16. UI -->
+	<!-- 16.1 Main Menu -->
+	<string name="main-menu_new-game">New Game</string>
+	<string name="main-menu_load-existing-game">Load Existing Game</string>
+	<string name="main-menu_settings">Settings</string>
+	<string name="main-menu_exit">Exit Game</string>
+
+	<!-- 16.2 Saves Panel -->
+	<string name="saves-panel_header">Saves</string>
+	<string name="saves-panel_no-saves">No saves found!</string>
+
+	<!-- 16.3 Settings -->
+	<string name="settings_header">Settings</string>
+	<string name="settings_general-header">General</string>
+	<string name="settings_language-header">Language</string>
+	<string name="settings_fullscreen">Fullscreen</string>
+	<string name="settings_audio-header">Audio</string>
+	<string name="settings_master-audio-header">Master Volume</string>
+	<string name="settings_sfx-audio-header">Sound Effects Volume</string>
+	<string name="settings_music-audio-header">Music Volume</string>
+	<string name="settings_graphics-header">Graphics</string>
+	<string name="settings_resolution-header">Resolution</string>
+	<string name="settings_quality-header">Quality</string>
+	<string name="settings_vsync">V-Sync</string>
+	<string name="settings_shadow-quality-header">Shadow Quality</string>
+	<string name="settings_texture-quality-header">Texture Quality</string>
+	<string name="settings_anti-aliasing-header">Anti-aliasing</string>
+	<string name="settings_controls-header">Controls</string>
+	<string name="settings_mouse-sensitivity-header">Mouse Sensitivity</string>
+	<string name="settings_invert">Invert Mouse Y-axis</string>
+	<string name="settings_saves-header">Saves</string>
+	<string name="settings_autosaves-header">Autosave Frequency</string>
+	<string name="settings_texture-quality_full">Full</string>
+	<string name="settings_texture-quality_half">Half</string>
+	<string name="settings_texture-quality_quarter">Quarter</string>
+	<string name="settings_texture-quality_eighth">Eighth</string>
+	<string name="settings_shadow-quality_off">Off</string>
+	<string name="settings_shadow-quality_hard">Hard Only</string>
+	<string name="settings_shadow-quality_all">All</string>
+	<string name="settings_anti-aliasing_off">Off</string>
+	<string name="settings_anti-aliasing_2x">2x</string>
+	<string name="settings_anti-aliasing_4x">4x</string>
+	<string name="settings_anti-aliasing_8x">8x</string>
 </resources>

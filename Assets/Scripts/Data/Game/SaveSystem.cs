@@ -230,13 +230,32 @@ namespace Data.Game
     [System.Serializable]
     public class SettingsSaveData
     {
+        // Аудио
         public string language = "ru-RU";
         public float masterVolume = 1.0f;
-        public float musicVolume = 1.0f;
+        public float musicVolume = 0.8f;
         public float sfxVolume = 1.0f;
+    
+        // Графика
         public bool fullscreen = true;
         public int resolutionWidth = 1920;
         public int resolutionHeight = 1080;
+        public int qualityLevel = 2; // Среднее качество
+        public bool vsyncEnabled = true;
+        public int textureQuality = 0;
+        public int shadowQuality = 2;
+        public int antiAliasing = 2;
+    
+        // Управление
+        public float mouseSensitivity = 300f;
+        public bool invertMouseY = false;
+    
+        // Сохранения
+        public float autoSaveInterval = 300f;
+        public bool enableScreenshots = true;
+        public int screenshotQuality = 75;
+        public bool enableChecksum = true;
+        public bool backupSaves = true;
     }
 
     // Specific dictionary types for serialization

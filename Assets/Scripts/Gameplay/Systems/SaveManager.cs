@@ -330,6 +330,17 @@ namespace Gameplay.Systems
                 var saveData = JsonUtility.FromJson<GameSaveData>(json);
 
                 ApplySaveData(saveData);
+                
+                if (saveData.settingsData != null && !string.IsNullOrEmpty(saveData.settingsData.language))
+                {
+                    Core.StaticSaveData.LanguageOverride = saveData.settingsData.language;
+            
+                    // Применяем настройки
+                    if (GameSettings.Instance != null)
+                    {
+                        GameSettings.Instance.SetCurrentSettings(saveData.settingsData);
+                    }
+                }
 
                 Debug.Log($"Game loaded: {filePath}");
                 OnGameLoaded?.Invoke();
@@ -714,7 +725,6 @@ namespace Gameplay.Systems
                 techData = CreateTechSaveData(),
                 inventoryData = CreateInventorySaveData(),
                 questData = CreateQuestSaveData(),
-                settingsData = CreateSettingsSaveData(),
                 collectedResourceIds = CreateCollectedResourcesData()
             };
         }
@@ -1038,27 +1048,6 @@ namespace Gameplay.Systems
             return questData;
         }
 
-        private SettingsSaveData CreateSettingsSaveData()
-        {
-            var settings = new SettingsSaveData();
-
-            // Настройки аудио
-            settings.masterVolume = AudioListener.volume;
-
-            // Настройки языка
-            if (LocalizationManager.LocalizationManager.Instance != null)
-            {
-                settings.language = LocalizationManager.LocalizationManager.Instance.GetCurrentLanguage();
-            }
-
-            // Настройки графики
-            settings.fullscreen = Screen.fullScreen;
-            settings.resolutionWidth = Screen.width;
-            settings.resolutionHeight = Screen.height;
-
-            return settings;
-        }
-
         private List<EnemySaveData> CreateEnemiesSaveData()
         {
             if (EnemySpawnManager.Instance != null)
@@ -1128,7 +1117,6 @@ namespace Gameplay.Systems
                 InitializeSystems();
 
                 // 1. Сначала применяем настройки и базовые данные
-                ApplySettingsSaveData(saveData.settingsData);
                 ApplyWorldSaveData(saveData.worldData);
 
                 // 2. Затем применяем игровые данные
@@ -1452,31 +1440,39 @@ namespace Gameplay.Systems
             }
         }
 
-        private void ApplySettingsSaveData(SettingsSaveData settingsData)
+        public void SaveSettings(SettingsSaveData settings)
         {
-            if (settingsData == null) return;
-
-            // Применяем настройки аудио
-            AudioListener.volume = settingsData.masterVolume;
-
-            // Применяем настройки языка
-            if (LocalizationManager.LocalizationManager.Instance != null &&
-                !string.IsNullOrEmpty(settingsData.language))
+            try
             {
-                LocalizationManager.LocalizationManager.Instance.SetLanguage(settingsData.language);
+                var settingsPath = Path.Combine(SaveFolder, "settings.json");
+                var json = JsonUtility.ToJson(settings, true);
+                File.WriteAllText(settingsPath, json);
+                Debug.Log($"Settings saved to: {settingsPath}");
             }
-
-            // Применяем настройки графики
-            Screen.SetResolution(
-                settingsData.resolutionWidth,
-                settingsData.resolutionHeight,
-                settingsData.fullscreen
-            );
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to save settings: {e.Message}");
+            }
         }
 
-        public SettingsSaveData GetSettingsData()
+        public SettingsSaveData LoadSettings()
         {
-            return CreateSettingsSaveData();
+            try
+            {
+                var settingsPath = Path.Combine(SaveFolder, "settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    var json = File.ReadAllText(settingsPath);
+                    var settings = JsonUtility.FromJson<SettingsSaveData>(json);
+                    return settings;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to load settings: {e.Message}");
+            }
+    
+            return null;
         }
 
         private void ApplyCollectedResourcesData(List<string> collectedResourceIds)

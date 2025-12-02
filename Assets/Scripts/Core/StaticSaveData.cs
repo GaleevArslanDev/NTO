@@ -6,6 +6,7 @@ namespace Core
     {
         public static string SaveToLoad { get; set; }
         public static bool ShouldLoadSave => !string.IsNullOrEmpty(SaveToLoad);
+        public static string LanguageOverride { get; set; }
         
         // Для передачи настроек между сценами
         public static Dictionary<string, object> CrossSceneData { get; } = new Dictionary<string, object>();

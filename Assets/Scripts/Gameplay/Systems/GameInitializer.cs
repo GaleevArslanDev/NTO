@@ -71,6 +71,11 @@ namespace Gameplay.Systems
                 Debug.Log("GameInitializer: Starting new game - no save to load");
                 SaveManager.Instance.StartNewGame();
             }
+            
+            if (LocalizationManager.LocalizationManager.Instance != null)
+            {
+                LocalizationManager.LocalizationManager.Instance.ReloadCurrentLanguage();
+            }
 
             Debug.Log("GameInitializer: Initialization complete");
         }
