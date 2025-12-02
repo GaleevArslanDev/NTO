@@ -76,11 +76,11 @@ namespace Gameplay.Characters.Player
     
             if (_currentReactiveNpc != null && _currentReactiveNpc.IsCalling)
             {
-                textMesh.text = $"{npcName} (зовет)\nE - Ответить\nF - Услуги";
+                textMesh.text = LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction-prompt_calling", npcName);
             }
             else
             {
-                textMesh.text = $"{npcName}\nF - Услуги";
+                textMesh.text = LocalizationManager.LocalizationManager.Instance.GetString("npc-interaction-prompt_no-calling", npcName);
             }
         }
     

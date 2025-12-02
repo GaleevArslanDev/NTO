@@ -24,8 +24,8 @@ namespace UI
         {
             _quest = quest;
         
-            titleText.text = quest.title;
-            descriptionText.text = quest.description;
+            titleText.text = quest.GetLocalizedTitle();
+            descriptionText.text = quest.GetLocalizedDescription();
         
             // Отображаем прогресс
             if (showProgress && quest.type == QuestType.KillEnemies)
@@ -38,7 +38,7 @@ namespace UI
             }
         
             // Отображаем награды
-            var rewardsString = quest.rewards.Aggregate("Награды: ", (current, reward) => current + $"{reward.type} x{reward.amount} ");
+            var rewardsString = quest.rewards.Aggregate(LocalizationManager.LocalizationManager.Instance.GetString("quest-award"), (current, reward) => current + $"{LocalizationManager.LocalizationManager.Instance.GetString(reward.type.ToString())} x{reward.amount} ");
             rewardsText.text = rewardsString;
         
             // Настраиваем кнопку выбора (только в режиме NPC)

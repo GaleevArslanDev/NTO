@@ -20,7 +20,7 @@ namespace UI
             // Здесь можно добавить получение иконки по типу предмета
             icon.sprite = itemDatabase.GetItemIcon(type);
         
-            amountText.text = $"{itemDatabase.GetItemData(type).name} x{amount}";
+            amountText.text = $"{LocalizationManager.LocalizationManager.Instance.GetString((itemDatabase.GetItemData(type).type).ToString())} x{amount}";
         
             // Проверяем достаточно ли ресурсов и меняем цвет
             var hasEnough = Inventory.Instance.GetItemCount(type) >= amount;

@@ -16,8 +16,10 @@ namespace Gameplay.Systems
         public class Quest
         {
             public string questId;
-            public string title;
-            public string description;
+            [Tooltip("Ключ локализации для названия квеста")]
+            public string titleLocalizationKey;
+            [Tooltip("Ключ локализации для описания квеста")]
+            public string descriptionLocalizationKey;
             public QuestType type;
             public List<ResourceCost> requirements;
             public List<ResourceCost> rewards;
@@ -74,6 +76,25 @@ namespace Gameplay.Systems
                 if (inventory == null) return false;
 
                 return requirements.All(req => inventory.GetItemCount(req.type) >= req.amount);
+            }
+            
+            public string GetLocalizedTitle()
+            {
+                if (!string.IsNullOrEmpty(titleLocalizationKey) && LocalizationManager.LocalizationManager.Instance != null)
+                {
+                    return LocalizationManager.LocalizationManager.Instance.GetString(titleLocalizationKey);
+                }
+
+                return "Localization failed";
+            }
+    
+            public string GetLocalizedDescription(params object[] args)
+            {
+                if (!string.IsNullOrEmpty(descriptionLocalizationKey) && LocalizationManager.LocalizationManager.Instance != null)
+                {
+                    return LocalizationManager.LocalizationManager.Instance.GetString(descriptionLocalizationKey, args);
+                }
+                return "Localization failed";
             }
         }
 
@@ -132,8 +153,6 @@ namespace Gameplay.Systems
                 _availableQuests.Add(new Quest
                 {
                     questId = "gather_wood_1",
-                    title = "Заготовка древесины",
-                    description = "Соберите 20 единиц дерева",
                     type = QuestType.GatherResources,
                     requirements = new List<ResourceCost> { new ResourceCost { type = ItemType.Wood, amount = 20 } },
                     rewards = new List<ResourceCost> { new ResourceCost { type = ItemType.Metal, amount = 5 } },
@@ -147,8 +166,6 @@ namespace Gameplay.Systems
                 _availableQuests.Add(new Quest
                 {
                     questId = "kill_beetles_1",
-                    title = "Очистка территории",
-                    description = "Уничтожьте 3 жуков",
                     type = QuestType.KillEnemies,
                     enemyType = "Beetle",
                     requiredKills = 3,
@@ -355,8 +372,6 @@ namespace Gameplay.Systems
             var quest = new Quest
             {
                 questId = questId,
-                title = $"Quest {questId}",
-                description = "Restored from save",
                 type = QuestType.GatherResources, // По умолчанию
                 requirements = new List<ResourceCost>(),
                 rewards = new List<ResourceCost>(),

@@ -68,9 +68,9 @@ namespace UI
 
             // Основная информация
             nodeIcon.sprite = _currentNode.icon;
-            nodeNameText.text = _currentNode.nodeName;
-            descriptionText.text = _currentNode.description;
-            tierText.text = $"Тир: {_currentNode.tier}";
+            nodeNameText.text = _currentNode.GetLocalizedName();
+            descriptionText.text = _currentNode.GetLocalizedDescription();
+            tierText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_tier-label")+_currentNode.tier.ToString();
 
             // Очищаем контейнеры
             ClearContainer(requirementsContainer);
@@ -110,7 +110,7 @@ namespace UI
                     if (prereqText != null)
                     {
                         var status = prereqNode.isUnlocked ? "✓" : "✗";
-                        prereqText.text = $"{status} {prereqNode.nodeName}";
+                        prereqText.text = $"{status} {prereqNode.GetLocalizedName()}";
                         prereqText.color = prereqNode.isUnlocked ? Color.green : Color.red;
                     }
                 }
@@ -124,14 +124,14 @@ namespace UI
         {
             return effect.effectType switch
             {
-                EffectType.FireRateMultiplier => $"Скорость стрельбы: +{(effect.floatValue - 1) * 100:F0}%",
-                EffectType.DamageMultiplier => $"Урон: +{(effect.floatValue - 1) * 100:F0}%",
-                EffectType.MiningSpeedMultiplier => $"Скорость добычи: +{(effect.floatValue - 1) * 100:F0}%",
-                EffectType.InventoryCapacity => $"Вместимость инвентаря: {effect.intValue}",
-                EffectType.CollectionRangeMultiplier => $"Радиус сбора: +{(effect.floatValue - 1) * 100:F0}%",
-                EffectType.PassiveIncome => $"Пассивный доход: {effect.stringValue} ({effect.floatValue}/мин)",
-                EffectType.UnlockBuilding => $"Разблокирует: {effect.stringValue}",
-                EffectType.UnlockUpgradeTier => $"Открывает тир улучшений: {effect.intValue}",
+                EffectType.FireRateMultiplier => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_fire-rate-multiplier-label", ((effect.floatValue - 1) * 100).ToString("F0")),
+                EffectType.DamageMultiplier => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_damage-multiplier-label", ((effect.floatValue - 1) * 100).ToString("F0")),
+                EffectType.MiningSpeedMultiplier => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_mining-speed-label", ((effect.floatValue - 1) * 100).ToString("F0")),
+                EffectType.InventoryCapacity => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_inventory-capacity-label", effect.intValue.ToString()),
+                EffectType.CollectionRangeMultiplier => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_collection-range-multiplier-label", ((effect.floatValue - 1) * 100).ToString("F0")),
+                EffectType.PassiveIncome => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_passive-income-label", effect.stringValue, effect.floatValue.ToString()),
+                EffectType.UnlockBuilding => LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_unlock-building-label", effect.stringValue),
+                EffectType.UnlockUpgradeTier =>LocalizationManager.LocalizationManager.Instance.GetString("tech-node-detail-panel_unlock-upgrade-tier-label", effect.intValue.ToString()),
                 _ => effect.effectType.ToString()
             };
         }
@@ -140,9 +140,9 @@ namespace UI
         {
             if (_currentNode.isUnlocked)
             {
-                statusText.text = "<color=green>✓ Разблокировано</color>";
+                statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_unlocked");
                 unlockButton.interactable = false;
-                unlockButtonText.text = "Изучено";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("researched");
                 return;
             }
 
@@ -151,36 +151,36 @@ namespace UI
 
             if (!hasPrerequisites)
             {
-                statusText.text = "<color=red>✗ Не выполнены требования</color>";
+                statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_no-prerequisites");
                 unlockButton.interactable = false;
-                unlockButtonText.text = "Недоступно";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("unavailable");
             }
             else if (!canUnlock)
             {
-                statusText.text = "<color=red>✗ Недостаточно ресурсов</color>";
+                statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_no-resources");
                 unlockButton.interactable = false;
-                unlockButtonText.text = "Недоступно";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("unavailable");
             }
             else
             {
-                statusText.text = "<color=green>✓ Доступно для изучения</color>";
+                statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_available");
                 unlockButton.interactable = true;
-                unlockButtonText.text = "Изучить";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("upgrade");
             }
 
             // Проверяем уровень ратуши
             var townHallTier = TownHall.Instance.GetUnlockedTechTier();
             if (_currentNode.tier > townHallTier)
             {
-                statusText.text = $"<color=red>✗ Требуется уровень ратуши: {_currentNode.tier}</color>";
+                statusText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_no-town-hall-tier", _currentNode.tier.ToString());
                 unlockButton.interactable = false;
-                unlockButtonText.text = "Недоступно";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("unavailable");
             }
 
             if (!_canUpgrade)
             {
                 unlockButton.interactable = false;
-                unlockButtonText.text = "Доступно только у NPC";
+                unlockButtonText.text = LocalizationManager.LocalizationManager.Instance.GetString("tech-node_available_in_town");
             }
         }
 

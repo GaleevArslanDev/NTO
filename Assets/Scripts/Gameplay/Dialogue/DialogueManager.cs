@@ -158,7 +158,7 @@ namespace Gameplay.Dialogue
             // ОТЛАДКА: Выводим информацию о выборе
             Debug.Log($"   Обработка выбора диалога:");
             Debug.Log($"   NPC: {npcData.npcName} (ID: {npcData.npcID})");
-            Debug.Log($"   Опция: '{option.optionText}'");
+            Debug.Log($"   Опция: '{option.GetLocalizedText()}'");
             Debug.Log($"   Изменение отношений: {option.relationshipChange}");
         
             // Изменяем отношения
@@ -211,7 +211,7 @@ namespace Gameplay.Dialogue
                 npcData.npcID, 
                 _currentTree.treeName, 
                 CurrentNode.nodeID, 
-                option.optionText,
+                option.GetLocalizedText(),
                 option.setFlags
             );
         

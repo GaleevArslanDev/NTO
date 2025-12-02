@@ -61,13 +61,22 @@ namespace UI
         [SerializeField] private float playerStopThreshold = 3f;
 
         private AssistantMood _currentMood = AssistantMood.Neutral;
+        
+        [Header("Localization Settings")]
+        [SerializeField] private string commentBaseKey = "assistant";
     
-        [Serializable]
+        [System.Serializable]
         public class CommentCategory
         {
             public string categoryName;
-            public List<string> comments;
+            public List<string> localizationKeys; // Ключи вместо готовых фраз
+            [NonSerialized] public List<string> availableKeys; // Доступные ключи после фильтрации
         }
+        
+        private LocalizationManager.LocalizationManager _localizationManager;
+        
+        private Dictionary<string, Queue<string>> _recentlySpokenCategories = new Dictionary<string, Queue<string>>();
+        private const int CATEGORY_MEMORY_SIZE = 7; 
     
         [Header("Comment Database")]
         public List<CommentCategory> commentCategories;
@@ -84,8 +93,7 @@ namespace UI
         private bool _shouldMove = true;
 
         // Speech
-        private Dictionary<string, List<string>> _commentsDict = new();
-        private List<string> _recentlySpoken = new();
+        private Dictionary<string, CommentCategory> _commentsDict = new();
         private const int MemorySize = 5;
         private Coroutine _currentSpeechCoroutine;
         private Coroutine _bounceCoroutine;
@@ -132,19 +140,50 @@ namespace UI
             if (assistantRectTransform == null)
                 assistantRectTransform = GetComponent<RectTransform>();
         
-            InitializeComments();
             FindPlayerController();
+            _localizationManager = LocalizationManager.LocalizationManager.Instance;
         }
 
         private void Start()
         {
             speechBubble.alpha = 0;
-        
+    
             if (_mainCamera != null)
                 _lastCameraForward = _mainCamera.transform.forward;
-        
+    
             // Запускаем полную инициализацию
             StartCoroutine(FullInitialization());
+            InitializeLocalizedComments();
+    
+            // Инициализируем словарь категорий
+            foreach (var category in commentCategories)
+            {
+                _commentsDict[category.categoryName] = category;
+            }
+    
+            if (_localizationManager != null)
+            {
+                _localizationManager.OnLanguageChanged += OnLanguageChanged;
+            }
+        }
+        
+        private void OnLanguageChanged(string languageCode)
+        {
+            // Переинициализируем комментарии при смене языка
+            InitializeLocalizedComments();
+        }
+
+        private void InitializeLocalizedComments()
+        {
+            _commentsDict.Clear(); // Очищаем словарь
+    
+            // Инициализируем систему вариативности для каждой категории
+            foreach (var category in commentCategories)
+            {
+                category.availableKeys = new List<string>(category.localizationKeys);
+                _recentlySpokenCategories[category.categoryName] = new Queue<string>();
+                _commentsDict[category.categoryName] = category; // Добавляем в словарь
+            }
         }
 
         private IEnumerator FullInitialization()
@@ -164,6 +203,90 @@ namespace UI
             _movementCoroutine = StartCoroutine(MovementRoutine());
             StartCoroutine(IdleActionsRoutine());
             StartCoroutine(PlayerTrackingRoutine());
+        }
+        
+        private string GetUniqueLocalizedComment(string categoryName)
+        {
+            if (!_commentsDict.TryGetValue(categoryName, out var category))
+                return GetFallbackText(categoryName);
+
+            // Если нет доступных ключей, сбрасываем память
+            if (category.availableKeys.Count == 0)
+            {
+                ResetCategoryMemory(categoryName);
+            }
+
+            // Выбираем случайный доступный ключ
+            var randomIndex = Random.Range(0, category.availableKeys.Count);
+            var selectedKey = category.availableKeys[randomIndex];
+            
+            // Убираем выбранный ключ из доступных
+            category.availableKeys.RemoveAt(randomIndex);
+            
+            // Добавляем в историю произнесенных
+            var spokenQueue = _recentlySpokenCategories[categoryName];
+            spokenQueue.Enqueue(selectedKey);
+            
+            // Ограничиваем размер памяти
+            if (spokenQueue.Count > CATEGORY_MEMORY_SIZE)
+            {
+                var oldestKey = spokenQueue.Dequeue();
+                // Возвращаем старый ключ в доступные, если он еще существует
+                if (category.localizationKeys.Contains(oldestKey) && !category.availableKeys.Contains(oldestKey))
+                {
+                    category.availableKeys.Add(oldestKey);
+                }
+            }
+
+            // Получаем локализованный текст
+            return GetLocalizedText(selectedKey);
+        }
+        
+        private void ResetCategoryMemory(string categoryName)
+        {
+            if (_commentsDict.TryGetValue(categoryName, out var category))
+            {
+                category.availableKeys = new List<string>(category.localizationKeys);
+                _recentlySpokenCategories[categoryName].Clear();
+            }
+        }
+        
+        private string GetLocalizedText(string key)
+        {
+            if (_localizationManager != null)
+            {
+                var localizedText = _localizationManager.GetString(key);
+                if (!localizedText.StartsWith("[") && !localizedText.EndsWith("]"))
+                {
+                    return localizedText;
+                }
+            }
+            
+            // Fallback: пытаемся найти любой вариант
+            return GetRandomLocalizedVariant(key);
+        }
+        
+        private string GetRandomLocalizedVariant(string baseKey)
+        {
+            if (_localizationManager != null)
+            {
+                return _localizationManager.GetRandomString(baseKey);
+            }
+            
+            return $"[{baseKey}]"; // Fallback
+        }
+        
+        private string GetFallbackText(string category)
+        {
+            return category switch
+            {
+                "Combat" => "Отличный бой!",
+                "ResourceCollection" => "Ресурсы собраны!",
+                "Technology" => "Технология исследована!",
+                "Construction" => "Строительство завершено!",
+                "LowHealth" => "Внимание! Низкое здоровье!",
+                _ => "Интересно..."
+            };
         }
 
         private void OnRectTransformDimensionsChange()
@@ -280,14 +403,6 @@ namespace UI
             }
         }
     
-        private void InitializeComments()
-        {
-            foreach (var category in commentCategories)
-            {
-                _commentsDict[category.categoryName] = category.comments;
-            }
-        }
-    
         private IEnumerator PlayerTrackingRoutine()
         {
             while (true)
@@ -346,7 +461,7 @@ namespace UI
     
             if (Random.value < npcShoutCommentChance)
             {
-                SpeakRandomFromCategory("NpcCalling");
+                SpeakLocalized("NpcCalling");
             }
         }
 
@@ -356,7 +471,7 @@ namespace UI
     
             if (Random.value < npcIgnoredCommentChance)
             {
-                SpeakRandomFromCategory("NpcIgnored");
+                SpeakLocalized("NpcIgnored");
             }
         }
     
@@ -517,7 +632,7 @@ namespace UI
             
             if (Random.value < quickTurnCommentChance)
             {
-                SpeakRandomFromCategory("CameraQuickTurn");
+                SpeakLocalized("CameraQuickTurn");
             }
         }
 
@@ -530,7 +645,7 @@ namespace UI
             if (!(Random.value < quickMoveCommentChance)) return;
             if (!(acceleration.magnitude > playerAccelThreshold * 2f)) return;
             TriggerMoodChange(AssistantMood.Excited, 2f);
-            SpeakRandomFromCategory("QuickMovement");
+            SpeakLocalized("QuickMovement");
         }
 
         private void OnPlayerStoppedQuickly(Vector3 previousVelocity)
@@ -541,7 +656,7 @@ namespace UI
             
             if (Random.value < quickStopCommentChance)
             {
-                SpeakRandomFromCategory("QuickStop");
+                SpeakLocalized("QuickStop");
             }
         }
     
@@ -586,37 +701,23 @@ namespace UI
             
                 if (!_isSpeaking && !IsAnyImportantUIOpen())
                 {
-                    SpeakRandomFromCategory("Random");
+                    SpeakLocalized("Random");
                 }
             }
         }
-    
-        private string GetUniqueComment(string category)
-        {
-            if (!_commentsDict.TryGetValue(category, out var value)) return "Category not found!";
         
-            var availableComments = new List<string>(value);
-    
-            foreach (var spoken in _recentlySpoken)
+        private void SpeakLocalized(string category, CommentPriority priority = CommentPriority.Normal)
+        {
+            var text = GetUniqueLocalizedComment(category);
+            
+            if (priority == CommentPriority.Normal)
             {
-                availableComments.Remove(spoken);
+                Speak(text);
             }
-    
-            if (availableComments.Count == 0)
+            else
             {
-                _recentlySpoken.Clear();
-                availableComments = new List<string>(_commentsDict[category]);
+                SpeakWithPriority(text, priority);
             }
-    
-            var selected = availableComments[Random.Range(0, availableComments.Count)];
-    
-            _recentlySpoken.Add(selected);
-            if (_recentlySpoken.Count > MemorySize)
-            {
-                _recentlySpoken.RemoveAt(0);
-            }
-    
-            return selected;
         }
 
         private void Speak(string text)
@@ -705,16 +806,16 @@ namespace UI
             {
                 case ItemType.CrystalRed:
                 case ItemType.CrystalBlue:
-                    SpeakRandomFromCategory("CrystalCollection");
+                    SpeakLocalized("CrystalCollection");
                     break;
                 case ItemType.Metal:
-                    SpeakRandomFromCategory("MetalCollection");
+                    SpeakLocalized("MetalCollection");
                     break;
                 case ItemType.Wood:
-                    SpeakRandomFromCategory("WoodCollection");
+                    SpeakLocalized("WoodCollection");
                     break;
                 case ItemType.Stone:
-                    SpeakRandomFromCategory("StoneCollection");
+                    SpeakLocalized("StoneCollection");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
@@ -727,7 +828,7 @@ namespace UI
         
             if (Random.value < combatCommentChance)
             {
-                SpeakRandomFromCategory("Combat");
+                SpeakLocalized("Combat");
             }
         }
     
@@ -735,35 +836,27 @@ namespace UI
         {
             if (_isSpeaking) return;
         
-            SpeakRandomFromCategory("Technology");
+            SpeakLocalized("Technology");
         }
     
         public void OnBuildingUpgraded(string buildingName)
         {
             if (_isSpeaking) return;
         
-            SpeakRandomFromCategory("Construction");
+            SpeakLocalized("Construction");
         }
     
         public void OnPlayerLowHealth()
         {
             if (_isSpeaking) return;
         
-            SpeakWithPriority(GetUniqueComment("LowHealth"), CommentPriority.High);
+            SpeakLocalized("LowHealth", CommentPriority.High);
         }
     
         public void OnPlayerEnterNewArea(string areaName)
         {
             if (_isSpeaking) return;
-            SpeakRandomFromCategory("NewArea");
-        }
-
-        private void SpeakRandomFromCategory(string category)
-        {
-            if (_commentsDict.ContainsKey(category) && _commentsDict[category].Count > 0)
-            {
-                Speak(GetUniqueComment(category));
-            }
+            SpeakLocalized("NewArea");
         }
     
         private static bool IsAnyImportantUIOpen()
@@ -800,27 +893,13 @@ namespace UI
             public List<string> spokenComments;
             public Vector2 position;
         }
-    
-        public AssistantData GetSaveData()
-        {
-            return new AssistantData
-            {
-                currentMood = _currentMood,
-                spokenComments = _recentlySpoken,
-                position = _currentPixelOffset
-            };
-        }
-    
-        public void LoadData(AssistantData data)
-        {
-            if (data == null) return;
         
-            SetMood(data.currentMood);
-            _recentlySpoken = data.spokenComments ?? new List<string>();
-            
-            CalculateMovementBounds();
-            assistantRectTransform.anchoredPosition = ClampToMovementBounds(_defaultPosition + data.position);
-            _currentPixelOffset = data.position;
+        private void OnDestroy()
+        {
+            if (_localizationManager != null)
+            {
+                _localizationManager.OnLanguageChanged -= OnLanguageChanged;
+            }
         }
     }
 }

@@ -22,11 +22,6 @@ namespace UI
         [SerializeField] private Transform upgradesContainer;
         [SerializeField] private GameObject upgradeInfoPrefab;
 
-        [Header("Texts")]
-        [SerializeField] private string titleFormat = "Ратуша (Уровень {0})";
-        [SerializeField] private string descriptionFormat = "Улучшение ратуши до уровня {0} откроет новые возможности для вашего поселения.";
-        [SerializeField] private string[] levelDescriptions;
-
         private TownHall _townHall;
         public bool isUiOpen;
 
@@ -88,14 +83,11 @@ namespace UI
             var currentLevel = _townHall.GetCurrentLevel();
             var nextLevel = currentLevel + 1;
     
-            titleText.text = string.Format(titleFormat, currentLevel);
+            titleText.text = LocalizationManager.LocalizationManager.Instance.GetString("town-hall_title", currentLevel.ToString());
+            
+            descriptionText.text = LocalizationManager.LocalizationManager.Instance.GetString("town-hall_level-description-" + nextLevel.ToString());
     
-            var description = nextLevel <= _townHall.GetMaxLevel() && nextLevel - 1 < levelDescriptions.Length 
-                ? levelDescriptions[nextLevel - 1] 
-                : "Максимальный уровень достигнут.";
-            descriptionText.text = description;
-    
-            levelText.text = $"Текущий уровень: {currentLevel} / {_townHall.GetMaxLevel()}";
+            levelText.text = LocalizationManager.LocalizationManager.Instance.GetString("town-hall_level", currentLevel.ToString(), _townHall.GetMaxLevel().ToString());
 
             ClearContainer(requirementsContainer);
             ClearContainer(upgradesContainer);
@@ -117,12 +109,12 @@ namespace UI
             else
             {
                 var text = Instantiate(resourceRequirementPrefab, requirementsContainer);
-                text.GetComponentInChildren<TextMeshProUGUI>().text = "Максимальный уровень достигнут";
+                text.GetComponentInChildren<TextMeshProUGUI>().text = LocalizationManager.LocalizationManager.Instance.GetString("town-hall_max-level-achived");
             }
 
             upgradeButton.interactable = _townHall.CanUpgrade() && !_townHall.IsMaxLevel();
             upgradeButton.GetComponentInChildren<TextMeshProUGUI>().text = 
-                _townHall.IsMaxLevel() ? "Макс. уровень" : $"Улучшить до уровня {nextLevel}";
+                _townHall.IsMaxLevel() ? LocalizationManager.LocalizationManager.Instance.GetString("town-hall_max-level-short") : LocalizationManager.LocalizationManager.Instance.GetString("town-hall_upgrade-to", nextLevel.ToString());
         }
 
         private void ShowBuildingUpgrades(int nextLevel)

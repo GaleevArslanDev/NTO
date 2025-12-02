@@ -18,7 +18,9 @@ namespace Gameplay.Dialogue
     public class DialogueNode
     {
         public string nodeID;
-        [TextArea(3, 5)] public string npcText;
+        [Tooltip("Ключ локализации для текста NPC")]
+        public string localizationKey;
+        [TextArea(3, 5)] 
         public DialogueOption[] playerOptions;
         public string[] triggers;
         public Condition[] conditions;
@@ -26,12 +28,23 @@ namespace Gameplay.Dialogue
         public Emotion emotion = Emotion.Neutral;
         public AudioClip voiceLine;
         public float typingSpeed = 0.05f;
+        
+        // Метод для получения локализованного текста
+        public string GetLocalizedText()
+        {
+            if (!string.IsNullOrEmpty(localizationKey) && LocalizationManager.LocalizationManager.Instance != null)
+            {
+                return LocalizationManager.LocalizationManager.Instance.GetString(localizationKey);
+            }
+            return "Localization failed"; // Fallback
+        }
     }
 
     [System.Serializable]
     public class DialogueOption
     {
-        [TextArea(1, 2)] public string optionText;
+        [Tooltip("Ключ локализации для текста опции")]
+        public string localizationKey;
         public string nextNodeID;
         public int relationshipChange;
         public string memoryToAdd;
@@ -41,7 +54,18 @@ namespace Gameplay.Dialogue
         public string[] setFlags;
         public PersonalityPreference personalityPreference;
         public bool isExitOption;
+        
+        // Метод для получения локализованного текста
+        public string GetLocalizedText()
+        {
+            if (!string.IsNullOrEmpty(localizationKey) && LocalizationManager.LocalizationManager.Instance != null)
+            {
+                return LocalizationManager.LocalizationManager.Instance.GetString(localizationKey);
+            }
+            return "Localization failed"; // Fallback
+        }
     }
+
 
     [System.Serializable]
     public class Condition

@@ -20,7 +20,7 @@ namespace UI
         {
             saveNameText.text = GetDisplayName(saveInfo.saveName);
             timestampText.text = saveInfo.timestamp;
-            detailsText.text = $"Уровень: {saveInfo.playerLevel}";
+            detailsText.text = LocalizationManager.LocalizationManager.Instance.GetString("save-entry_player-level-label", saveInfo.playerLevel.ToString());
             Debug.Log($"Screenshot data length: {saveInfo.screenshotData}");
             // Загрузка скриншота
             if (!string.IsNullOrEmpty(saveInfo.screenshotData))
@@ -44,11 +44,11 @@ namespace UI
         
         private string GetDisplayName(string saveName)
         {
-            if (saveName == "autosave") return "Автосохранение";
-            if (saveName == "quicksave") return "Быстрое сохранение";
+            if (saveName == "autosave") return LocalizationManager.LocalizationManager.Instance.GetString("save_autosave");
+            if (saveName == "quicksave") return LocalizationManager.LocalizationManager.Instance.GetString("save_quicksave");
             if (saveName.StartsWith("manual_"))
             {
-                return saveName.Replace("manual_", "Сохранение ");
+                return saveName.Replace("manual_", LocalizationManager.LocalizationManager.Instance.GetString("save_manual"));
             }
             return saveName;
         }

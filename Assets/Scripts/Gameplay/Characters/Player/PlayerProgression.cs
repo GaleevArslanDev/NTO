@@ -94,11 +94,11 @@ namespace Gameplay.Characters.Player
             if (SaveManager.Instance != null)
                 SaveManager.Instance.AutoSave();
     
-            Debug.Log($"Технология разблокирована: {node.nodeName}");
+            Debug.Log($"Технология разблокирована: {node.GetLocalizedName()}");
 
             if (AIAssistant.Instance != null)
             {
-                AIAssistant.Instance.OnTechUnlocked(node.nodeName);
+                AIAssistant.Instance.OnTechUnlocked(node.GetLocalizedName());
             }
             
             if (SaveManager.Instance != null)
