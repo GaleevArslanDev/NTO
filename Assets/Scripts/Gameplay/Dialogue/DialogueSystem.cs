@@ -19,8 +19,7 @@ namespace Gameplay.Dialogue
     {
         public string nodeID;
         [Tooltip("Ключ локализации для текста NPC")]
-        public string localizationKey;
-        [TextArea(3, 5)] 
+        public string localizationKey; 
         public DialogueOption[] playerOptions;
         public string[] triggers;
         public Condition[] conditions;
