@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<!-- 1. MAIN MENU -->
-	<string name="main_menu_start">Начать игру</string>
-	<string name="main_menu_load">Загрузить игру</string>
-	<string name="main_menu_settings">Настройки</string>
-	<string name="main_menu_exit">Выход</string>
-
 	<!-- 2. UI COMMON -->
 	<string name="ui_back">Назад</string>
 	<string name="ui_cancel">Отмена</string>
+	<string name="ui_apply">Применить</string>
 	<string name="ui_close">Закрыть</string>
 	<string name="ui_no">Нет</string>
 	<string name="ui_ok">OK</string>
@@ -371,4 +366,48 @@
 	<!-- 15. AI ASSISTANT MESSAGES -->
 	<string name="assistant_low_health">Ваше здоровье на низком уровне!</string>
 	<string name="assistant_welcome">Добро пожаловать в игру!</string>
+	
+	<!-- 16. UI -->
+	<!-- 16.1 Main Menu -->
+	<string name="main-menu_new-game">Новая игра</string>
+	<string name="main-menu_load-existing-game">Загрузить существующую игру</string>
+	<string name="main-menu_settings">Настройки</string>
+	<string name="main-menu_exit">Выйти из игры</string>
+
+	<!-- 16.2 Saves Panel -->
+	<string name="saves-panel_header">Сохранения</string>
+	<string name="saves-panel_no-saves">Сохранений нет!</string>
+	
+	<!-- 16.3 Settings -->
+	<string name="settings_header">Настройки</string>
+	<string name="settings_general-header">Общие</string>
+	<string name="settings_language-header">Язык</string>
+	<string name="settings_fullscreen">Полноэкранный режим</string>
+	<string name="settings_audio-header">Звук</string>
+	<string name="settings_master-audio-header">Громкость общего звука</string>
+	<string name="settings_sfx-audio-header">Громкость звуковых эффектов</string>
+	<string name="settings_music-audio-header">Громкость фоновой музыки</string>
+	<string name="settings_graphics-header">Графика</string>
+	<string name="settings_resolution-header">Разрешение</string>
+	<string name="settings_quality-header">Качество</string>
+	<string name="settings_vsync">V-Sync</string>
+	<string name="settings_shadow-quality-header">Качество теней</string>
+	<string name="settings_texture-quality-header">Качество текстур</string>
+	<string name="settings_anti-aliasing-header">Anti-aliasing</string>
+	<string name="settings_controls-header">Anti-aliasing</string>
+	<string name="settings_mouse-sensitivity-header">Чувствительность мыши</string>
+	<string name="settings_invert">Инвертировать Y-ось мыши</string>
+	<string name="settings_saves-header">Сохранения</string>
+	<string name="settings_autosaves-header">Частота автосохранений</string>
+	<string name="settings_texture-quality_full">Полное</string>
+	<string name="settings_texture-quality_half">Половина</string>
+	<string name="settings_texture-quality_quarter">Четверть</string>
+	<string name="settings_texture-quality_eighth">Восьмая</string>
+	<string name="settings_shadow-quality_off">Выключены</string>
+	<string name="settings_shadow-quality_hard">Только жесткие</string>
+	<string name="settings_shadow-quality_all">Все</string>
+	<string name="settings_anti-aliasing_off">Выключен</string>
+	<string name="settings_anti-aliasing_2x">2x</string>
+	<string name="settings_anti-aliasing_4x">4x</string>
+	<string name="settings_anti-aliasing_8x">8x</string>
 </resources>

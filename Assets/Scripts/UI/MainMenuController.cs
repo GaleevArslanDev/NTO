@@ -10,7 +10,6 @@ namespace UI
     {
         [Header("Scene Names")]
         [SerializeField] private string gameSceneName = "GameScene";
-        [SerializeField] private string settingsSceneName = "GameScene";
         
         [Header("UI References")]
         [SerializeField] private Button newGameButton;
@@ -24,6 +23,9 @@ namespace UI
         [SerializeField] private Transform savesContainer;
         [SerializeField] private GameObject saveEntryPrefab;
         [SerializeField] private Button closeSaveSelectionButton;
+        
+        [Header("Settings")]
+        [SerializeField] private GameObject settingsPanel;
         
         private void Start()
         {
@@ -39,6 +41,7 @@ namespace UI
             
             // Создаем SaveManager если его нет
             EnsureSaveManagerExists();
+            //LocalizationManager.LocalizationManager.Instance.Initialize();
         }
         
         private void EnsureSaveManagerExists()
@@ -134,7 +137,17 @@ namespace UI
         
         private void ShowSettings()
         {
-            Debug.Log("Opening settings...");
+            if (settingsPanel != null)
+            {
+                settingsPanel.SetActive(true);
+        
+                // Инициализируем SettingsUI если он есть в панели
+                var settingsUI = settingsPanel.GetComponent<SettingsUI>();
+                if (settingsUI != null)
+                {
+                    settingsUI.ShowSettings();
+                }
+            }
         }
         
         private void ExitGame()

@@ -12,7 +12,6 @@ namespace LocalizationManager
 
         [Header("Settings")]
         [SerializeField] private string defaultLanguage = "ru-RU";
-        [SerializeField] private string saveKey = "SelectedLanguage";
 
         [Header("Available Languages")]
         [SerializeField] private List<Localization> availableLanguages = new List<Localization>
@@ -24,14 +23,10 @@ namespace LocalizationManager
 
         private Dictionary<string, Dictionary<string, string>> _localizationData = new();
         private string _currentLanguage;
+        private Dictionary<string, string> _cachedStrings = new();
+        private bool _isInitialized = false;
 
         public event Action<string> OnLanguageChanged;
-
-        // Кэш для часто используемых строк
-        private Dictionary<string, string> _cachedStrings = new();
-        
-        // Поддержка плейсхолдеров
-        private readonly char[] _placeholderChars = { '{', '}' };
 
         private void Awake()
         {
@@ -39,33 +34,60 @@ namespace LocalizationManager
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                Initialize();
             }
             else
             {
                 Destroy(gameObject);
+                return;
             }
+        }
+
+        private void Start()
+        {
+            Initialize();
         }
 
         private void Initialize()
         {
-            // Загружаем язык из сохранений или используем системный
-            if (SaveManager.Instance != null && SaveManager.Instance.GetSettingsData() != null)
+            if (_isInitialized) return;
+
+            // Определяем язык в порядке приоритета:
+            // 1. Из статических данных (если загружаем сейв)
+            // 2. Из сохраненных настроек
+            // 3. Системный язык
+            // 4. Язык по умолчанию
+            
+            string targetLanguage = defaultLanguage;
+            
+            // Проверяем статические данные для загрузки игры
+            if (!string.IsNullOrEmpty(Core.StaticSaveData.LanguageOverride))
             {
-                var settings = SaveManager.Instance.GetSettingsData();
-                _currentLanguage = settings.language;
+                targetLanguage = Core.StaticSaveData.LanguageOverride;
             }
+            // Пытаемся загрузить из сохранений
+            else if (SaveManager.Instance != null && SaveManager.Instance.LoadSettings() != null)
+            {
+                var settings = SaveManager.Instance.LoadSettings();
+                if (!string.IsNullOrEmpty(settings.language))
+                {
+                    targetLanguage = settings.language;
+                }
+            }
+            // Используем системный язык
             else
             {
-                _currentLanguage = GetSystemLanguage();
+                targetLanguage = GetSystemLanguage();
             }
 
-            if (!availableLanguages.Exists(lang => lang.localizationCode == _currentLanguage))
+            // Проверяем, что язык доступен
+            if (!availableLanguages.Exists(lang => lang.localizationCode == targetLanguage))
             {
-                _currentLanguage = defaultLanguage;
+                Debug.LogWarning($"Language {targetLanguage} not available, falling back to {defaultLanguage}");
+                targetLanguage = defaultLanguage;
             }
 
-            LoadLanguage(_currentLanguage);
+            LoadLanguage(targetLanguage);
+            _isInitialized = true;
         }
 
         private string GetSystemLanguage()
@@ -85,39 +107,47 @@ namespace LocalizationManager
         {
             if (!availableLanguages.Exists(lang => lang.localizationCode == languageCode))
             {
-                Debug.LogError($"Language {languageCode} not found!");
-                return;
+                Debug.LogError($"Language {languageCode} not found in available languages!");
+                languageCode = defaultLanguage;
             }
 
             // Очищаем кэш
             _cachedStrings.Clear();
 
+            // Если язык уже загружен, просто переключаемся
             if (_localizationData.ContainsKey(languageCode))
             {
                 _currentLanguage = languageCode;
-                SaveLanguagePreference(languageCode);
                 OnLanguageChanged?.Invoke(languageCode);
+                Debug.Log($"Switched to language: {languageCode}");
                 return;
             }
 
             var localization = availableLanguages.Find(lang => lang.localizationCode == languageCode);
-            var xml = Resources.Load<TextAsset>($"Localization/{localization.stringsFileName}");
+            if (localization == null)
+            {
+                Debug.LogError($"Localization for {languageCode} not found!");
+                return;
+            }
 
+            var xml = Resources.Load<TextAsset>($"Localization/{localization.stringsFileName}");
             if (xml == null)
             {
-                Debug.LogError($"Localization file for {languageCode} not found!");
+                Debug.LogError($"Localization file for {languageCode} not found at: Localization/{localization.stringsFileName}");
                 return;
             }
 
             try
             {
                 var document = System.Xml.Linq.XDocument.Parse(xml.text);
-                if (document.Root == null) return;
-                var stringElements = document.Root.Elements("string");
+                if (document.Root == null)
+                {
+                    Debug.LogError($"XML root is null for {languageCode}");
+                    return;
+                }
 
                 var languageDict = new Dictionary<string, string>();
-
-                foreach (var element in stringElements)
+                foreach (var element in document.Root.Elements("string"))
                 {
                     var key = element.Attribute("name")?.Value;
                     var value = element.Value;
@@ -125,41 +155,32 @@ namespace LocalizationManager
                     if (!string.IsNullOrEmpty(key))
                     {
                         languageDict[key] = value;
-                        // Кэшируем строку
-                        _cachedStrings[key] = value;
                     }
                 }
 
                 _localizationData[languageCode] = languageDict;
                 _currentLanguage = languageCode;
-                SaveLanguagePreference(languageCode);
-                OnLanguageChanged?.Invoke(languageCode);
-
+                
                 Debug.Log($"Language {languageCode} loaded successfully with {languageDict.Count} strings");
+                OnLanguageChanged?.Invoke(languageCode);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error loading language {languageCode}: {e.Message}");
-            }
-        }
-
-        private void SaveLanguagePreference(string languageCode)
-        {
-            if (SaveManager.Instance != null)
-            {
-                var settings = SaveManager.Instance.GetSettingsData();
-                if (settings != null)
-                {
-                    settings.language = languageCode;
-                    SaveManager.Instance.AutoSave();
-                }
+                Debug.LogError($"Error loading language {languageCode}: {e.Message}\n{e.StackTrace}");
             }
         }
 
         public string GetString(string key, params object[] args)
         {
-            // Пытаемся получить из кэша
-            if (_cachedStrings.TryGetValue(key, out var cachedValue))
+            if (!_isInitialized)
+            {
+                Debug.LogWarning("LocalizationManager not initialized!");
+                return $"[{key}]";
+            }
+
+            // Пытаемся получить из кэша текущего языка
+            string cacheKey = $"{_currentLanguage}_{key}";
+            if (_cachedStrings.TryGetValue(cacheKey, out var cachedValue))
             {
                 return FormatString(cachedValue, args);
             }
@@ -169,13 +190,13 @@ namespace LocalizationManager
             {
                 if (languageDict.TryGetValue(key, out var value))
                 {
-                    // Кэшируем найденное значение
-                    _cachedStrings[key] = value;
+                    // Кэшируем
+                    _cachedStrings[cacheKey] = value;
                     return FormatString(value, args);
                 }
             }
 
-            Debug.LogWarning($"Localization key not found: {key} in language {_currentLanguage}");
+            Debug.LogWarning($"Localization key not found: '{key}' in language {_currentLanguage}");
             return $"[{key}]";
         }
 
@@ -187,9 +208,9 @@ namespace LocalizationManager
             {
                 return string.Format(value, args);
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                Debug.LogWarning($"Format error in localized string. Value: {value}, Args: {string.Join(", ", args)}");
+                Debug.LogWarning($"Format error in localized string. Value: {value}, Args: {string.Join(", ", args)}\nError: {e.Message}");
                 return value;
             }
         }
@@ -246,7 +267,16 @@ namespace LocalizationManager
 
         public void SetLanguage(string languageCode)
         {
+            if (string.IsNullOrEmpty(languageCode) || _currentLanguage == languageCode)
+                return;
+
             LoadLanguage(languageCode);
+            
+            // Сохраняем в настройках
+            if (GameSettings.Instance != null)
+            {
+                GameSettings.Instance.Language = languageCode;
+            }
         }
 
         public static string GetLanguageDisplayName(string languageCode)
@@ -260,10 +290,12 @@ namespace LocalizationManager
             };
         }
 
-        // Метод для принудительной перезагрузки языка (например, при добавлении новых ключей)
         public void ReloadCurrentLanguage()
         {
-            LoadLanguage(_currentLanguage);
+            if (!string.IsNullOrEmpty(_currentLanguage))
+            {
+                LoadLanguage(_currentLanguage);
+            }
         }
     }
 }
