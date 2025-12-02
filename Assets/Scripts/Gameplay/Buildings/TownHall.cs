@@ -125,6 +125,12 @@ namespace Gameplay.Buildings
             UpdateVisualModel();
         
             ApplyBuildingUpgrades();
+            
+            // Уведомляем FarmManager об изменении эпохи
+            if (FarmManager.Instance != null)
+            {
+                FarmManager.Instance.OnEraChanged();
+            }
         
             AIAssistant.Instance.OnBuildingUpgraded("TownHall");
         
@@ -136,7 +142,7 @@ namespace Gameplay.Buildings
                 SaveManager.Instance.AutoSave();
         }
 
-        private void UpdateVisualModel()
+        public void UpdateVisualModel()
         {
             baseModel.SetActive(_currentLevel == 0);
             // Отключаем все модели

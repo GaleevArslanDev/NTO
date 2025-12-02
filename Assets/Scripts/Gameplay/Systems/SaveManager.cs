@@ -1377,11 +1377,11 @@ namespace Gameplay.Systems
                 // Восстанавливаем уровень ратуши
                 for (int i = 0; i < data.townHallLevel; i++)
                 {
-                    // Нужно добавить метод для установки уровня в TownHall
                     townHall.SetLevel(data.townHallLevel);
                 }
 
                 townHall.UnlockUpgradeTier(data.unlockedTechTier);
+                townHall.UpdateVisualModel();
             }
 
             if (farmManager != null)
