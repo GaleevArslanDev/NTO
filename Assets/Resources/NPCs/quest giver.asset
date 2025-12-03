@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34544832d400cb6ddbe918117bcd4, type: 3}
   m_Name: quest giver
   m_EditorClassIdentifier: 
-  npcName: Lip
+  npcName: questgiver
   npcID: 4
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
@@ -26,7 +26,12 @@ MonoBehaviour:
   workLocation: {x: 154, y: 4, z: 208}
   eatingLocation: {x: 49, y: 2.7, z: 294}
   leisureLocation: {x: 315, y: 5, z: 96}
-  dialogueTrees: []
+  dialogueTrees:
+  - {fileID: 11400000, guid: c5afdcd9f92881543b1fe57fc0c5b674, type: 2}
+  - {fileID: 11400000, guid: 00e8580acd805d34cab6555994ff3daf, type: 2}
+  - {fileID: 11400000, guid: 85ed9828da23f864189952d297efa605, type: 2}
+  - {fileID: 11400000, guid: 99e228bb79345444eaac2ef3f2f5c031, type: 2}
+  - {fileID: 11400000, guid: c248ff5b69742fc45860c39346834da6, type: 2}
   movementSpeed: 3.5
   interactionRange: 3
   customModel: {fileID: 0}
