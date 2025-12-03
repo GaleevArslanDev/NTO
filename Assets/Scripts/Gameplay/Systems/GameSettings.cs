@@ -110,6 +110,11 @@ namespace Gameplay.Systems
             };
         }
 
+        public void SetLanguage(string language)
+        {
+            Language = language;
+        }
+
         public void ApplySettings()
         {
             // Язык

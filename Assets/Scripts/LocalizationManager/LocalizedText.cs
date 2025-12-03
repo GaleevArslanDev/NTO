@@ -63,7 +63,7 @@ namespace LocalizationManager
             if (LocalizationManager.Instance == null || string.IsNullOrEmpty(localizationKey))
                 return;
 
-            var localizedText = useRandomVariants ? LocalizationManager.Instance.GetRandomString(localizationKey) : LocalizationManager.Instance.GetString(localizationKey);
+            var localizedText = LocalizationManager.Instance.GetString(localizationKey);
 
             // Применяем динамические значения если есть
             if (hasDynamicValues && _dynamicValues is { Length: > 0 })

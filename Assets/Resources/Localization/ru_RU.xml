@@ -13,7 +13,7 @@
 	<string name="save_autosave">Автосохранение</string>
 	<string name="save_manual">Сохранение</string>
 	<string name="save_quicksave">Быстрое сохранение</string>
-	<string name="save-entry_player-level-label">Уровень: {saveInfo.playerLevel}</string>
+	<string name="save-entry_player-level-label">Уровень: {0}</string>
 
 	<!-- 4. NPC NAMES -->
 	<string name="npc_blacksmith">Брук</string>
@@ -28,8 +28,8 @@
 	<string name="building_townhall">Ратуша</string>
 
 	<!-- 6. ITEMS & RESOURCES -->
-	<string name="Crystal_Blue">Золото</string>
-	<string name="Crystal_Red">Кристалл</string>
+	<string name="CrystalBlue">Золото</string>
+	<string name="CrystalRed">Кристалл</string>
 	<string name="Metal">Металл</string>
 	<string name="Stone">Камень</string>
 	<string name="Wood">Древесина</string>
@@ -55,10 +55,10 @@
 	<string name="tech-node-detail-panel_inventory-capacity-label">Вместимость инвентаря: {0}</string>
 	<string name="tech-node-detail-panel_mining-speed-label">Скорость добычи: +{0}%</string>
 	<string name="tech-node-detail-panel_passive-income-label">Пассивный доход: {0} ({1}/мин)</string>
-	<string name="tech-node-detail-panel_tier-label">Тир: {0}</string>
+	<string name="tech-node-detail-panel_tier-label">Тир: </string>
 	<string name="tech-node-detail-panel_unlock-building-label">Разблокирует: {0}</string>
 	<string name="tech-node-detail-panel_unlock-upgrade-tier-label">Открывает тир улучшений: {0}</string>
-	<string name="tech-tree_upgrade-mode">Режим прокачки - {npcName}</string>
+	<string name="tech-tree_upgrade-mode">Режим прокачки - {0}</string>
 
 	<!-- 7.3 Tech Actions -->
 	<string name="researched">Изучено</string>
@@ -75,7 +75,7 @@
 	<string name="accept">Принять</string>
 	<string name="completed">Завершено</string>
 	<string name="quest-award">Награды: </string>
-	<string name="quests-npc">Квесты - {npcName}</string>
+	<string name="quests-npc">Квесты - {0}</string>
 	<string name="quest_gather_wood_desc">Соберите {0} единиц дерева для развития поселения.</string>
 	<string name="quest_gather_wood_title">Заготовка древесины</string>
 	<string name="quest_kill_beetles_desc">Уничтожьте {0} жуков, угрожающих нашему поселению.</string>

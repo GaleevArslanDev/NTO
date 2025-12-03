@@ -19,7 +19,7 @@
 	<string name="save_autosave">Autosave</string>
 	<string name="save_manual">Save</string>
 	<string name="save_quicksave">Quicksave</string>
-	<string name="save-entry_player-level-label">Level: {saveInfo.playerLevel}</string>
+	<string name="save-entry_player-level-label">Level: {0}</string>
 
 	<!-- 4. NPC NAMES -->
 	<string name="npc_blacksmith">Brook</string>
@@ -61,10 +61,10 @@
 	<string name="tech-node-detail-panel_inventory-capacity-label">Inventory Capacity: {0}</string>
 	<string name="tech-node-detail-panel_mining-speed-label">Mining Speed: +{0}%</string>
 	<string name="tech-node-detail-panel_passive-income-label">Passive Income: {0} ({1}/min)</string>
-	<string name="tech-node-detail-panel_tier-label">Tier: {0}</string>
+	<string name="tech-node-detail-panel_tier-label">Tier: </string>
 	<string name="tech-node-detail-panel_unlock-building-label">Unlocks: {0}</string>
 	<string name="tech-node-detail-panel_unlock-upgrade-tier-label">Unlocks Upgrade Tier: {0}</string>
-	<string name="tech-tree_upgrade-mode">Upgrade Mode - {npcName}</string>
+	<string name="tech-tree_upgrade-mode">Upgrade Mode - {0}</string>
 
 	<!-- 7.3 Tech Actions -->
 	<string name="researched">Researched</string>
@@ -81,7 +81,7 @@
 	<string name="accept">Accept</string>
 	<string name="completed">Completed</string>
 	<string name="quest-award">Rewards: </string>
-	<string name="quests-npc">Quests - {npcName}</string>
+	<string name="quests-npc">Quests - {0}</string>
 	<string name="quest_gather_wood_desc">Gather {0} units of wood for the settlement development.</string>
 	<string name="quest_gather_wood_title">Wood Gathering</string>
 	<string name="quest_kill_beetles_desc">Eliminate {0} beetles threatening our settlement.</string>

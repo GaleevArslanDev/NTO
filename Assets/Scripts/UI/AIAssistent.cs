@@ -261,19 +261,8 @@ namespace UI
                     return localizedText;
                 }
             }
-            
-            // Fallback: пытаемся найти любой вариант
-            return GetRandomLocalizedVariant(key);
-        }
-        
-        private string GetRandomLocalizedVariant(string baseKey)
-        {
-            if (_localizationManager != null)
-            {
-                return _localizationManager.GetRandomString(baseKey);
-            }
-            
-            return $"[{baseKey}]"; // Fallback
+
+            return "Localized text not found";
         }
         
         private string GetFallbackText(string category)
