@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34544832d400cb6ddbe918117bcd4, type: 3}
   m_Name: blacksmith
   m_EditorClassIdentifier: 
-  npcName: Brook
+  npcName: blacksmith
   npcID: 2
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
@@ -26,7 +26,12 @@ MonoBehaviour:
   workLocation: {x: 150, y: 4, z: 160}
   eatingLocation: {x: 172, y: 4, z: 200}
   leisureLocation: {x: 147, y: 4, z: 190}
-  dialogueTrees: []
+  dialogueTrees:
+  - {fileID: 11400000, guid: 0c77410f61165eb4e988eefa24f58a6c, type: 2}
+  - {fileID: 11400000, guid: 1e00f309893dda04698c3f2a9d09dc1d, type: 2}
+  - {fileID: 11400000, guid: 153128386d68f28469a736c4cd6a637f, type: 2}
+  - {fileID: 11400000, guid: 8416329884ef8a94db638ed4be445ee0, type: 2}
+  - {fileID: 11400000, guid: 9d484e4d3d899454d83a8230c0065f77, type: 2}
   movementSpeed: 3.5
   interactionRange: 3
   customModel: {fileID: 0}

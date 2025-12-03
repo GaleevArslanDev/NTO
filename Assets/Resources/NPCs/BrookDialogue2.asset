@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 681f3c4d91bb4c88aa75cbb21f7818d7, type: 3}
+  m_Name: BrookDialogue2
+  m_EditorClassIdentifier: 
+  treeName: BrookDialogue2
+  nodes:
+  - nodeID: start
+    localizationKey: dialogue_brook_2_npc
+    playerOptions:
+    - localizationKey: dialogue_brook_2_option_a
+      nextNodeID: answer1
+      relationshipChange: 10
+      memoryToAdd: 
+      questToStart: 
+      requiredItems: 
+      conditions: []
+      setFlags: []
+      personalityPreference:
+        preferredTrait: 0
+        dislikedTrait: 0
+        preferredOpenness: 0
+        preferredFriendliness: 0
+        preferredAmbition: 0
+      isExitOption: 0
+    - localizationKey: dialogue_brook_2_option_b
+      nextNodeID: answer2
+      relationshipChange: -10
+      memoryToAdd: 
+      questToStart: 
+      requiredItems: 
+      conditions: []
+      setFlags: []
+      personalityPreference:
+        preferredTrait: 0
+        dislikedTrait: 0
+        preferredOpenness: 0
+        preferredFriendliness: 0
+        preferredAmbition: 0
+      isExitOption: 0
+    triggers: []
+    conditions: []
+    setFlags: []
+    emotion: 0
+    voiceLine: {fileID: 0}
+    typingSpeed: 0
+  - nodeID: answer1
+    localizationKey: dialogue_brook_2_reaction_a
+    playerOptions: []
+    triggers: []
+    conditions: []
+    setFlags: []
+    emotion: 1
+    voiceLine: {fileID: 0}
+    typingSpeed: 0
+  - nodeID: answer2
+    localizationKey: dialogue_brook_2_reaction_b
+    playerOptions: []
+    triggers: []
+    conditions: []
+    setFlags: []
+    emotion: 2
+    voiceLine: {fileID: 0}
+    typingSpeed: 0
+  globalConditions: []
+  requiredFlags: []
+  setFlagsOnStart: []
+  priority: 0
