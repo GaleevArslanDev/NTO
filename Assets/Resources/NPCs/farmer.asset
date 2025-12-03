@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34544832d400cb6ddbe918117bcd4, type: 3}
   m_Name: farmer
   m_EditorClassIdentifier: 
-  npcName: Gork
+  npcName: farmer
   npcID: 1
   portrait: {fileID: 0}
   defaultVoice: {fileID: 0}
@@ -26,7 +26,12 @@ MonoBehaviour:
   workLocation: {x: 172, y: 4, z: 179}
   eatingLocation: {x: 180, y: 4, z: 197}
   leisureLocation: {x: 150, y: 4, z: 192}
-  dialogueTrees: []
+  dialogueTrees:
+  - {fileID: 11400000, guid: 29831c25cafb5134685c34951ca72279, type: 2}
+  - {fileID: 11400000, guid: 6330449596b141940b20593221e8d792, type: 2}
+  - {fileID: 11400000, guid: 1268cbd9f1a0909408cea8aa763a1e95, type: 2}
+  - {fileID: 11400000, guid: 6bfce8ed5befd8b4caefa06a3e277938, type: 2}
+  - {fileID: 11400000, guid: acfe1bde109f8a74fbb0804bc6696dab, type: 2}
   movementSpeed: 3.5
   interactionRange: 3
   customModel: {fileID: 0}
