@@ -23,9 +23,9 @@ MonoBehaviour:
     ambition: 50
   startingRelationships: {fileID: 0}
   homeLocation: {x: 154, y: 4, z: 188}
-  workLocation: {x: 154, y: 4, z: 188}
+  workLocation: {x: 168.8, y: 5, z: 189}
   eatingLocation: {x: 154, y: 4, z: 188}
-  leisureLocation: {x: 154, y: 4, z: 188}
+  leisureLocation: {x: 168.8, y: 5, z: 189}
   dialogueTrees:
   - {fileID: 11400000, guid: 565d0e08a68d9304095baa2ef193d610, type: 2}
   - {fileID: 11400000, guid: 7cf7449aab13c31458846ccc2c52a88a, type: 2}

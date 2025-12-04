@@ -11,9 +11,8 @@ namespace Gameplay.Characters.NPC
         [Header("Animator References")]
         [SerializeField] private Animator animator;
         [SerializeField] private NavMeshAgent navMeshAgent;
-        
+
         [Header("Animation Parameters")]
-        [SerializeField] private string speedParam = "Speed";
         [SerializeField] private string isMovingParam = "IsMoving";
         [SerializeField] private string isWorkingParam = "IsWorking";
         [SerializeField] private string isTalkingParam = "IsTalking";
@@ -23,25 +22,24 @@ namespace Gameplay.Characters.NPC
         [SerializeField] private string sadTrigger = "Sad";
         [SerializeField] private string impatientTrigger = "Impatient"; // Новый триггер
         [SerializeField] private string lookAroundTrigger = "LookAround"; // Новый триггер
-        
+
         [Header("Animation Settings")]
         [SerializeField] private float locomotionSmoothTime = 0.1f;
         [SerializeField] private float minMoveSpeed = 0.1f;
-        
+
         [Header("Waiting Animation Settings")]
         [SerializeField] private float minWaitingAnimationInterval = 8f;
         [SerializeField] private float maxWaitingAnimationInterval = 15f;
         [SerializeField] private List<string> waitingAnimationTriggers = new List<string>() { "Impatient", "LookAround", "Think" };
-        
+
         // Состояния
         private NpcState _currentState = NpcState.Idle;
         private ActivityType _currentActivity = ActivityType.Home;
         private bool _isInDialogue = false;
         private bool _isWaitingForResponse = false;
         private float _currentSpeed = 0f;
-        
+
         // Кэшированные хэши параметров
-        private int _speedHash;
         private int _isMovingHash;
         private int _isWorkingHash;
         private int _isTalkingHash;
@@ -51,16 +49,15 @@ namespace Gameplay.Characters.NPC
         private int _sadHash;
         private int _impatientHash;
         private int _lookAroundHash;
-        
+
         // Корутины
         private Coroutine _waitingAnimationCoroutine;
-        
+
         private void Awake()
         {
             if (animator == null) animator = GetComponent<Animator>();
             if (navMeshAgent == null) navMeshAgent = GetComponent<NavMeshAgent>();
-            
-            _speedHash = Animator.StringToHash(speedParam);
+
             _isMovingHash = Animator.StringToHash(isMovingParam);
             _isWorkingHash = Animator.StringToHash(isWorkingParam);
             _isTalkingHash = Animator.StringToHash(isTalkingParam);
@@ -71,45 +68,28 @@ namespace Gameplay.Characters.NPC
             _impatientHash = Animator.StringToHash(impatientTrigger);
             _lookAroundHash = Animator.StringToHash(lookAroundTrigger);
         }
-        
-        private void Update()
+
+        public void SetMoving(bool isMoving)
         {
-            UpdateLocomotion();
-        }
-        
-        private void UpdateLocomotion()
-        {
-            if (navMeshAgent == null || animator == null) return;
-            
-            float targetSpeed = 0f;
-            bool isMoving = false;
-            
-            if (_currentState == NpcState.Walking && navMeshAgent.enabled)
-            {
-                targetSpeed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
-                isMoving = targetSpeed > minMoveSpeed;
-            }
-            
-            _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, Time.deltaTime / locomotionSmoothTime);
-            
-            animator.SetFloat(_speedHash, _currentSpeed);
             animator.SetBool(_isMovingHash, isMoving);
+
+            Debug.Log("jdnakn");
         }
-        
+
         public void SetState(NpcState state, ActivityType activity = ActivityType.Home)
         {
             _currentState = state;
             _currentActivity = activity;
             UpdateAnimatorState();
         }
-        
+
         private void UpdateAnimatorState()
         {
             if (animator == null) return;
-            
+
             animator.SetBool(_isWorkingHash, false);
             animator.SetBool(_isTalkingHash, false);
-            
+
             switch (_currentActivity)
             {
                 case ActivityType.Work:
@@ -117,18 +97,18 @@ namespace Gameplay.Characters.NPC
                     break;
             }
         }
-        
+
         // Новая система ожидания ответа
         public void SetWaitingForResponse(bool waiting)
         {
             if (_isWaitingForResponse == waiting) return;
-            
+
             _isWaitingForResponse = waiting;
-            
+
             if (animator != null)
             {
                 animator.SetBool(_isWaitingHash, waiting);
-                
+
                 if (waiting)
                 {
                     // Запускаем корутину для периодических анимаций ожидания
@@ -149,7 +129,7 @@ namespace Gameplay.Characters.NPC
                 }
             }
         }
-        
+
         private IEnumerator WaitingAnimationRoutine()
         {
             while (_isWaitingForResponse)
@@ -157,7 +137,7 @@ namespace Gameplay.Characters.NPC
                 // Ждем случайный интервал перед следующей анимацией
                 float waitTime = Random.Range(minWaitingAnimationInterval, maxWaitingAnimationInterval);
                 yield return new WaitForSeconds(waitTime);
-                
+
                 // Если все еще ждем ответа, проигрываем случайную анимацию
                 if (_isWaitingForResponse && CanPlayWaitingAnimation())
                 {
@@ -165,15 +145,15 @@ namespace Gameplay.Characters.NPC
                 }
             }
         }
-        
+
         private void PlayRandomWaitingAnimation()
         {
             if (animator == null || waitingAnimationTriggers.Count == 0) return;
-            
+
             // Выбираем случайную анимацию из списка
             int randomIndex = Random.Range(0, waitingAnimationTriggers.Count);
             string triggerName = waitingAnimationTriggers[randomIndex];
-            
+
             // Проигрываем соответствующую анимацию
             switch (triggerName)
             {
@@ -188,18 +168,18 @@ namespace Gameplay.Characters.NPC
                     break;
             }
         }
-        
+
         private bool CanPlayWaitingAnimation()
         {
             if (_isInDialogue || !_isWaitingForResponse) return false;
-            
+
             // Проверяем, не проигрывается ли уже другая анимация
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            return !stateInfo.IsTag("Talking") && 
+            return !stateInfo.IsTag("Talking") &&
                    !stateInfo.IsTag("Emotional") &&
                    !stateInfo.IsTag("Working");
         }
-        
+
         // Остальные методы остаются без изменений
         public void PlayThinkingAnimation()
         {
@@ -208,7 +188,7 @@ namespace Gameplay.Characters.NPC
                 animator.SetTrigger(_thinkHash);
             }
         }
-        
+
         public void PlayHappyAnimation()
         {
             if (animator != null)
@@ -216,7 +196,7 @@ namespace Gameplay.Characters.NPC
                 animator.SetTrigger(_happyHash);
             }
         }
-        
+
         public void PlaySadAnimation()
         {
             if (animator != null)
@@ -224,13 +204,13 @@ namespace Gameplay.Characters.NPC
                 animator.SetTrigger(_sadHash);
             }
         }
-        
+
         public void SetTalking(bool isTalking)
         {
             if (animator != null)
             {
                 animator.SetBool(_isTalkingHash, isTalking);
-                
+
                 // Если начинаем говорить, выключаем ожидание
                 if (isTalking)
                 {
@@ -238,26 +218,26 @@ namespace Gameplay.Characters.NPC
                 }
             }
         }
-        
+
         public void SetDialogueState(bool inDialogue)
         {
             _isInDialogue = inDialogue;
             SetTalking(inDialogue);
-            
+
             // При выходе из диалога сбрасываем ожидание
             if (!inDialogue)
             {
                 SetWaitingForResponse(false);
             }
         }
-        
+
         public bool CanPlayAnimation()
         {
             if (_isInDialogue) return false;
-            
+
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            return !stateInfo.IsName("Think") && 
-                   !stateInfo.IsName("Happy") && 
+            return !stateInfo.IsName("Think") &&
+                   !stateInfo.IsName("Happy") &&
                    !stateInfo.IsName("Sad");
         }
     }

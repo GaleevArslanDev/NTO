@@ -39207,6 +39207,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1913784372}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913784374}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913784373}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913784378}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913784377}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913784376}
   m_SourcePrefab: {fileID: 100100000, guid: 421e9cfbb4aa9444db254c5eae835b42, type: 3}
 --- !u!1 &1246005284
 GameObject:
@@ -42824,7 +42839,7 @@ Transform:
   m_GameObject: {fileID: 1380635277}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 172, y: 5, z: 199}
+  m_LocalPosition: {x: 168.8, y: 8.67, z: 189}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62130,6 +62145,152 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!195 &1913784373
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913784369}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1913784374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913784369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4fcfa88e0f4dafbcba829bf7c3e92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1913784371}
+  navMeshAgent: {fileID: 1913784373}
+  speedParam: Speed
+  isMovingParam: IsMoving
+  isWorkingParam: IsWorking
+  isTalkingParam: IsTalking
+  isWaitingParam: IsWaiting
+  thinkTrigger: Think
+  happyTrigger: Happy
+  sadTrigger: Sad
+  impatientTrigger: Impatient
+  lookAroundTrigger: LookAround
+  locomotionSmoothTime: 0.1
+  minMoveSpeed: 0.05
+  minWaitingAnimationInterval: 8
+  maxWaitingAnimationInterval: 15
+  waitingAnimationTriggers:
+  - Impatient
+  - LookAround
+  - Think
+--- !u!114 &1913784376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913784369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554b03df25514b3bb0eaf29e94292eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  callRadius: 20
+  minCallCooldown: 180
+  maxCallCooldown: 240
+  getsOffendedWhenIgnored: 1
+  relationshipPenalty: -5
+  playerSpeedThreshold: 2
+  callIcon: {fileID: 1069843044}
+  callSound: {fileID: 0}
+  callPhrases: []
+  callText: {fileID: 1751850574}
+  reactiveDialogueSequence:
+  - ZolDialogue1
+  - ZolDialogue2
+  - ZolDialogue3
+  - ZolDialogue4
+  - ZolDialogue5
+  loopSequence: 0
+--- !u!114 &1913784377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913784369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7997f537359ea4c449a204edb506aa25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcType: 0
+  npcData:
+    npcName: 
+    npcID: 4
+    memories: []
+    schedule:
+      dailySchedule:
+      - time: 0
+        activity: 0
+        location: {x: 0, y: 0, z: 0}
+        specificNpc: 
+      - time: 1
+        activity: 5
+        location: {x: 0, y: 0, z: 0}
+        specificNpc: 
+      - time: 2
+        activity: 0
+        location: {x: 0, y: 0, z: 0}
+        specificNpc: 
+      - time: 3
+        activity: 2
+        location: {x: 0, y: 0, z: 0}
+        specificNpc: 
+      - time: 4
+        activity: 3
+        location: {x: 0, y: 0, z: 0}
+        specificNpc: 
+    personality:
+      traits: 
+      openness: 50
+      friendliness: 50
+      ambition: 50
+    currentState: 0
+    homeLocation: {x: 0, y: 0, z: 0}
+  dialogueTrees: []
+  portrait: {fileID: 0}
+  defaultVoice: {fileID: 0}
+  reactiveTrigger: {fileID: 0}
+--- !u!114 &1913784378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913784369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f399d9926009494ea2b18ff5e3aaed83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcDataConfig: {fileID: 11400000, guid: b03762cb0f709c845bf75b8ad36898f2, type: 2}
 --- !u!1001 &1915827025
 PrefabInstance:
   m_ObjectHideFlags: 0

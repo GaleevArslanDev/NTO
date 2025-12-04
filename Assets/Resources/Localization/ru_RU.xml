@@ -60,7 +60,9 @@
 	<string name="tech-node_no-town-hall-tier">Требуется уровень ратуши: {0}</string>
 	<string name="tech-node_unlocked">&lt;color=green&gt;✓ Разблокировано&lt;/color&gt;</string>
 	<string name="tech-node-detail-panel_collection-range-multiplier-label">Радиус сбора: +{0}%</string>
-	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +{0}%</string>
+	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +25%</string>
+	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +50%</string>
+	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +100%</string>
 	<string name="tech-node-detail-panel_fire-rate-multiplier-label">Скорость стрельбы: +{0}%</string>
 	<string name="tech-node-detail-panel_inventory-capacity-label">Вместимость инвентаря: {0}</string>
 	<string name="tech-node-detail-panel_mining-speed-label">Скорость добычи: +{0}%</string>
