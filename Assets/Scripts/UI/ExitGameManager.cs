@@ -33,7 +33,7 @@ namespace UI
             Application.wantsToQuit -= OnWantsToQuit;
         }
         
-        private bool OnWantsToQuit()
+        public bool OnWantsToQuit()
         {
             // Если уже выходим - разрешаем
             if (_isExiting) return true;
