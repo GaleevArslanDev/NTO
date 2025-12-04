@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef61551c0d24d4b86f81c13f8648546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneName: ScriptsTesting
+  gameSceneName: Main
   newGameButton: {fileID: 2104723923}
   loadGameButton: {fileID: 1616857097}
   settingsButton: {fileID: 1298179056}
