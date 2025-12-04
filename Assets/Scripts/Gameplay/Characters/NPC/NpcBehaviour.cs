@@ -128,6 +128,7 @@ namespace Gameplay.Characters.NPC
 
             _currentState = NpcState.Walking;
             _npcAnimator?.SetState(_currentState);
+            _npcAnimator?.SetMoving(true);
             
             _agent.SetDestination(destination);
 
@@ -140,6 +141,7 @@ namespace Gameplay.Characters.NPC
                 timer += Time.deltaTime;
                 yield return null;
             }
+            _npcAnimator?.SetMoving(false);
         }
 
         private static NpcState GetNpcStateForActivity(ActivityType activityType)

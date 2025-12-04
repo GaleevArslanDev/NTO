@@ -13,7 +13,6 @@ namespace Gameplay.Characters.NPC
         [SerializeField] private NavMeshAgent navMeshAgent;
         
         [Header("Animation Parameters")]
-        [SerializeField] private string speedParam = "Speed";
         [SerializeField] private string isMovingParam = "IsMoving";
         [SerializeField] private string isWorkingParam = "IsWorking";
         [SerializeField] private string isTalkingParam = "IsTalking";
@@ -41,7 +40,6 @@ namespace Gameplay.Characters.NPC
         private float _currentSpeed = 0f;
         
         // Кэшированные хэши параметров
-        private int _speedHash;
         private int _isMovingHash;
         private int _isWorkingHash;
         private int _isTalkingHash;
@@ -60,7 +58,6 @@ namespace Gameplay.Characters.NPC
             if (animator == null) animator = GetComponent<Animator>();
             if (navMeshAgent == null) navMeshAgent = GetComponent<NavMeshAgent>();
             
-            _speedHash = Animator.StringToHash(speedParam);
             _isMovingHash = Animator.StringToHash(isMovingParam);
             _isWorkingHash = Animator.StringToHash(isWorkingParam);
             _isTalkingHash = Animator.StringToHash(isTalkingParam);
@@ -72,27 +69,8 @@ namespace Gameplay.Characters.NPC
             _lookAroundHash = Animator.StringToHash(lookAroundTrigger);
         }
         
-        private void Update()
+        public void SetMoving(bool isMoving)
         {
-            UpdateLocomotion();
-        }
-        
-        private void UpdateLocomotion()
-        {
-            if (navMeshAgent == null || animator == null) return;
-            
-            float targetSpeed = 0f;
-            bool isMoving = false;
-            
-            if (_currentState == NpcState.Walking && navMeshAgent.enabled)
-            {
-                targetSpeed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
-                isMoving = targetSpeed > minMoveSpeed;
-            }
-            
-            _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, Time.deltaTime / locomotionSmoothTime);
-            
-            animator.SetFloat(_speedHash, _currentSpeed);
             animator.SetBool(_isMovingHash, isMoving);
         }
         

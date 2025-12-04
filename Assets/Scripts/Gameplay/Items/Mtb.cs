@@ -1,5 +1,6 @@
 using System.Collections;
 using Gameplay.Characters.Enemies;
+using Gameplay.Systems;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,7 +34,13 @@ namespace Gameplay.Items
         [SerializeField] private Image reloadFill;
         [SerializeField] private Color reloadingColor = Color.red;
         [SerializeField] private Color readyColor = Color.green;
-    
+        
+        [Header("Audio")]
+        [SerializeField] private AudioClip shootSound;
+        [SerializeField] private AudioClip vacuumSound;
+        
+        
+        private AudioSource _vacuumAudioSource;
         private bool _isVacuuming;
         private CollectableItem _currentTargetItem;
         private float _nextFireTime;
@@ -64,6 +71,8 @@ namespace Gameplay.Items
 
         private void Start()
         {
+            _vacuumAudioSource = SoundManager.Instance.PlaySoundEffect(vacuumSound, 0.3f, true);
+            _vacuumAudioSource.volume = 0;
             // Настройка лазерного луча
             if (laserBeam != null)
             {
@@ -144,8 +153,10 @@ namespace Gameplay.Items
             }
 
             if (_currentTargetItem == null || _currentTargetItem.CanBeCollected) return;
+            
             if (Input.GetMouseButton(1))
             {
+                 _vacuumAudioSource.volume = 0.3f;
                 if (!_currentTargetItem.IsBeingBroken)
                 {
                     _currentTargetItem.StartBreaking(vacuumSpeedMultiplier);
@@ -153,6 +164,7 @@ namespace Gameplay.Items
             }
             else if (Input.GetMouseButtonUp(1))
             {
+                _vacuumAudioSource.volume = 0;
                 _currentTargetItem.StopBreaking(_currentTargetItem.data.vacuumTime * (1f / vacuumSpeedMultiplier));
             }
         }
@@ -166,6 +178,7 @@ namespace Gameplay.Items
     
         private void Shoot()
         {
+            SoundManager.Instance.PlayOneShot(shootSound, 0.7f);
             if (Camera.main == null) return;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
