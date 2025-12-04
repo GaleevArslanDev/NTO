@@ -17,7 +17,7 @@ MonoBehaviour:
     \u0432\u0430\u0448\u0435\u0433\u043E MTB"
   nodes:
   - nodeId: damage_1
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_damage_boost1
     descriptionLocalizationKey: 
     tier: 1
     unlockCost:
@@ -35,7 +35,7 @@ MonoBehaviour:
     graphPosition: {x: -727, y: -318}
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: damage_2
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_damage_boost2
     descriptionLocalizationKey: 
     tier: 2
     unlockCost:
@@ -58,7 +58,7 @@ MonoBehaviour:
     graphPosition: {x: -288, y: -318}
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: damage_3
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_damage_boost3
     descriptionLocalizationKey: 
     tier: 3
     unlockCost:
@@ -83,7 +83,7 @@ MonoBehaviour:
     graphPosition: {x: 151, y: -318}
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_1
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_range1
     descriptionLocalizationKey: 
     tier: 1
     unlockCost:
@@ -101,7 +101,7 @@ MonoBehaviour:
     graphPosition: {x: -727, y: 418}
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_2
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_range2
     descriptionLocalizationKey: 
     tier: 2
     unlockCost:
@@ -124,7 +124,7 @@ MonoBehaviour:
     graphPosition: {x: -288, y: 418}
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_3
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_range3
     descriptionLocalizationKey: 
     tier: 3
     unlockCost:
@@ -149,7 +149,7 @@ MonoBehaviour:
     graphPosition: {x: 151, y: 418}
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_50
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_inventory_capacity1
     descriptionLocalizationKey: 
     tier: 1
     unlockCost:
@@ -167,7 +167,7 @@ MonoBehaviour:
     graphPosition: {x: -727, y: 50}
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_100
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_inventory_capacity2
     descriptionLocalizationKey: 
     tier: 2
     unlockCost:
@@ -190,7 +190,7 @@ MonoBehaviour:
     graphPosition: {x: -288, y: 50}
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_200
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_inventory_capacity3
     descriptionLocalizationKey: 
     tier: 3
     unlockCost:
@@ -215,7 +215,7 @@ MonoBehaviour:
     graphPosition: {x: 151, y: 50}
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_1
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_speed1
     descriptionLocalizationKey: 
     tier: 1
     unlockCost:
@@ -233,7 +233,7 @@ MonoBehaviour:
     graphPosition: {x: -727, y: 234}
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_2
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_speed2
     descriptionLocalizationKey: 
     tier: 2
     unlockCost:
@@ -256,7 +256,7 @@ MonoBehaviour:
     graphPosition: {x: -288, y: 234}
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_3
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_mining_speed3
     descriptionLocalizationKey: 
     tier: 3
     unlockCost:
@@ -281,7 +281,7 @@ MonoBehaviour:
     graphPosition: {x: 151, y: 234}
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection1
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_resource_per_deposit1
     descriptionLocalizationKey: 
     tier: 1
     unlockCost:
@@ -299,7 +299,7 @@ MonoBehaviour:
     graphPosition: {x: -727, y: -134}
     icon: {fileID: -999874107, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection2
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_resource_per_deposit2
     descriptionLocalizationKey: 
     tier: 2
     unlockCost:
@@ -322,7 +322,7 @@ MonoBehaviour:
     graphPosition: {x: -288, y: -134}
     icon: {fileID: -999874107, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection3
-    nameLocalizationKey: 
+    nameLocalizationKey: tech_resource_per_deposit3
     descriptionLocalizationKey: 
     tier: 3
     unlockCost:
@@ -338,7 +338,7 @@ MonoBehaviour:
       amount: 21
     prerequisiteNodes:
     - resource_collection2
-    isUnlocked: 0
+    isUnlocked: 1
     effects:
     - effectType: 8
       floatValue: 0

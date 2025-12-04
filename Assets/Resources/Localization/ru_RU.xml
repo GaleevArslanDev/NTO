@@ -36,11 +36,21 @@
 
 	<!-- 7. TECHNOLOGY TREE -->
 	<!-- 7.1 Tech Node Names -->
-	<string name="tech_damage_boost">Усиление урона</string>
-	<string name="tech_inventory_capacity">Вместимость инвентаря</string>
-	<string name="tech_mining_range">Дальность добычи</string>
-	<string name="tech_mining_speed">Скорость добычи</string>
-	<string name="tech_resource_per_deposit">Ресурсов с залежи</string>
+	<string name="tech_damage_boost1">Усиление урона I</string>
+	<string name="tech_damage_boost2">Усиление урона II</string>
+	<string name="tech_damage_boost3">Усиление урона III</string>
+	<string name="tech_inventory_capacity1">Вместимость инвентаря I</string>
+	<string name="tech_inventory_capacity2">Вместимость инвентаря II</string>
+	<string name="tech_inventory_capacity3">Вместимость инвентаря III</string>
+	<string name="tech_mining_range1">Дальность добычи I</string>
+	<string name="tech_mining_range2">Дальность добычи II</string>
+	<string name="tech_mining_range3">Дальность добычи III</string>
+	<string name="tech_mining_speed1">Скорость добычи I</string>
+	<string name="tech_mining_speed2">Скорость добычи II</string>
+	<string name="tech_mining_speed3">Скорость добычи III</string>
+	<string name="tech_resource_per_deposit1">Ресурсов с залежи I</string>
+	<string name="tech_resource_per_deposit2">Ресурсов с залежи II</string>
+	<string name="tech_resource_per_deposit3">Ресурсов с залежи III</string>
 
 	<!-- 7.2 Tech UI Labels -->
 	<string name="tech-node_available">&lt;color=green&gt;✓ Доступно для изучения&lt;/color&gt;</string>
