@@ -22,9 +22,11 @@ namespace Gameplay.Characters.NPC
         
         [Header("Reactive Dialogue")]
         public ReactiveDialogueTrigger reactiveTrigger;
+        private NpcBehaviour _npcBehaviour;
 
         private void Start()
         {
+            _npcBehaviour = GetComponent<NpcBehaviour>();
             // Регистрация в менеджерах
             if (npcData == null) return;
             
@@ -67,12 +69,15 @@ namespace Gameplay.Characters.NPC
         public void StartSpecificDialogue(string treeName)
         {
             if (DialogueManager.Instance.IsInDialogue) return;
+            
+            _npcBehaviour?.SetDialogueState(true);
         
             DialogueManager.Instance.StartDialogue(this, treeName);
         }
 
         public void OnDialogueEnded()
         {
+            _npcBehaviour?.SetDialogueState(false);
             Debug.Log($"Диалог с {npcData.npcName} завершен");
         }
 

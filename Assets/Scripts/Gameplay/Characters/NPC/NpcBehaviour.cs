@@ -16,6 +16,8 @@ namespace Gameplay.Characters.NPC
         private ScheduleManager _scheduleManager;
         private RelationshipManager _relationshipManager;
         private NpcInteraction _interaction;
+        
+        private NpcAnimator _npcAnimator;
 
         // Состояния
         private NpcState _currentState = NpcState.Idle;
@@ -28,6 +30,7 @@ namespace Gameplay.Characters.NPC
             _scheduleManager = FindObjectOfType<ScheduleManager>();
             _relationshipManager = FindObjectOfType<RelationshipManager>();
             _interaction = GetComponent<NpcInteraction>();
+            _npcAnimator = GetComponent<NpcAnimator>();
 
             // Настройка NPCInteraction из NPCDataConfig
             if (npcDataConfig == null || _interaction == null) return;
@@ -89,6 +92,7 @@ namespace Gameplay.Characters.NPC
         private IEnumerator ExecuteActivity(Activity activity)
         {
             _currentState = GetNpcStateForActivity(activity.type);
+            _npcAnimator?.SetState(_currentState, activity.type);
 
             // Двигаемся к цели
             yield return StartCoroutine(MoveToLocation(activity.location));
@@ -123,6 +127,8 @@ namespace Gameplay.Characters.NPC
             if (_agent == null || !_agent.enabled) yield break;
 
             _currentState = NpcState.Walking;
+            _npcAnimator?.SetState(_currentState);
+            
             _agent.SetDestination(destination);
 
             const float timeout = 10f;
@@ -291,6 +297,36 @@ namespace Gameplay.Characters.NPC
         {
             // TODO: Реализовать логику получения оставшегося времени активности
             return 0f;
+        }
+        
+        public void PlayThinkingAnimation()
+        {
+            _npcAnimator?.PlayThinkingAnimation();
+        }
+
+        public void PlayHappyAnimation()
+        {
+            _npcAnimator?.PlayHappyAnimation();
+        }
+        
+        public void SetWaitingForResponse(bool waiting)
+        {
+            _npcAnimator?.SetWaitingForResponse(waiting);
+        }
+
+        public void PlaySadAnimation()
+        {
+            _npcAnimator?.PlaySadAnimation();
+        }
+
+        public void SetTalking(bool isTalking)
+        {
+            _npcAnimator?.SetTalking(isTalking);
+        }
+
+        public void SetDialogueState(bool inDialogue)
+        {
+            _npcAnimator?.SetDialogueState(inDialogue);
         }
     }
 

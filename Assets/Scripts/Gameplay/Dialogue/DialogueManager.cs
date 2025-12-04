@@ -318,5 +318,6 @@ namespace Gameplay.Dialogue
         public DialogueNode CurrentNode { get; private set; }
 
         public string CurrentNpcName => _currentNpc?.npcData.npcName ?? "";
+        public NpcInteraction CurrentNpc => _currentNpc;
     }
 }

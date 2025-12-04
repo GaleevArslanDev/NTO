@@ -53,8 +53,10 @@ namespace Gameplay.Characters.NPC
             Debug.Log($"   Текущие: {currentRelationship} → Новые: {newRelationship} (изменение: {change})");
     
             npc.SetRelationship(targetNpcId, newRelationship);
-    
+            
             AddMemory(npcID, $"Изменение отношений с игроком: {change}", change);
+            
+            PlayEmotionalAnimationForNpc(npcID, change);
         }
 
         public void AddMemory(int npcID, string memory, int impact)
@@ -67,6 +69,22 @@ namespace Gameplay.Characters.NPC
     
             _allNpcs[npcID].AddMemory(memory, impact, "System", _worldTime.GetCurrentTimestamp());
             Debug.Log($"  Добавлена память для NPC {npcID}: '{memory}' (влияние: {impact})");
+        }
+        
+        private void PlayEmotionalAnimationForNpc(int npcID, int relationshipChange)
+        {
+            var npcBehaviour = NpcManager.Instance?.GetNpcByID(npcID);
+            if (npcBehaviour != null)
+            {
+                if (relationshipChange > 10) // Значительное положительное изменение
+                {
+                    npcBehaviour.PlayHappyAnimation();
+                }
+                else if (relationshipChange < -5) // Отрицательное изменение
+                {
+                    npcBehaviour.PlaySadAnimation();
+                }
+            }
         }
     
         public void AddMemory(int npcID, string memory, int impact, string source)

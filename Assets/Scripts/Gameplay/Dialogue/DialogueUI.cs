@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Core;
+using Gameplay.Characters.NPC;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -76,6 +77,9 @@ namespace Gameplay.Dialogue
     
         private void OnDialogueEnded()
         {
+            // Выключаем состояние ожидания при завершении диалога
+            SetNpcWaitingForResponse(false);
+    
             HideDialogue();
         }
     
@@ -152,16 +156,28 @@ namespace Gameplay.Dialogue
         {
             _isTyping = true;
             dialogueText.text = "";
-        
+    
             var actualSpeed = speed > 0 ? speed : typeWriterSpeed;
-        
+    
             foreach (var c in text)
             {
                 dialogueText.text += c;
                 yield return new WaitForSeconds(actualSpeed);
             }
-        
+    
             _isTyping = false;
+    
+            // Включаем состояние ожидания ответа после завершения печати текста NPC
+            SetNpcWaitingForResponse(true);
+        }
+        
+        private void SetNpcWaitingForResponse(bool waiting)
+        {
+            if (DialogueManager.Instance == null || 
+                DialogueManager.Instance.CurrentNpc == null) return;
+    
+            var npcBehaviour = DialogueManager.Instance.CurrentNpc.GetComponent<NpcBehaviour>();
+            npcBehaviour?.SetWaitingForResponse(waiting);
         }
 
         private void SkipTyping()
@@ -285,7 +301,10 @@ namespace Gameplay.Dialogue
         private void OnOptionSelected(DialogueOption option)
         {
             if (_isTyping) return;
-        
+    
+            // Выключаем состояние ожидания перед выбором опции
+            SetNpcWaitingForResponse(false);
+    
             DialogueManager.Instance.SelectOption(option);
         }
     
