@@ -39,9 +39,10 @@ namespace Gameplay.Systems
         private int _currentTrackIndex = -1;
         
         [Header("Default Sounds")]
-        [SerializeField] private AudioClip defaultUIClick;
-        [SerializeField] private AudioClip defaultUIHover;
-        [SerializeField] private AudioClip defaultButtonClick;
+        [HideInInspector]
+        public AudioClip defaultUIClick;
+        [HideInInspector]
+        public AudioClip defaultUIHover;
 
 
         private void Awake()
@@ -356,7 +357,6 @@ namespace Gameplay.Systems
             {
                 UISoundType.Click => defaultUIClick,
                 UISoundType.Hover => defaultUIHover,
-                UISoundType.Button => defaultButtonClick,
                 _ => null
             };
     
@@ -615,7 +615,6 @@ namespace Gameplay.Systems
     public enum UISoundType
     {
         Click,
-        Hover,
-        Button
+        Hover
     }
 }

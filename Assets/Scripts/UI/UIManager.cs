@@ -1,5 +1,6 @@
 ﻿using Gameplay.Characters.Player;
 using Gameplay.Dialogue;
+using Gameplay.Systems;
 using UnityEngine;
 
 namespace UI
@@ -7,6 +8,8 @@ namespace UI
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance;
+        [SerializeField] private AudioClip uiOpenSound;
+        [SerializeField] private AudioClip uiCloseSound;
     
         private int _openUICount;
 
@@ -24,12 +27,14 @@ namespace UI
     
         public void RegisterUIOpen()
         {
+            SoundManager.Instance.PlayOneShot(uiOpenSound);
             _openUICount++;
             UpdateCursorState();
         }
     
         public void RegisterUIClose()
         {
+            SoundManager.Instance.PlayOneShot(uiCloseSound);
             _openUICount--;
             if (_openUICount < 0) _openUICount = 0;
             UpdateCursorState();
