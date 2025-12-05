@@ -44,7 +44,7 @@ namespace Gameplay.Systems
 
         [Header("UI")] public GameObject saveIndicator;
 
-        private string SaveFolder => Path.Combine(Application.persistentDataPath, "Saves");
+        private string SaveFolder => Path.Combine(Application.dataPath, "Saves");
         private string AutoSavePath => Path.Combine(SaveFolder, "autosave.json");
 
         private Coroutine _screenshotCoroutine;
