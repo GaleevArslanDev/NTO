@@ -48161,13 +48161,15 @@ MonoBehaviour:
   cloudPrefabs:
   - {fileID: 2532457351249807336, guid: 56ca7046c0d4be244a9e8b00ad2f2ea9, type: 3}
   - {fileID: 1764370842721519874, guid: b972554292c778c4d99d3d3b706fdb52, type: 3}
-  spawnRate: -9999999
+  spawnRate: 1
   maxClouds: 800
   spawnZone: {fileID: 1341208047}
   spawnAreaSize: {x: 1200, y: 200, z: 1}
   speedRange: {x: 3, y: 16}
   scaleRange: {x: 700, y: 1000}
   rotationRange: {x: -360, y: 360}
+  minCloudDistance: 15
+  maxSpawnAttempts: 50
   movementDirection: {x: 0, y: 0, z: 1}
 --- !u!4 &1341208047
 Transform:
