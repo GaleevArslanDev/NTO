@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core;
+using Gameplay.Systems;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -59,8 +60,13 @@ namespace UI
         [SerializeField] private float cameraTurnThreshold = 45f;
         [SerializeField] private float playerAccelThreshold = 5f;
         [SerializeField] private float playerStopThreshold = 3f;
+        
+        [Header("Story Mode")]
+        [SerializeField] private bool storyMode = true;
+        [SerializeField] private List<string> storyCommentCategories = new List<string> { "StoryIntroduction", "StoryTutorial", "StoryGuide", "StoryVillage", "StoryFinal" };
 
         private AssistantMood _currentMood = AssistantMood.Neutral;
+        private StoryManager _storyManager;
         
         [Header("Localization Settings")]
         [SerializeField] private string commentBaseKey = "assistant";
@@ -150,6 +156,8 @@ namespace UI
     
             if (_mainCamera != null)
                 _lastCameraForward = _mainCamera.transform.forward;
+            
+            _storyManager = FindObjectOfType<StoryManager>();
     
             // Запускаем полную инициализацию
             StartCoroutine(FullInitialization());
@@ -276,6 +284,16 @@ namespace UI
                 "LowHealth" => "Внимание! Низкое здоровье!",
                 _ => "Интересно..."
             };
+        }
+        
+        public void SpeakStoryLine(string category, params object[] args)
+        {
+            if (_localizationManager != null)
+            {
+                string key = $"assistant_story_{category}";
+                string text = _localizationManager.GetString(key, args);
+                Speak(text, true); // forceStoryMode = true
+            }
         }
 
         private void OnRectTransformDimensionsChange()
@@ -499,7 +517,14 @@ namespace UI
         private void Update()
         {
             if (!_isInitialized) return;
-            
+    
+            // В режиме сюжета ограничиваем движение и комментарии
+            if (_storyManager != null && _storyManager.IsInStoryMode())
+            {
+                _shouldMove = false;
+                return;
+            }
+    
             HandleInertiaForces();
             HandleMovement();
             HandleBounceAnimation();
@@ -709,13 +734,19 @@ namespace UI
             }
         }
 
-        private void Speak(string text)
+        public void Speak(string text, bool forceStoryMode = false)
         {
+            if (_storyManager != null && _storyManager.IsInStoryMode() && !forceStoryMode)
+            {
+                // В режиме сюжета говорим только сюжетные реплики
+                return;
+            }
+    
             if (_isSpeaking) return;
-        
+    
             if (_currentSpeechCoroutine != null)
                 StopCoroutine(_currentSpeechCoroutine);
-            
+    
             _currentSpeechCoroutine = StartCoroutine(SpeechRoutine(text));
         }
 
