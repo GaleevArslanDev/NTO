@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Gameplay.Systems;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,9 +27,9 @@ namespace Gameplay.Characters.Player
     
         [Header("Damage Effects")]
         public AudioClip damageSound;
+        public AudioClip deathSound;
         public float damageEffectDuration = 0.3f;
     
-        private AudioSource _audioSource;
         private bool _isDead;
         private PlayerController _playerController;
         private CharacterController _characterController;
@@ -48,7 +49,6 @@ namespace Gameplay.Characters.Player
         private void Start()
         {
             currentHealth = maxHealth;
-            _audioSource = GetComponent<AudioSource>();
             _playerController = GetComponent<PlayerController>();
             _characterController = GetComponent<CharacterController>();
         
@@ -68,9 +68,9 @@ namespace Gameplay.Characters.Player
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         
-            if (damageSound != null && _audioSource != null)
+            if (damageSound != null && SoundManager.Instance != null && currentHealth > 0)
             {
-                _audioSource.PlayOneShot(damageSound);
+                SoundManager.Instance.PlayOneShot(damageSound);
             }
         
             // Проверяем низкое здоровье
@@ -115,6 +115,8 @@ namespace Gameplay.Characters.Player
         private void Die()
         {
             _isDead = true;
+            
+            SoundManager.Instance.PlayOneShot(deathSound);
         
             if (_playerController != null)
                 _playerController.enabled = false;

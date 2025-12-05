@@ -37,6 +37,12 @@ namespace Gameplay.Systems
         private Coroutine _musicCoroutine;
         private bool _isMusicPlaying;
         private int _currentTrackIndex = -1;
+        
+        [Header("Default Sounds")]
+        [SerializeField] private AudioClip defaultUIClick;
+        [SerializeField] private AudioClip defaultUIHover;
+        [SerializeField] private AudioClip defaultButtonClick;
+
 
         private void Awake()
         {
@@ -343,6 +349,20 @@ namespace Gameplay.Systems
                 StartCoroutine(ReturnToPoolAfterPlay(audioSource, clip.length));
             }
         }
+        
+        public void PlayUISound(UISoundType soundType, float volume = 1f)
+        {
+            AudioClip clip = soundType switch
+            {
+                UISoundType.Click => defaultUIClick,
+                UISoundType.Hover => defaultUIHover,
+                UISoundType.Button => defaultButtonClick,
+                _ => null
+            };
+    
+            if (clip != null)
+                PlayOneShot(clip, volume);
+        }
 
         private AudioSource GetAvailableAudioSource()
         {
@@ -590,5 +610,12 @@ namespace Gameplay.Systems
                 StopCoroutine(_musicCoroutine);
             }
         }
+    }
+    
+    public enum UISoundType
+    {
+        Click,
+        Hover,
+        Button
     }
 }

@@ -27,9 +27,14 @@ namespace Gameplay.Items
         private Collider _coll;
         private Vector3 _originalPosition;
         private bool _hasCheckedCollection = false;
+        private AudioSource _audioSource;
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+                _audioSource = gameObject.AddComponent<AudioSource>();
+            
             if (string.IsNullOrEmpty(resourceId))
             {
                 resourceId = $"{transform.position.x}_{transform.position.y}_{transform.position.z}";
@@ -81,8 +86,21 @@ namespace Gameplay.Items
                 breakProgressUI.SetActive(true);
                 breakProgressSlider.UpdateSlider(0);
             }
+            
+            PlayBreakingSound();
         
             StartCoroutine(BreakingRoutine(vacuumSpeedMultiplier));
+        }
+        
+        private void PlayBreakingSound()
+        {
+            AudioClip clip = data.soundData?.breakingSound != null ? data.soundData.breakingSound : null;
+    
+            if (clip != null)
+            {
+                float volume = data.soundData?.breakingVolume ?? 1f;
+                _audioSource.PlayOneShot(clip, volume);
+            }
         }
     
         public void StopBreaking(float time)
@@ -184,6 +202,17 @@ namespace Gameplay.Items
             if (Mtb.Instance != null)
             {
                 Mtb.Instance.StartVacuuming(this);
+            }
+            
+            PlayCollectSound();
+        }
+        
+        private void PlayCollectSound()
+        {
+            if (data.soundData?.collectSound != null)
+            {
+                float volume = data.soundData.collectVolume;
+                SoundManager.Instance.PlayOneShot(data.soundData.collectSound, volume);
             }
         }
     

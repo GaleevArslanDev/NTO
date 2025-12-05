@@ -37,8 +37,11 @@ namespace Gameplay.Items
         
         [Header("Audio")]
         [SerializeField] private AudioClip shootSound;
-        [SerializeField] private AudioClip vacuumSound;
         
+        [Header("Vacuum Sound")]
+        [SerializeField] private AudioClip vacuumSound;
+        [SerializeField] private float vacuumVolume = 0.7f;
+        [SerializeField] private bool loopVacuumSound = true;
         
         private AudioSource _vacuumAudioSource;
         private bool _isVacuuming;
@@ -71,7 +74,7 @@ namespace Gameplay.Items
 
         private void Start()
         {
-            _vacuumAudioSource = SoundManager.Instance.PlaySoundEffect(vacuumSound, 0.3f, true);
+            _vacuumAudioSource = SoundManager.Instance.PlaySoundEffect(vacuumSound, vacuumVolume, loopVacuumSound);
             _vacuumAudioSource.volume = 0;
             // Настройка лазерного луча
             if (laserBeam != null)
@@ -94,6 +97,14 @@ namespace Gameplay.Items
         {
             UpdateReloadIndicator();
             if (Cursor.lockState == CursorLockMode.None) return;
+            if (_currentTargetItem != null && _currentTargetItem.IsBeingBroken)
+            {
+                _vacuumAudioSource.volume = Mathf.Lerp(_vacuumAudioSource.volume, vacuumVolume, Time.deltaTime * 5f);
+            }
+            else
+            {
+                _vacuumAudioSource.volume = Mathf.Lerp(_vacuumAudioSource.volume, 0, Time.deltaTime * 10f);
+            }
             HandleItemTargeting();
             HandleWeapon();
         }
