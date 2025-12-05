@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core;
+using Gameplay.Buildings;
 using Gameplay.Characters.NPC;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace Data.Game
         
         // NPC Data
         public List<NpcSaveData> npcsData;
+        
+        public FarmManagerSaveData farmManagerData;
         
         // Building Data
         public BuildingSaveData buildingData;

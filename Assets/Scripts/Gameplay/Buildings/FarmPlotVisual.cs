@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 using Core;
 
 namespace Gameplay.Buildings
@@ -18,16 +19,21 @@ namespace Gameplay.Buildings
         public GameObject[] markerRow1;
         public GameObject[] markerRow2;
         public GameObject[] markerRow3;
+        
+        [Header("UI для отображения количества")]
+        [SerializeField] private TextMeshProUGUI amountText;
+        [SerializeField] private GameObject amountDisplay;
 
         private ItemType _currentResourceType;
         private int _currentProductionLevel;
         private int _currentEra;
         private bool _isVisible = false;
+        private int _accumulatedAmount = 0;
 
         public void Initialize(string id)
         {
             plotId = id;
-            SetVisible(false); // По умолчанию скрыто
+            SetVisible(false);
         }
 
         public void UpdateVisuals(ItemType resourceType, int productionLevel, int era)
@@ -36,6 +42,32 @@ namespace Gameplay.Buildings
             _currentProductionLevel = productionLevel;
             _currentEra = era;
 
+            UpdateVisuals();
+        }
+        
+        // Новый метод для обновления отображения количества
+        public void UpdateAccumulatedAmount(int amount)
+        {
+            _accumulatedAmount = amount;
+            
+            if (amountDisplay != null)
+            {
+                amountDisplay.SetActive(amount > 0);
+            }
+            
+            if (amountText != null)
+            {
+                amountText.text = amount.ToString();
+                
+                // Изменяем цвет текста в зависимости от количества
+                if (amount >= 20)
+                    amountText.color = Color.green;
+                else if (amount >= 10)
+                    amountText.color = Color.yellow;
+                else
+                    amountText.color = Color.white;
+            }
+            
             UpdateVisuals();
         }
 
@@ -128,15 +160,12 @@ namespace Gameplay.Buildings
             }
         }
 
-        // Метод для управления видимостью всего поля
         public void SetVisible(bool visible)
         {
             _isVisible = visible;
             
-            // Включаем/выключаем основной GameObject
             gameObject.SetActive(visible);
             
-            // Если скрываем, гарантируем что все визуалы выключены
             if (!visible)
             {
                 DeactivateAllMarkers();
@@ -144,12 +173,14 @@ namespace Gameplay.Buildings
                 medievalVisual?.SetActive(false);
                 modernVisual?.SetActive(false);
                 futureVisual?.SetActive(false);
+                
+                if (amountDisplay != null)
+                    amountDisplay.SetActive(false);
             }
         }
 
         public string GetPlotId() => plotId;
         
-        // Метод для установки plotId из инспектора (если нужно)
         public void SetPlotId(string id) => plotId = id;
     }
 }

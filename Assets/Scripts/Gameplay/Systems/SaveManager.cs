@@ -296,6 +296,8 @@ namespace Gameplay.Systems
                 var saveData = CreateSaveData(saveName);
                 var json = JsonUtility.ToJson(saveData, true);
                 var filePath = GetSaveFilePath(saveName);
+                
+                saveData.farmManagerData = FarmManager.Instance?.GetSaveData();
 
                 File.WriteAllText(filePath, json);
 
@@ -915,10 +917,10 @@ namespace Gameplay.Systems
 
             if (farmManager != null)
             {
-                var farmPlotsDict = new Dictionary<string, FarmPlotSaveData>();
+                var farmPlotsDict = new Dictionary<string, Data.Game.FarmPlotSaveData>();
                 foreach (var plot in farmManager.GetFarmPlots())
                 {
-                    farmPlotsDict[plot.Key] = new FarmPlotSaveData
+                    farmPlotsDict[plot.Key] = new Data.Game.FarmPlotSaveData
                     {
                         plotId = plot.Value.plotId,
                         resourceType = plot.Value.resourceType,
@@ -1131,6 +1133,11 @@ namespace Gameplay.Systems
 
                 // 4. Затем NPC
                 ApplyNpcsSaveData(saveData.npcsData);
+                
+                if (saveData.farmManagerData != null && FarmManager.Instance != null)
+                {
+                    FarmManager.Instance.ApplySaveData(saveData.farmManagerData);
+                }
 
                 // 5. Убедимся, что EnemySpawnManager готов перед загрузкой врагов
                 StartCoroutine(WaitForEnemySpawnManagerAndRestore(saveData.enemiesData));
