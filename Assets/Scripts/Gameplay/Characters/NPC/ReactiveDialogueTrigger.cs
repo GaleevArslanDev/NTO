@@ -299,6 +299,14 @@ namespace Gameplay.Characters.NPC
                 if (playerData != null)
                 {
                     playerData.ModifyRelationship(npcData.npcID, relationshipPenalty);
+                    
+                    if (RelationshipNotificationUI.Instance != null)
+                    {
+                        RelationshipNotificationUI.Instance.ShowRelationshipChange(
+                            npcData.npcName,
+                            relationshipPenalty
+                        );
+                    }
 
                     var relationshipManager = RelationshipManager.Instance;
                     if (relationshipManager != null)

@@ -6,6 +6,7 @@ using Data.Game;
 using Data.NPC;
 using Gameplay.Characters.NPC;
 using Gameplay.Systems;
+using UI;
 using UnityEngine;
 
 namespace Gameplay.Dialogue
@@ -168,6 +169,15 @@ namespace Gameplay.Dialogue
                 Debug.Log($"   Финальное изменение: {finalChange} (с учетом личности)");
             
                 RelationshipManager.Instance.ModifyRelationship(npcData.npcID, playerData.playerID, finalChange);
+                
+                // ПОКАЗЫВАЕМ УВЕДОМЛЕНИЕ ИГРОКУ
+                if (RelationshipNotificationUI.Instance != null)
+                {
+                    RelationshipNotificationUI.Instance.ShowRelationshipChange(
+                        npcData.npcName, 
+                        finalChange
+                    );
+                }
             
                 // Проверяем результат
                 int newRelationship = RelationshipManager.Instance.GetRelationshipWithPlayer(npcData.npcID);
