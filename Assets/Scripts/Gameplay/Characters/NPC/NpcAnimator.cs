@@ -57,7 +57,6 @@ namespace Gameplay.Characters.NPC
         {
             if (animator == null) animator = GetComponent<Animator>();
             if (navMeshAgent == null) navMeshAgent = GetComponent<NavMeshAgent>();
-
             _isMovingHash = Animator.StringToHash(isMovingParam);
             _isWorkingHash = Animator.StringToHash(isWorkingParam);
             _isTalkingHash = Animator.StringToHash(isTalkingParam);
@@ -68,7 +67,6 @@ namespace Gameplay.Characters.NPC
             _impatientHash = Animator.StringToHash(impatientTrigger);
             _lookAroundHash = Animator.StringToHash(lookAroundTrigger);
         }
-
         public void SetMoving(bool isMoving)
         {
             animator.SetBool(_isMovingHash, isMoving);

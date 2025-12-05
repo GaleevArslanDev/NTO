@@ -9,6 +9,8 @@ namespace Data.Inventory
         public ItemType type;
         public Color particleColor = Color.white;
         public Sprite icon;
+        
+        public ItemSoundData soundData;
     
         [Header("Breaking Settings")]
         public float breakTime = 2f;
@@ -21,5 +23,14 @@ namespace Data.Inventory
         [Range(0f, 1f)]
         public float enemySpawnChance = 0.1f;
         public int maxSpawnCount = 2;
+    }
+    
+    [System.Serializable]
+    public class ItemSoundData
+    {
+        public AudioClip breakingSound;
+        public AudioClip collectSound;
+        public float breakingVolume = 1f;
+        public float collectVolume = 1f;
     }
 }

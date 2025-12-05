@@ -23,6 +23,15 @@ namespace Gameplay.Characters.Player
         public float crouchHeight = 1f;
         public float crouchSpeed = 3f;
         public float crouchTransitionSpeed = 5f;
+        
+        [Header("Audio")]
+        [SerializeField] private AudioClip walkSound;
+        [SerializeField] private AudioClip runSound;
+        [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip landSound;
+    
+        private AudioSource _walkAudioSource;
+        private bool _wasGrounded;
 
         private CharacterController _characterController;
         private Vector3 _velocity;
@@ -34,6 +43,7 @@ namespace Gameplay.Characters.Player
         private Vector3 _standingCameraPosition;
         private float _currentSpeed; 
         private float _currentMouseSensitivity;
+        
         public static PlayerController Instance { get; private set; }
 
         private void Awake()
@@ -57,6 +67,8 @@ namespace Gameplay.Characters.Player
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            _walkAudioSource = SoundManager.Instance.PlaySoundEffect(walkSound, 0.5f, true);
+            _walkAudioSource.volume = 0;
             
             if (GameSettings.Instance != null)
             {
@@ -76,6 +88,24 @@ namespace Gameplay.Characters.Player
 
         private void Update()
         {
+            // Обновляем звук ходьбы в зависимости от состояния
+            if (_isGrounded && (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f))
+            {
+                _walkAudioSource.volume = _isCrouching ? 0.3f : (_currentSpeed == runSpeed ? 0.7f : 0.5f);
+            }
+            else
+            {
+                _walkAudioSource.volume = 0;
+            }
+        
+            // Звук приземления
+            if (_isGrounded && !_wasGrounded)
+            {
+                SoundManager.Instance.PlayOneShot(landSound, 0.3f);
+            }
+        
+            _wasGrounded = _isGrounded;
+            
             if (IsAnyUIOpen()) return;
         
             HandleMovement();
@@ -106,6 +136,7 @@ namespace Gameplay.Characters.Player
 
             if (Input.GetButtonDown("Jump") && _isGrounded)
             {
+                SoundManager.Instance.PlayOneShot(jumpSound, 0.5f);
                 if (_isCrouching)
                 {
                     StopCrouch();

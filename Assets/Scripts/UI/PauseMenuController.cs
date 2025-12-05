@@ -27,6 +27,10 @@ namespace UI
         [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
         [SerializeField] private bool allowPauseInGame = true;
         
+        [Header("Звуки")]
+        [SerializeField] private AudioClip openMenuSound;
+        [SerializeField] private AudioClip closeMenuSound;
+        
         private bool _isPaused;
         private GameObject _currentSubMenu;
         
@@ -63,6 +67,7 @@ namespace UI
         private void Update()
         {
             if (!allowPauseInGame) return;
+            if (UIManager.Instance.IsAnyUIOpen()) return;
             
             if (Input.GetKeyDown(pauseKey))
             {
@@ -89,6 +94,8 @@ namespace UI
         {
             if (_isPaused) return;
             
+            SoundManager.Instance.PlayOneShot(openMenuSound);
+            
             _isPaused = true;
             Time.timeScale = 0f;
             
@@ -111,6 +118,8 @@ namespace UI
         public void ResumeGame()
         {
             if (!_isPaused) return;
+            
+            SoundManager.Instance.PlayOneShot(closeMenuSound);
             
             _isPaused = false;
             Time.timeScale = 1f;

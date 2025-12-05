@@ -129,7 +129,6 @@ namespace Gameplay.Characters.NPC
             _currentState = NpcState.Walking;
             _npcAnimator?.SetState(_currentState);
             _npcAnimator?.SetMoving(true);
-
             _agent.SetDestination(destination);
 
             const float timeout = 10f;
