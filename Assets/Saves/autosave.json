@@ -1,0 +1,431 @@
+{
+    "version": "1.0",
+    "saveName": "autosave",
+    "timestamp": "2025-12-06 19:11:17",
+    "gameVersion": "1.0",
+    "screenshotData": "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",
+    "playerData": {
+        "playerID": 0,
+        "playerName": "Player",
+        "position": {
+            "x": 153.89739990234376,
+            "y": 5.726167678833008,
+            "z": 189.13221740722657
+        },
+        "rotation": {
+            "x": 0.0,
+            "y": 258.50408935546877,
+            "z": 0.0
+        },
+        "health": 100.0,
+        "level": 1,
+        "relationships": {
+            "dictionaryList": [
+                {
+                    "key": 1,
+                    "value": -5
+                },
+                {
+                    "key": 2,
+                    "value": -5
+                },
+                {
+                    "key": 4,
+                    "value": -5
+                }
+            ]
+        },
+        "dialogueHistory": {
+            "dictionaryList": []
+        },
+        "dialogueFlags": [],
+        "progression": {
+            "damageMultiplier": 1.0,
+            "fireRateMultiplier": 1.0,
+            "miningSpeedMultiplier": 1.0,
+            "inventoryCapacity": 50,
+            "collectionRangeMultiplier": 1.0,
+            "unlockedTechs": {
+                "dictionaryList": []
+            }
+        }
+    },
+    "worldData": {
+        "currentDay": 1,
+        "currentHour": 15,
+        "currentMinute": 34,
+        "timeTimer": 0.04409690201282501
+    },
+    "npcsData": [
+        {
+            "npcID": 1,
+            "npcName": "farmer",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [
+                {
+                    "memoryText": "Игрок проигнорировал мой зов",
+                    "relationshipImpact": -5,
+                    "sourceNpc": "System",
+                    "timestamp": {
+                        "day": 1,
+                        "hour": 11,
+                        "minute": 17
+                    }
+                }
+            ],
+            "currentDialogueIndex": 1,
+            "canCall": false,
+            "lastCallTime": 20.972412109375,
+            "behaviourData": {
+                "position": {
+                    "x": 180.0,
+                    "y": 4.050280570983887,
+                    "z": 197.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 55.77409362792969,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 5,
+                    "location": {
+                        "x": 180.0,
+                        "y": 4.0,
+                        "z": 197.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 4,
+            "npcName": "questgiver",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [
+                {
+                    "memoryText": "Игрок проигнорировал мой зов",
+                    "relationshipImpact": -5,
+                    "sourceNpc": "System",
+                    "timestamp": {
+                        "day": 1,
+                        "hour": 11,
+                        "minute": 16
+                    }
+                }
+            ],
+            "currentDialogueIndex": 1,
+            "canCall": false,
+            "lastCallTime": 32.77396774291992,
+            "behaviourData": {
+                "position": {
+                    "x": 122.02069091796875,
+                    "y": 2.727576732635498,
+                    "z": 253.58978271484376
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 301.3531188964844,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 5,
+                    "location": {
+                        "x": 49.0,
+                        "y": 2.700000047683716,
+                        "z": 294.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 2,
+            "npcName": "blacksmith",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [
+                {
+                    "memoryText": "Игрок проигнорировал мой зов",
+                    "relationshipImpact": -5,
+                    "sourceNpc": "System",
+                    "timestamp": {
+                        "day": 1,
+                        "hour": 10,
+                        "minute": 35
+                    }
+                }
+            ],
+            "currentDialogueIndex": 1,
+            "canCall": false,
+            "lastCallTime": 24.861530303955079,
+            "behaviourData": {
+                "position": {
+                    "x": 172.0,
+                    "y": 3.924269676208496,
+                    "z": 200.08969116210938
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 71.95500946044922,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 5,
+                    "location": {
+                        "x": 172.0,
+                        "y": 4.0,
+                        "z": 200.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 3,
+            "npcName": "mayor",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
+            "behaviourData": {
+                "position": {
+                    "x": 154.0,
+                    "y": 3.007603168487549,
+                    "z": 188.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 317.36669921875,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 5,
+                    "location": {
+                        "x": 154.0,
+                        "y": 4.0,
+                        "z": 188.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        }
+    ],
+    "farmManagerData": {},
+    "buildingData": {
+        "buildingLevels": {
+            "dictionaryList": [
+                {
+                    "key": "farm",
+                    "value": 0
+                },
+                {
+                    "key": "Forge",
+                    "value": 0
+                },
+                {
+                    "key": "tasks",
+                    "value": 0
+                }
+            ]
+        },
+        "unlockedBuildings": {
+            "dictionaryList": []
+        },
+        "townHallLevel": 0,
+        "unlockedTechTier": 1,
+        "farmPlots": {
+            "dictionaryList": []
+        }
+    },
+    "techData": {
+        "unlockedNodes": {
+            "dictionaryList": [
+                {
+                    "key": "damage_1",
+                    "value": false
+                },
+                {
+                    "key": "damage_2",
+                    "value": false
+                },
+                {
+                    "key": "damage_3",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_1",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_2",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_3",
+                    "value": false
+                },
+                {
+                    "key": "inventory_50",
+                    "value": false
+                },
+                {
+                    "key": "inventory_100",
+                    "value": false
+                },
+                {
+                    "key": "inventory_200",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_1",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_2",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_3",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection1",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection2",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection3",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red1",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red2",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood1",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood2",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal1",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal2",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone1",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone2",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold1",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold2",
+                    "value": false
+                }
+            ]
+        },
+        "unlockedTrees": []
+    },
+    "inventoryData": {
+        "items": {
+            "dictionaryList": []
+        },
+        "gold": 100,
+        "capacity": 50
+    },
+    "enemiesData": [],
+    "questData": {
+        "activeQuests": [],
+        "completedQuests": [],
+        "questProgress": {
+            "dictionaryList": []
+        }
+    },
+    "collectedResourceIds": [],
+    "settingsData": {
+        "language": "ru-RU",
+        "masterVolume": 1.0,
+        "musicVolume": 0.800000011920929,
+        "sfxVolume": 1.0,
+        "fullscreen": true,
+        "resolutionWidth": 1920,
+        "resolutionHeight": 1080,
+        "qualityLevel": 2,
+        "vsyncEnabled": true,
+        "textureQuality": 0,
+        "shadowQuality": 2,
+        "antiAliasing": 2,
+        "mouseSensitivity": 300.0,
+        "invertMouseY": false,
+        "autoSaveInterval": 300.0,
+        "enableScreenshots": true,
+        "screenshotQuality": 75,
+        "enableChecksum": true,
+        "backupSaves": true
+    },
+    "checksum": "Et8CRMGQiCwui+73gPOrh19UWppIBlGP3q2tW/nQePY=",
+    "isValid": true
+}

@@ -296,6 +296,27 @@
 	<string name="plot_choice_2_option_b">Мы должны спасти своих. Используем аномалию.</string>
 	<string name="plot_choice_2_reaction_a">Зол с гордостью смотрит на тебя: "Мужество встречать будущее - вот истинная сила."</string>
 	<string name="plot_choice_2_reaction_b">Зол выглядит постаревшим: "Цена будет ужасна... но если другого выхода нет..."</string>
+	
+	<!-- 14. Tutorial -->
+	<string name="story_intro_welcome">Это самая первая фраза. Ее говоорит ассистент прямо на спавне</string>
+	<string name="story_tutorial_movement">Далее учит передвигаться</string>
+	<string name="story_tutorial_movement_success">Игрок, ты молодец! Научился двигаться! Вау!</string>
+	<string name="story_npc_introduction">Тут AI агент говорит, что идут какие-то уроды</string>
+	<string name="story_guide_greeting">Тут NPC должны сказать привет и представиться.</string>
+	<string name="assistant_guide_comment">Тут AI агент что-то говорит про них.</string>
+	<string name="story_follow_guides">Тут то, что они рассказывают по пути к камню!</string>
+	<string name="assistant_black_screen">Тут AI агент говорит что-то про камень</string>
+	<string name="story_village_show">Тут NPC говорят что-то про деревню</string>
+	<string name="story_village_descriptionMayor">Тут личная фраза Зола про деревню</string>
+	<string name="story_village_descriptionBlacksmith">Тут личная фраза Брука про деревню</string>
+	<string name="story_village_descriptionFarmer">Тут личная фраза Горка про деревню</string>
+	<string name="story_village_descriptionQuestGiver">Тут личная фраза Липа про деревню</string>
+	<string name="assistant_village_welcome">Ассистент тоже что-то про деревню</string>
+	<string name="story_final_wordsMayor">Тут личная фраза Зола прощание</string>
+	<string name="story_final_wordsBlacksmith">Тут личная фраза Брука прощание</string>
+	<string name="story_final_wordsFarmer">Тут личная фраза Горка прощание</string>
+	<string name="story_final_wordsQuestGiver">Тут личная фраза Липа прощание</string>
+	<string name="story_game_completed">Финальное сообщение</string>
 
 	<!-- 14. AI ASSISTANT PHRASES -->
 	<!-- 14.1 Resource Collection -->

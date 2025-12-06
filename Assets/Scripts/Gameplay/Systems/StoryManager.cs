@@ -212,7 +212,7 @@ namespace Gameplay.Systems
                     ShowTutorialMessage($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString("story_guide_greeting")}");
                     
                     // AI Assistant может комментировать
-                    if (_aiAssistant != null && UnityEngine.Random.value > 0.5f)
+                    if (_aiAssistant != null)
                     {
                         _aiAssistant.Speak(LocalizationManager.LocalizationManager.Instance.GetString("assistant_guide_comment"));
                     }
@@ -340,7 +340,7 @@ namespace Gameplay.Systems
                 if (npcInteraction != null)
                 {
                     string npcName = npcInteraction.GetNpcName();
-                    ShowTutorialMessage($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString("story_village_description")}");
+                    ShowTutorialMessage($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString("story_village_description"+npcInteraction.npcType)}");
                     
                     yield return new WaitForSeconds(3f);
                 }
@@ -455,7 +455,7 @@ namespace Gameplay.Systems
                 if (npcInteraction != null)
                 {
                     string npcName = npcInteraction.GetNpcName();
-                    ShowTutorialMessage($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString("story_final_words")}");
+                    ShowTutorialMessage($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString("story_final_words"+npcInteraction.npcType)}");
                     yield return new WaitForSeconds(3f);
                 }
             }
