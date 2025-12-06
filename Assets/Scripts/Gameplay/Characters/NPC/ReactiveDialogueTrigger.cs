@@ -195,6 +195,13 @@ namespace Gameplay.Characters.NPC
 
         private void StartCalling()
         {
+            // ПРОВЕРКА: не в сюжетном режиме
+            if (StoryManager.Instance != null && StoryManager.Instance.IsInStoryMode())
+            {
+                Debug.Log($"{_npcInteraction.GetNpcName()}: Не могу звать в сюжетном режиме");
+                return;
+            }
+    
             if (!_canCall || _isCalling) return;
 
             if (AIAssistant.Instance != null)
@@ -330,7 +337,7 @@ namespace Gameplay.Characters.NPC
             AdvanceToNextDialogue();
         }
 
-        private void EndCalling()
+        public void EndCalling()
         {
             _isCalling = false;
             _currentDialogueIndex++;

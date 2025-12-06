@@ -17,6 +17,9 @@ namespace Gameplay.Characters.NPC
         private RelationshipManager _relationshipManager;
         private NpcInteraction _interaction;
         
+        private bool _isInStoryMode = false;
+        private Coroutine _optimizedBehaviorRoutine;
+        
         private NpcAnimator _npcAnimator;
 
         // Состояния
@@ -48,15 +51,37 @@ namespace Gameplay.Characters.NPC
 
         private void Start()
         {
+            _agent = GetComponent<NavMeshAgent>();
+            _scheduleManager = FindObjectOfType<ScheduleManager>();
+            _relationshipManager = FindObjectOfType<RelationshipManager>();
+            _interaction = GetComponent<NpcInteraction>();
+            _npcAnimator = GetComponent<NpcAnimator>();
+
+            // Настройка NPCInteraction из NPCDataConfig
+            if (npcDataConfig == null || _interaction == null) return;
+            _interaction.npcData = CreateRuntimeNpcData();
+            _interaction.dialogueTrees = npcDataConfig.dialogueTrees;
+            _interaction.portrait = npcDataConfig.portrait;
+            _interaction.defaultVoice = npcDataConfig.defaultVoice;
+
+            if (_agent != null)
+            {
+                _agent.speed = npcDataConfig.movementSpeed;
+            }
+    
             // Регистрация в менеджерах
             if (_relationshipManager != null && _interaction != null && _interaction.npcData != null)
             {
                 _relationshipManager.RegisterNpc(_interaction.npcData);
             }
-
-            // Запуск оптимизированной корутины поведения
-            StartCoroutine(OptimizedBehaviorRoutine());
+    
+            // Запуск оптимизированной корутины поведения, если не в режиме сюжета
+            if (!_isInStoryMode)
+            {
+                _optimizedBehaviorRoutine = StartCoroutine(OptimizedBehaviorRoutine());
+            }
         }
+
 
         private IEnumerator OptimizedBehaviorRoutine()
         {
@@ -65,6 +90,9 @@ namespace Gameplay.Characters.NPC
             while (true)
             {
                 yield return waitCheck;
+
+                // Если в режиме сюжета, не обновляем активность
+                if (_isInStoryMode) continue;
 
                 if (_scheduleManager == null || npcDataConfig == null) continue;
 
@@ -87,6 +115,41 @@ namespace Gameplay.Characters.NPC
             return a.type == b.type &&
                    Vector3.Distance(a.location, b.location) < 1f &&
                    a.targetNpc == b.targetNpc;
+        }
+        
+        public void SetStoryMode(bool storyMode)
+        {
+            _isInStoryMode = storyMode;
+    
+            if (storyMode)
+            {
+                // Останавливаем обычное поведение
+                if (_optimizedBehaviorRoutine != null)
+                {
+                    StopCoroutine(_optimizedBehaviorRoutine);
+                    _optimizedBehaviorRoutine = null;
+                }
+        
+                if (_currentActivityRoutine != null)
+                {
+                    StopCoroutine(_currentActivityRoutine);
+                    _currentActivityRoutine = null;
+                }
+        
+                // Останавливаем агента
+                if (_agent != null && _agent.enabled)
+                {
+                    _agent.isStopped = true;
+                }
+            }
+            else
+            {
+                // Восстанавливаем обычное поведение
+                if (_optimizedBehaviorRoutine == null)
+                {
+                    _optimizedBehaviorRoutine = StartCoroutine(OptimizedBehaviorRoutine());
+                }
+            }
         }
 
         private IEnumerator ExecuteActivity(Activity activity)

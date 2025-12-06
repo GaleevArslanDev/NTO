@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core;
 using Gameplay.Buildings;
 using Gameplay.Characters.NPC;
+using Gameplay.Systems;
 using UnityEngine;
 
 namespace Data.Game
@@ -17,6 +18,8 @@ namespace Data.Game
         
         // Screenshot data for manual saves
         public string screenshotData; // Base64 encoded thumbnail
+
+        public StorySaveData storyData;
         
         // Player Data
         public PlayerSaveData playerData;

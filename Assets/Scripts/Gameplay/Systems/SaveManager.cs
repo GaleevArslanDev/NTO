@@ -704,6 +704,23 @@ namespace Gameplay.Systems
                 }
             }
         }
+        
+        private StorySaveData CreateStorySaveData()
+        {
+            if (StoryManager.Instance != null)
+            {
+                return StoryManager.Instance.GetSaveData();
+            }
+            return new StorySaveData();
+        }
+
+        private void ApplyStorySaveData(StorySaveData data)
+        {
+            if (StoryManager.Instance != null)
+            {
+                StoryManager.Instance.ApplySaveData(data);
+            }
+        }
 
         private string GetSaveFilePath(string saveName)
         {
@@ -718,6 +735,7 @@ namespace Gameplay.Systems
                 saveName = saveName,
                 timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 gameVersion = gameVersion,
+                storyData = CreateStorySaveData(),
 
                 playerData = CreatePlayerSaveData(),
                 worldData = CreateWorldSaveData(),
@@ -1120,6 +1138,8 @@ namespace Gameplay.Systems
 
                 // 1. Сначала применяем настройки и базовые данные
                 ApplyWorldSaveData(saveData.worldData);
+                
+                ApplyStorySaveData(saveData.storyData);
 
                 // 2. Затем применяем игровые данные
                 ApplyPlayerSaveData(saveData.playerData);

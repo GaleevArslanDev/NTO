@@ -1,20 +1,25 @@
 {
     "version": "1.0",
     "saveName": "autosave",
-    "timestamp": "2025-12-06 19:11:17",
+    "timestamp": "2025-12-06 23:57:51",
     "gameVersion": "1.0",
-    "screenshotData": "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",
+    "screenshotData": "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",
+    "storyData": {
+        "isTutorialCompleted": true,
+        "isFinalCutscenePlayed": false,
+        "currentState": 7
+    },
     "playerData": {
         "playerID": 0,
         "playerName": "Player",
         "position": {
-            "x": 153.89739990234376,
-            "y": 5.726167678833008,
-            "z": 189.13221740722657
+            "x": 234.542236328125,
+            "y": 4.061175346374512,
+            "z": 145.2833251953125
         },
         "rotation": {
             "x": 0.0,
-            "y": 258.50408935546877,
+            "y": 143.80641174316407,
             "z": 0.0
         },
         "health": 100.0,
@@ -23,15 +28,11 @@
             "dictionaryList": [
                 {
                     "key": 1,
-                    "value": -5
+                    "value": 0
                 },
                 {
                     "key": 2,
-                    "value": -5
-                },
-                {
-                    "key": 4,
-                    "value": -5
+                    "value": 0
                 }
             ]
         },
@@ -51,10 +52,10 @@
         }
     },
     "worldData": {
-        "currentDay": 1,
-        "currentHour": 15,
+        "currentDay": 3,
+        "currentHour": 21,
         "currentMinute": 34,
-        "timeTimer": 0.04409690201282501
+        "timeTimer": 0.11725820600986481
     },
     "npcsData": [
         {
@@ -64,39 +65,28 @@
             "relationships": {
                 "dictionaryList": []
             },
-            "memories": [
-                {
-                    "memoryText": "Игрок проигнорировал мой зов",
-                    "relationshipImpact": -5,
-                    "sourceNpc": "System",
-                    "timestamp": {
-                        "day": 1,
-                        "hour": 11,
-                        "minute": 17
-                    }
-                }
-            ],
-            "currentDialogueIndex": 1,
-            "canCall": false,
-            "lastCallTime": 20.972412109375,
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
             "behaviourData": {
                 "position": {
-                    "x": 180.0,
-                    "y": 4.050280570983887,
-                    "z": 197.0
+                    "x": 170.1953125,
+                    "y": 4.007602691650391,
+                    "z": 197.45199584960938
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": 55.77409362792969,
+                    "y": 74.67532348632813,
                     "z": 0.0
                 },
                 "currentState": 1,
                 "currentActivity": {
-                    "type": 5,
+                    "type": 3,
                     "location": {
-                        "x": 180.0,
+                        "x": 172.0,
                         "y": 4.0,
-                        "z": 197.0
+                        "z": 199.0
                     },
                     "targetNpc": "",
                     "duration": 60.0,
@@ -111,39 +101,28 @@
             "relationships": {
                 "dictionaryList": []
             },
-            "memories": [
-                {
-                    "memoryText": "Игрок проигнорировал мой зов",
-                    "relationshipImpact": -5,
-                    "sourceNpc": "System",
-                    "timestamp": {
-                        "day": 1,
-                        "hour": 11,
-                        "minute": 16
-                    }
-                }
-            ],
-            "currentDialogueIndex": 1,
-            "canCall": false,
-            "lastCallTime": 32.77396774291992,
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
             "behaviourData": {
                 "position": {
-                    "x": 122.02069091796875,
-                    "y": 2.727576732635498,
-                    "z": 253.58978271484376
+                    "x": 109.50320434570313,
+                    "y": 1.6821706295013428,
+                    "z": 258.8848876953125
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": 301.3531188964844,
+                    "y": 106.51012420654297,
                     "z": 0.0
                 },
                 "currentState": 1,
                 "currentActivity": {
-                    "type": 5,
+                    "type": 3,
                     "location": {
-                        "x": 49.0,
-                        "y": 2.700000047683716,
-                        "z": 294.0
+                        "x": 154.0,
+                        "y": 4.0,
+                        "z": 208.0
                     },
                     "targetNpc": "",
                     "duration": 60.0,
@@ -158,39 +137,28 @@
             "relationships": {
                 "dictionaryList": []
             },
-            "memories": [
-                {
-                    "memoryText": "Игрок проигнорировал мой зов",
-                    "relationshipImpact": -5,
-                    "sourceNpc": "System",
-                    "timestamp": {
-                        "day": 1,
-                        "hour": 10,
-                        "minute": 35
-                    }
-                }
-            ],
-            "currentDialogueIndex": 1,
-            "canCall": false,
-            "lastCallTime": 24.861530303955079,
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
             "behaviourData": {
                 "position": {
-                    "x": 172.0,
-                    "y": 3.924269676208496,
-                    "z": 200.08969116210938
+                    "x": 154.15643310546876,
+                    "y": 3.9926114082336427,
+                    "z": 171.3023681640625
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": 71.95500946044922,
+                    "y": 161.21853637695313,
                     "z": 0.0
                 },
                 "currentState": 1,
                 "currentActivity": {
-                    "type": 5,
+                    "type": 3,
                     "location": {
-                        "x": 172.0,
+                        "x": 158.0,
                         "y": 4.0,
-                        "z": 200.0
+                        "z": 160.0
                     },
                     "targetNpc": "",
                     "duration": 60.0,
@@ -217,12 +185,12 @@
                 },
                 "rotation": {
                     "x": 0.0,
-                    "y": 317.36669921875,
+                    "y": 266.1385498046875,
                     "z": 0.0
                 },
                 "currentState": 1,
                 "currentActivity": {
-                    "type": 5,
+                    "type": 3,
                     "location": {
                         "x": 154.0,
                         "y": 4.0,
@@ -391,7 +359,16 @@
     },
     "inventoryData": {
         "items": {
-            "dictionaryList": []
+            "dictionaryList": [
+                {
+                    "key": "CrystalRed",
+                    "value": 1
+                },
+                {
+                    "key": "CrystalBlue",
+                    "value": 1
+                }
+            ]
         },
         "gold": 100,
         "capacity": 50
@@ -404,7 +381,10 @@
             "dictionaryList": []
         }
     },
-    "collectedResourceIds": [],
+    "collectedResourceIds": [
+        "234,1038_3,181168_148,3407",
+        "235,5362_3,126928_144,0106"
+    ],
     "settingsData": {
         "language": "ru-RU",
         "masterVolume": 1.0,
@@ -426,6 +406,6 @@
         "enableChecksum": true,
         "backupSaves": true
     },
-    "checksum": "Et8CRMGQiCwui+73gPOrh19UWppIBlGP3q2tW/nQePY=",
+    "checksum": "KdY3R42t3QQ3/KFcfT/7bkzWX5/jsMe86Y0YzcLvQ1s=",
     "isValid": true
 }
