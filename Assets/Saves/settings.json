@@ -1,0 +1,21 @@
+{
+    "language": "ru-RU",
+    "masterVolume": 0.0,
+    "musicVolume": 0.0,
+    "sfxVolume": 1.0,
+    "fullscreen": true,
+    "resolutionWidth": 2560,
+    "resolutionHeight": 1600,
+    "qualityLevel": 5,
+    "vsyncEnabled": true,
+    "textureQuality": 0,
+    "shadowQuality": 2,
+    "antiAliasing": 2,
+    "mouseSensitivity": 300.0,
+    "invertMouseY": false,
+    "autoSaveInterval": 300.0,
+    "enableScreenshots": true,
+    "screenshotQuality": 75,
+    "enableChecksum": true,
+    "backupSaves": true
+}
