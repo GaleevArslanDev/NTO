@@ -322,7 +322,7 @@ namespace Gameplay.Dialogue
                 option != null && ConditionChecker.CheckConditions(option.conditions, _currentNpc.npcData)
             ).ToArray();
         }
-    
+
         public bool IsInDialogue { get; private set; }
 
         public DialogueNode CurrentNode { get; private set; }

@@ -90,8 +90,7 @@ namespace Gameplay.Dialogue
     
             // Используем UIManager
             if (UIManager.Instance != null)
-                if (!DialogueManager.Instance.IsInDialogue)
-                    UIManager.Instance.RegisterUIOpen();
+                UIManager.Instance.RegisterUIOpen();
         }
 
         public void HideDialogue()
