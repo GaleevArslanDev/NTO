@@ -10,10 +10,6 @@
         [SerializeField] private AudioClip[] gameMusicTracks;
         [SerializeField] private AudioClip battleMusic;
         
-        [Header("UI Sounds")]
-        [SerializeField] private AudioClip uiClickSound;
-        [SerializeField] private AudioClip uiHoverSound;
-        
         [Header("Music Settings")]
         [SerializeField] private float musicDelayBetweenTracks = 2f;
         [SerializeField] private bool shufflePlaylist = true;
@@ -29,7 +25,6 @@
             }
             
             InitializeMusic();
-            InitializeUISounds();
         }
         
         private void InitializeMusic()
@@ -60,14 +55,6 @@
             SoundManager.Instance.SetMusicDelay(musicDelayBetweenTracks);
             SoundManager.Instance.SetShuffle(shufflePlaylist);
             SoundManager.Instance.SetLoopMusic(loopMusic);
-        }
-        
-        private void InitializeUISounds()
-        {
-            // Сохраняем ссылки на звуки UI в SoundManager
-            // (вам нужно добавить публичные поля в SoundManager для этого)
-            SoundManager.Instance.defaultUIClick = uiClickSound;
-            SoundManager.Instance.defaultUIHover = uiHoverSound;
         }
     }
 }

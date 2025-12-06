@@ -43,7 +43,6 @@ namespace Gameplay.Items
         [SerializeField] private float vacuumVolume = 0.7f;
         [SerializeField] private bool loopVacuumSound = true;
         
-        private AudioSource _vacuumAudioSource;
         private bool _isVacuuming;
         private CollectableItem _currentTargetItem;
         private float _nextFireTime;
@@ -74,8 +73,6 @@ namespace Gameplay.Items
 
         private void Start()
         {
-            _vacuumAudioSource = SoundManager.Instance.PlaySoundEffect(vacuumSound, vacuumVolume, loopVacuumSound);
-            _vacuumAudioSource.volume = 0;
             // Настройка лазерного луча
             if (laserBeam != null)
             {
@@ -97,14 +94,6 @@ namespace Gameplay.Items
         {
             UpdateReloadIndicator();
             if (Cursor.lockState == CursorLockMode.None) return;
-            if (_currentTargetItem != null && _currentTargetItem.IsBeingBroken)
-            {
-                _vacuumAudioSource.volume = Mathf.Lerp(_vacuumAudioSource.volume, vacuumVolume, Time.deltaTime * 5f);
-            }
-            else
-            {
-                _vacuumAudioSource.volume = Mathf.Lerp(_vacuumAudioSource.volume, 0, Time.deltaTime * 10f);
-            }
             HandleItemTargeting();
             HandleWeapon();
         }
@@ -167,7 +156,6 @@ namespace Gameplay.Items
             
             if (Input.GetMouseButton(1))
             {
-                 _vacuumAudioSource.volume = 0.3f;
                 if (!_currentTargetItem.IsBeingBroken)
                 {
                     _currentTargetItem.StartBreaking(vacuumSpeedMultiplier);
@@ -175,7 +163,6 @@ namespace Gameplay.Items
             }
             else if (Input.GetMouseButtonUp(1))
             {
-                _vacuumAudioSource.volume = 0;
                 _currentTargetItem.StopBreaking(_currentTargetItem.data.vacuumTime * (1f / vacuumSpeedMultiplier));
             }
         }
@@ -272,6 +259,7 @@ namespace Gameplay.Items
         {
             if (!_isVacuuming)
             {
+                SoundManager.Instance.PlayOneShot(vacuumSound, vacuumVolume);
                 StartCoroutine(VacuumRoutine(item));
             }
         }
