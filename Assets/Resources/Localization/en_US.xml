@@ -42,12 +42,42 @@
 
 	<!-- 7. TECHNOLOGY TREE -->
 	<!-- 7.1 Tech Node Names -->
-	<string name="tech_damage_boost">Damage Boost</string>
-	<string name="tech_inventory_capacity">Inventory Capacity</string>
-	<string name="tech_mining_range">Mining Range</string>
-	<string name="tech_mining_speed">Mining Speed</string>
-	<string name="tech_resource_per_deposit">Resources per Deposit</string>
+	<string name="tech_damage_boost1">Damage Boost I</string>
+	<string name="tech_damage_boost2">Damage Boost II</string>
+	<string name="tech_damage_boost3">Damage Boost III</string>
+	<string name="tech_inventory_capacity1">Inventory Capacity I</string>
+	<string name="tech_inventory_capacity2">Inventory Capacity II</string>
+	<string name="tech_inventory_capacity3">Inventory Capacity III</string>
+	<string name="tech_mining_range1">Mining Range I</string>
+	<string name="tech_mining_range2">Mining Range II</string>
+	<string name="tech_mining_range3">Mining Range III</string>
+	<string name="tech_mining_speed1">Mining Speed I</string>
+	<string name="tech_mining_speed2">Mining Speed II</string>
+	<string name="tech_mining_speed3">Mining Speed III</string>
+	<string name="tech_resource_per_deposit1">Resources per Deposit I</string>
+	<string name="tech_resource_per_deposit2">Resources per Deposit II</string>
+	<string name="tech_resource_per_deposit3">Resources per Deposit III</string>
 
+	<!-- 7.1.1 Farmer Passive Mining Upgrades -->
+	<string name="farmer_passive_wood1">Passive Wood Mining I</string>
+	<string name="farmer_passive_wood2">Passive Wood Mining II</string>
+	<string name="farmer_passive_wood3">Passive Wood Mining III</string>
+
+	<string name="farmer_passive_stone1">Passive Stone Mining I</string>
+	<string name="farmer_passive_stone2">Passive Stone Mining II</string>
+	<string name="farmer_passive_stone3">Passive Stone Mining III</string>
+
+	<string name="farmer_passive_iron1">Passive Iron Mining I</string>
+	<string name="farmer_passive_iron2">Passive Iron Mining II</string>
+	<string name="farmer_passive_iron3">Passive Iron Mining III</string>
+
+	<string name="farmer_passive_gold1">Passive Gold Mining I</string>
+	<string name="farmer_passive_gold2">Passive Gold Mining II</string>
+	<string name="farmer_passive_gold3">Passive Gold Mining III</string>
+
+	<string name="farmer_passive_crystals1">Passive Crystal Mining I</string>
+	<string name="farmer_passive_crystals2">Passive Crystal Mining II</string>
+	<string name="farmer_passive_crystals3">Passive Crystal Mining III</string>
 	<!-- 7.2 Tech UI Labels -->
 	<string name="tech-node_available">&lt;color=green&gt;✓ Available for Research&lt;/color&gt;</string>
 	<string name="tech-node_available_in_town">Available only at NPC</string>

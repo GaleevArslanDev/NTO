@@ -52,6 +52,28 @@
 	<string name="tech_resource_per_deposit2">Ресурсов с залежи II</string>
 	<string name="tech_resource_per_deposit3">Ресурсов с залежи III</string>
 
+	<!-- 8. FARMER CHARACTER -->
+	<!-- 8.1 Farmer Passive Mining Upgrades -->
+	<string name="farmer_passive_wood1">Пассивная добыча дерева I</string>
+	<string name="farmer_passive_wood2">Пассивная добыча дерева II</string>
+	<string name="farmer_passive_wood3">Пассивная добыча дерева III</string>
+
+	<string name="farmer_passive_stone1">Пассивная добыча камня I</string>
+	<string name="farmer_passive_stone2">Пассивная добыча камня II</string>
+	<string name="farmer_passive_stone3">Пассивная добыча камня III</string>
+
+	<string name="farmer_passive_iron1">Пассивная добыча железа I</string>
+	<string name="farmer_passive_iron2">Пассивная добыча железа II</string>
+	<string name="farmer_passive_iron3">Пассивная добыча железа III</string>
+
+	<string name="farmer_passive_gold1">Пассивная добыча золота I</string>
+	<string name="farmer_passive_gold2">Пассивная добыча золота II</string>
+	<string name="farmer_passive_gold3">Пассивная добыча золота III</string>
+
+	<string name="farmer_passive_crystals1">Добыча кристаллов I</string>
+	<string name="farmer_passive_crystals2">Добыча кристаллов II</string>
+	<string name="farmer_passive_crystals3">Добыча кристаллов III</string>
+
 	<!-- 7.2 Tech UI Labels -->
 	<string name="tech-node_available">&lt;color=green&gt;✓ Доступно для изучения&lt;/color&gt;</string>
 	<string name="tech-node_available_in_town">Доступно только у NPC</string>
@@ -60,9 +82,7 @@
 	<string name="tech-node_no-town-hall-tier">Требуется уровень ратуши: {0}</string>
 	<string name="tech-node_unlocked">&lt;color=green&gt;✓ Разблокировано&lt;/color&gt;</string>
 	<string name="tech-node-detail-panel_collection-range-multiplier-label">Радиус сбора: +{0}%</string>
-	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +25%</string>
-	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +50%</string>
-	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +100%</string>
+	<string name="tech-node-detail-panel_damage-multiplier-label">Урон: +{0}%</string>
 	<string name="tech-node-detail-panel_fire-rate-multiplier-label">Скорость стрельбы: +{0}%</string>
 	<string name="tech-node-detail-panel_inventory-capacity-label">Вместимость инвентаря: {0}</string>
 	<string name="tech-node-detail-panel_mining-speed-label">Скорость добычи: +{0}%</string>
