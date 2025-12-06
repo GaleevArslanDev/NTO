@@ -1,0 +1,394 @@
+{
+    "version": "1.0",
+    "saveName": "manual_adfasd_20251206_213226",
+    "timestamp": "2025-12-06 21:32:26",
+    "gameVersion": "1.0",
+    "screenshotData": "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",
+    "playerData": {
+        "playerID": 0,
+        "playerName": "Player",
+        "position": {
+            "x": 217.60000610351563,
+            "y": 3.81500506401062,
+            "z": 136.6999969482422
+        },
+        "rotation": {
+            "x": 0.0,
+            "y": 301.0207214355469,
+            "z": 0.0
+        },
+        "health": 100.0,
+        "level": 1,
+        "relationships": {
+            "dictionaryList": [
+                {
+                    "key": 1,
+                    "value": 0
+                },
+                {
+                    "key": 2,
+                    "value": 0
+                }
+            ]
+        },
+        "dialogueHistory": {
+            "dictionaryList": []
+        },
+        "dialogueFlags": [],
+        "progression": {
+            "damageMultiplier": 1.0,
+            "fireRateMultiplier": 1.0,
+            "miningSpeedMultiplier": 1.0,
+            "inventoryCapacity": 50,
+            "collectionRangeMultiplier": 1.0,
+            "unlockedTechs": {
+                "dictionaryList": []
+            }
+        }
+    },
+    "worldData": {
+        "currentDay": 1,
+        "currentHour": 8,
+        "currentMinute": 12,
+        "timeTimer": 0.03194329887628555
+    },
+    "npcsData": [
+        {
+            "npcID": 1,
+            "npcName": "farmer",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
+            "behaviourData": {
+                "position": {
+                    "x": 170.86721801757813,
+                    "y": 3.201021194458008,
+                    "z": 177.4764404296875
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 36.032081604003909,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 0,
+                    "location": {
+                        "x": 172.0,
+                        "y": 4.0,
+                        "z": 179.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 4,
+            "npcName": "questgiver",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
+            "behaviourData": {
+                "position": {
+                    "x": 162.12222290039063,
+                    "y": 3.7862534523010256,
+                    "z": 183.01132202148438
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 342.25799560546877,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 0,
+                    "location": {
+                        "x": 154.0,
+                        "y": 4.0,
+                        "z": 208.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 2,
+            "npcName": "blacksmith",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
+            "behaviourData": {
+                "position": {
+                    "x": 165.20370483398438,
+                    "y": 4.007603168487549,
+                    "z": 175.20370483398438
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 237.45779418945313,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 0,
+                    "location": {
+                        "x": 150.0,
+                        "y": 4.0,
+                        "z": 160.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        },
+        {
+            "npcID": 3,
+            "npcName": "mayor",
+            "currentState": 0,
+            "relationships": {
+                "dictionaryList": []
+            },
+            "memories": [],
+            "currentDialogueIndex": 0,
+            "canCall": true,
+            "lastCallTime": 0.0,
+            "behaviourData": {
+                "position": {
+                    "x": 164.14013671875,
+                    "y": 2.8367810249328615,
+                    "z": 185.86636352539063
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 55.157691955566409,
+                    "z": 0.0
+                },
+                "currentState": 1,
+                "currentActivity": {
+                    "type": 0,
+                    "location": {
+                        "x": 168.8000030517578,
+                        "y": 5.0,
+                        "z": 189.0
+                    },
+                    "targetNpc": "",
+                    "duration": 60.0,
+                    "remainingTime": 0.0
+                }
+            }
+        }
+    ],
+    "farmManagerData": {},
+    "buildingData": {
+        "buildingLevels": {
+            "dictionaryList": [
+                {
+                    "key": "farm",
+                    "value": 0
+                },
+                {
+                    "key": "Forge",
+                    "value": 0
+                },
+                {
+                    "key": "tasks",
+                    "value": 0
+                }
+            ]
+        },
+        "unlockedBuildings": {
+            "dictionaryList": []
+        },
+        "townHallLevel": 0,
+        "unlockedTechTier": 1,
+        "farmPlots": {
+            "dictionaryList": []
+        }
+    },
+    "techData": {
+        "unlockedNodes": {
+            "dictionaryList": [
+                {
+                    "key": "damage_1",
+                    "value": false
+                },
+                {
+                    "key": "damage_2",
+                    "value": false
+                },
+                {
+                    "key": "damage_3",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_1",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_2",
+                    "value": false
+                },
+                {
+                    "key": "collection_range_3",
+                    "value": false
+                },
+                {
+                    "key": "inventory_50",
+                    "value": false
+                },
+                {
+                    "key": "inventory_100",
+                    "value": false
+                },
+                {
+                    "key": "inventory_200",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_1",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_2",
+                    "value": false
+                },
+                {
+                    "key": "mining_speed_3",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection1",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection2",
+                    "value": false
+                },
+                {
+                    "key": "resource_collection3",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red1",
+                    "value": false
+                },
+                {
+                    "key": "passive_crystal_red2",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood1",
+                    "value": false
+                },
+                {
+                    "key": "passive_wood2",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal1",
+                    "value": false
+                },
+                {
+                    "key": "passive_metal2",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone1",
+                    "value": false
+                },
+                {
+                    "key": "passive_stone2",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold1",
+                    "value": false
+                },
+                {
+                    "key": "passive_gold2",
+                    "value": false
+                }
+            ]
+        },
+        "unlockedTrees": []
+    },
+    "inventoryData": {
+        "items": {
+            "dictionaryList": []
+        },
+        "gold": 100,
+        "capacity": 50
+    },
+    "enemiesData": [],
+    "questData": {
+        "activeQuests": [],
+        "completedQuests": [],
+        "questProgress": {
+            "dictionaryList": []
+        }
+    },
+    "collectedResourceIds": [],
+    "settingsData": {
+        "language": "ru-RU",
+        "masterVolume": 1.0,
+        "musicVolume": 0.800000011920929,
+        "sfxVolume": 1.0,
+        "fullscreen": true,
+        "resolutionWidth": 1920,
+        "resolutionHeight": 1080,
+        "qualityLevel": 2,
+        "vsyncEnabled": true,
+        "textureQuality": 0,
+        "shadowQuality": 2,
+        "antiAliasing": 2,
+        "mouseSensitivity": 300.0,
+        "invertMouseY": false,
+        "autoSaveInterval": 300.0,
+        "enableScreenshots": true,
+        "screenshotQuality": 75,
+        "enableChecksum": true,
+        "backupSaves": true
+    },
+    "checksum": "zYzSJJcvELPGoqGdKoFQxOC8gqw6BxlwWvhylwaOyKA=",
+    "isValid": true
+}
