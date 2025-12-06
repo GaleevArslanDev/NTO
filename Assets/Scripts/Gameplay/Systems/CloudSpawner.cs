@@ -10,7 +10,7 @@ public class CloudSpawner : MonoBehaviour
 
     [Header("Spawn Area")]
     [SerializeField] private Transform spawnZone;
-    [SerializeField] private Vector3 spawnAreaSize = new Vector3(100f, 30f, 100f); // Увеличьте размер области
+    [SerializeField] private Vector3 spawnAreaSize = new Vector3(100f, 30f, 100f);
 
     [Header("Cloud Settings")]
     [SerializeField] private Vector2 speedRange = new Vector2(3f, 8f);
@@ -18,8 +18,14 @@ public class CloudSpawner : MonoBehaviour
     [SerializeField] private Vector2 rotationRange = new Vector2(-15f, 15f);
 
     [Header("Spacing Settings")]
-    [SerializeField] private float minCloudDistance = 10f; // Минимальное расстояние между облаками
-    [SerializeField] private int maxSpawnAttempts = 30; // Максимальное количество попыток спавна
+    [SerializeField] private float minCloudDistance = 10f;
+    [SerializeField] private int maxSpawnAttempts = 30;
+
+    [Header("Hot Spawn Settings")]
+    [SerializeField] private bool useHotSpawn = true; // Включить горячий спавн
+    [SerializeField] private int initialCloudCount = 15; // Количество облаков при старте
+    [SerializeField] private float hotSpawnMinDistance = 8f; // Минимальное расстояние при горячем спавне
+    [SerializeField] private bool fillSpawnArea = true; // Равномерно заполнить всю зону
 
     [Header("Movement Direction")]
     [SerializeField] private Vector3 movementDirection = Vector3.forward;
@@ -37,11 +43,19 @@ public class CloudSpawner : MonoBehaviour
 
         spawnBounds = new Bounds(spawnZone.position, spawnAreaSize);
 
-        // Спавним с проверкой расстояния
-        int initialClouds = Mathf.Min(maxClouds / 2, 10);
-        for (int i = 0; i < initialClouds; i++)
+        // Горячий спавн при старте
+        if (useHotSpawn)
         {
-            TrySpawnCloudWithSpacing(100); // Больше попыток для начального спавна
+            PerformHotSpawn();
+        }
+        else
+        {
+            // Старый метод (постепенный спавн)
+            int initialClouds = Mathf.Min(maxClouds / 2, 10);
+            for (int i = 0; i < initialClouds; i++)
+            {
+                TrySpawnCloudWithSpacing(100);
+            }
         }
     }
 
@@ -59,7 +73,127 @@ public class CloudSpawner : MonoBehaviour
         RemoveDistantClouds();
     }
 
-    bool TrySpawnCloudWithSpacing(int maxAttempts)
+    // Горячий спавн - мгновенное создание облаков по всей зоне
+    void PerformHotSpawn()
+    {
+        if (!fillSpawnArea)
+        {
+            // Простой случайный спавн с расстоянием
+            for (int i = 0; i < initialCloudCount && activeClouds.Count < maxClouds; i++)
+            {
+                TrySpawnCloudWithSpacing(50, hotSpawnMinDistance);
+            }
+        }
+        else
+        {
+            // Равномерное заполнение всей зоны спавна
+            FillSpawnAreaUniformly();
+        }
+    }
+
+    // Метод равномерного заполнения зоны спавна
+    void FillSpawnAreaUniformly()
+    {
+        if (cloudPrefabs.Length == 0) return;
+
+        // Рассчитываем оптимальное количество облаков для равномерного распределения
+        float cellSize = Mathf.Max(minCloudDistance, hotSpawnMinDistance);
+        int cellsX = Mathf.FloorToInt(spawnAreaSize.x / cellSize);
+        int cellsY = Mathf.FloorToInt(spawnAreaSize.y / (cellSize * 0.7f)); // Меньше по вертикали
+        int cellsZ = Mathf.FloorToInt(spawnAreaSize.z / cellSize);
+
+        int totalCells = cellsX * cellsY * cellsZ;
+        int cloudsToSpawn = Mathf.Min(initialCloudCount, totalCells, maxClouds);
+
+        Debug.Log($"Hot spawn: {cloudsToSpawn} clouds in {cellsX}x{cellsY}x{cellsZ} grid");
+
+        // Создаем список всех возможных позиций в сетке
+        List<Vector3> gridPositions = new List<Vector3>();
+
+        for (int x = 0; x < cellsX; x++)
+        {
+            for (int y = 0; y < cellsY; y++)
+            {
+                for (int z = 0; z < cellsZ; z++)
+                {
+                    // Центр ячейки
+                    Vector3 cellCenter = new Vector3(
+                        (x + 0.5f) * cellSize - spawnAreaSize.x / 2,
+                        (y + 0.5f) * cellSize * 0.7f - spawnAreaSize.y / 2,
+                        (z + 0.5f) * cellSize - spawnAreaSize.z / 2
+                    );
+
+                    gridPositions.Add(spawnZone.position + cellCenter);
+                }
+            }
+        }
+
+        // Перемешиваем позиции для случайного распределения
+        ShuffleList(gridPositions);
+
+        // Спавним облака в перемешанных позициях
+        int spawnedCount = 0;
+        foreach (Vector3 gridPos in gridPositions)
+        {
+            if (spawnedCount >= cloudsToSpawn) break;
+
+            // Добавляем небольшой случайный сдвиг
+            Vector3 jitter = new Vector3(
+                Random.Range(-cellSize * 0.3f, cellSize * 0.3f),
+                Random.Range(-cellSize * 0.15f, cellSize * 0.15f),
+                Random.Range(-cellSize * 0.3f, cellSize * 0.3f)
+            );
+
+            Vector3 spawnPos = gridPos + jitter;
+
+            // Проверяем, не выходит ли за границы
+            if (IsInsideSpawnArea(spawnPos))
+            {
+                SpawnCloudAtPosition(spawnPos, true);
+                spawnedCount++;
+            }
+        }
+
+        // Если не удалось равномерно разместить, добавляем случайные
+        while (spawnedCount < cloudsToSpawn && spawnedCount < maxClouds)
+        {
+            if (TrySpawnCloudWithSpacing(20, hotSpawnMinDistance * 0.8f))
+            {
+                spawnedCount++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        Debug.Log($"Hot spawn completed: {spawnedCount} clouds spawned");
+    }
+
+    // Метод для перемешивания списка
+    void ShuffleList<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            T temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+    }
+
+    // Проверка, находится ли позиция внутри зоны спавна
+    bool IsInsideSpawnArea(Vector3 position)
+    {
+        Vector3 localPos = position - spawnZone.position;
+
+        return Mathf.Abs(localPos.x) <= spawnAreaSize.x / 2 &&
+               Mathf.Abs(localPos.y) <= spawnAreaSize.y / 2 &&
+               Mathf.Abs(localPos.z) <= spawnAreaSize.z / 2;
+    }
+
+    // Обновленный метод спавна с поддержкой горячего спавна
+    bool TrySpawnCloudWithSpacing(int maxAttempts, float customMinDistance = -1)
     {
         if (cloudPrefabs.Length == 0)
         {
@@ -67,9 +201,10 @@ public class CloudSpawner : MonoBehaviour
             return false;
         }
 
+        float distanceToCheck = customMinDistance > 0 ? customMinDistance : minCloudDistance;
+
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
-            // Генерируем случайную позицию
             Vector3 randomPosition = new Vector3(
                 Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
                 Random.Range(-spawnAreaSize.y / 2, spawnAreaSize.y / 2),
@@ -85,7 +220,7 @@ public class CloudSpawner : MonoBehaviour
                 if (cloud == null) continue;
 
                 float distance = Vector3.Distance(spawnPosition, cloud.transform.position);
-                if (distance < minCloudDistance)
+                if (distance < distanceToCheck)
                 {
                     tooClose = true;
                     break;
@@ -95,7 +230,7 @@ public class CloudSpawner : MonoBehaviour
             // Если позиция подходящая, спавним облако
             if (!tooClose || attempt == maxAttempts - 1)
             {
-                SpawnCloudAtPosition(spawnPosition);
+                SpawnCloudAtPosition(spawnPosition, customMinDistance > 0);
                 return true;
             }
         }
@@ -103,7 +238,7 @@ public class CloudSpawner : MonoBehaviour
         return false;
     }
 
-    void SpawnCloudAtPosition(Vector3 position)
+    void SpawnCloudAtPosition(Vector3 position, bool isHotSpawn = false)
     {
         GameObject cloudPrefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
         GameObject cloud = Instantiate(cloudPrefab, position, Quaternion.identity);
@@ -120,91 +255,25 @@ public class CloudSpawner : MonoBehaviour
         float randomScale = Random.Range(scaleRange.x, scaleRange.y);
         cloud.transform.localScale = Vector3.one * randomScale;
 
-        // Учитываем масштаб при проверке расстояния (опционально)
-        float effectiveMinDistance = minCloudDistance * randomScale;
-
         // Добавляем компонент для движения
         CloudMovement movement = cloud.AddComponent<CloudMovement>();
-        movement.SetMovementSpeed(Random.Range(speedRange.x, speedRange.y));
+
+        // Для горячего спавна можно сделать случайное смещение по времени
+        float speed = Random.Range(speedRange.x, speedRange.y);
+        if (isHotSpawn)
+        {
+            // Слегка варьируем скорость для более натурального вида
+            speed *= Random.Range(0.8f, 1.2f);
+        }
+
+        movement.SetMovementSpeed(speed);
         movement.SetMovementDirection(movementDirection);
 
         activeClouds.Add(cloud);
         cloud.transform.SetParent(transform);
     }
 
-    // Альтернативный метод: спавн в секторах
-    void SpawnCloudInSector()
-    {
-        if (cloudPrefabs.Length == 0 || activeClouds.Count >= maxClouds)
-            return;
-
-        // Делим пространство на сектора
-        int sectorsX = Mathf.CeilToInt(spawnAreaSize.x / minCloudDistance);
-        int sectorsY = Mathf.CeilToInt(spawnAreaSize.y / (minCloudDistance * 0.5f));
-        int sectorsZ = Mathf.CeilToInt(spawnAreaSize.z / minCloudDistance);
-
-        // Создаем сетку возможных позиций
-        List<Vector3> possiblePositions = new List<Vector3>();
-
-        for (int x = 0; x < sectorsX; x++)
-        {
-            for (int y = 0; y < sectorsY; y++)
-            {
-                for (int z = 0; z < sectorsZ; z++)
-                {
-                    Vector3 sectorCenter = new Vector3(
-                        (x + 0.5f) * minCloudDistance - spawnAreaSize.x / 2,
-                        (y + 0.5f) * minCloudDistance * 0.5f - spawnAreaSize.y / 2,
-                        (z + 0.5f) * minCloudDistance - spawnAreaSize.z / 2
-                    );
-
-                    // Добавляем небольшой рандом в пределах сектора
-                    Vector3 jitter = new Vector3(
-                        Random.Range(-minCloudDistance * 0.3f, minCloudDistance * 0.3f),
-                        Random.Range(-minCloudDistance * 0.15f, minCloudDistance * 0.15f),
-                        Random.Range(-minCloudDistance * 0.3f, minCloudDistance * 0.3f)
-                    );
-
-                    possiblePositions.Add(spawnZone.position + sectorCenter + jitter);
-                }
-            }
-        }
-
-        // Перемешиваем позиции
-        for (int i = 0; i < possiblePositions.Count; i++)
-        {
-            Vector3 temp = possiblePositions[i];
-            int randomIndex = Random.Range(i, possiblePositions.Count);
-            possiblePositions[i] = possiblePositions[randomIndex];
-            possiblePositions[randomIndex] = temp;
-        }
-
-        // Пытаемся спавнить в свободных позициях
-        foreach (Vector3 pos in possiblePositions)
-        {
-            if (activeClouds.Count >= maxClouds)
-                break;
-
-            bool positionValid = true;
-            foreach (GameObject cloud in activeClouds)
-            {
-                if (cloud == null) continue;
-
-                if (Vector3.Distance(pos, cloud.transform.position) < minCloudDistance)
-                {
-                    positionValid = false;
-                    break;
-                }
-            }
-
-            if (positionValid)
-            {
-                SpawnCloudAtPosition(pos);
-                break;
-            }
-        }
-    }
-
+    // Улучшенный метод удаления облаков
     void RemoveDistantClouds()
     {
         List<GameObject> cloudsToRemove = new List<GameObject>();
@@ -217,33 +286,36 @@ public class CloudSpawner : MonoBehaviour
                 continue;
             }
 
-            // Учитываем направление движения при проверке дистанции
-            Vector3 checkPoint = spawnZone.position;
+            // Вектор от центра зоны к облаку
+            Vector3 toCloud = cloud.transform.position - spawnZone.position;
+
+            // Проекция на направление движения
             if (movementDirection != Vector3.zero)
             {
-                // Проекция позиции облака на плоскость, перпендикулярную направлению
-                Vector3 toCloud = cloud.transform.position - spawnZone.position;
                 float dot = Vector3.Dot(toCloud.normalized, movementDirection.normalized);
+                float distance = toCloud.magnitude;
 
-                // Если облако движется в правильном направлении, даем ему больше времени
-                if (dot > 0.7f)
+                // Разные пороги удаления в зависимости от направления
+                float removeDistance = dot > 0.5f ?
+                    Mathf.Max(spawnAreaSize.x, spawnAreaSize.z) * 2.5f :
+                    Mathf.Max(spawnAreaSize.x, spawnAreaSize.z) * 1.8f;
+
+                if (distance > removeDistance)
                 {
-                    float distance = Vector3.Distance(cloud.transform.position, spawnZone.position);
-                    if (distance > Mathf.Max(spawnAreaSize.x, spawnAreaSize.y, spawnAreaSize.z) * 3f)
-                    {
-                        cloudsToRemove.Add(cloud);
-                    }
-                    continue;
+                    cloudsToRemove.Add(cloud);
                 }
             }
-
-            float distanceSimple = Vector3.Distance(cloud.transform.position, spawnZone.position);
-            if (distanceSimple > Mathf.Max(spawnAreaSize.x, spawnAreaSize.y, spawnAreaSize.z) * 2f)
+            else
             {
-                cloudsToRemove.Add(cloud);
+                // Если нет направления движения, используем сферическую проверку
+                if (toCloud.magnitude > Mathf.Max(spawnAreaSize.x, spawnAreaSize.y, spawnAreaSize.z) * 2f)
+                {
+                    cloudsToRemove.Add(cloud);
+                }
             }
         }
 
+        // Удаляем помеченные облака
         foreach (GameObject cloud in cloudsToRemove)
         {
             if (cloud != null)
@@ -254,16 +326,35 @@ public class CloudSpawner : MonoBehaviour
         }
     }
 
+    // Публичный метод для принудительного перезаполнения зоны
+    public void RefillSpawnArea()
+    {
+        // Удаляем старые облака
+        foreach (GameObject cloud in activeClouds)
+        {
+            if (cloud != null)
+            {
+                Destroy(cloud);
+            }
+        }
+        activeClouds.Clear();
+
+        // Заполняем заново
+        PerformHotSpawn();
+    }
+
+    // Визуализация в редакторе
     void OnDrawGizmosSelected()
     {
         if (spawnZone == null) return;
 
+        // Зона спавна
         Gizmos.color = new Color(0, 1, 0, 0.2f);
         Gizmos.DrawCube(spawnZone.position, spawnAreaSize);
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(spawnZone.position, spawnAreaSize);
 
-        // Показываем минимальное расстояние
+        // Минимальное расстояние
         Gizmos.color = new Color(1, 0, 0, 0.1f);
         foreach (GameObject cloud in activeClouds)
         {
@@ -272,5 +363,10 @@ public class CloudSpawner : MonoBehaviour
                 Gizmos.DrawSphere(cloud.transform.position, minCloudDistance / 2);
             }
         }
+
+        // Направление движения
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(spawnZone.position, movementDirection.normalized * 20f);
+        Gizmos.DrawSphere(spawnZone.position + movementDirection.normalized * 20f, 1f);
     }
 }
