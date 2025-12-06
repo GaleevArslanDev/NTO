@@ -18,7 +18,7 @@ MonoBehaviour:
   nodes:
   - nodeId: damage_1
     nameLocalizationKey: tech_damage_boost1
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_damage_lvl1
     tier: 1
     unlockCost:
     - type: 2
@@ -36,7 +36,7 @@ MonoBehaviour:
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: damage_2
     nameLocalizationKey: tech_damage_boost2
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_damage_lvl2
     tier: 2
     unlockCost:
     - type: 3
@@ -59,7 +59,7 @@ MonoBehaviour:
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: damage_3
     nameLocalizationKey: tech_damage_boost3
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_damage_lvl3
     tier: 3
     unlockCost:
     - type: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
     icon: {fileID: -1898543614, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_1
     nameLocalizationKey: tech_mining_range1
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_range_lvl1
     tier: 1
     unlockCost:
     - type: 2
@@ -102,7 +102,7 @@ MonoBehaviour:
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_2
     nameLocalizationKey: tech_mining_range2
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_range_lvl2
     tier: 2
     unlockCost:
     - type: 2
@@ -125,7 +125,7 @@ MonoBehaviour:
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: collection_range_3
     nameLocalizationKey: tech_mining_range3
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_range_lvl3
     tier: 3
     unlockCost:
     - type: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
     icon: {fileID: 1399556307, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_50
     nameLocalizationKey: tech_inventory_capacity1
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_inventory_lvl1
     tier: 1
     unlockCost:
     - type: 2
@@ -168,7 +168,7 @@ MonoBehaviour:
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_100
     nameLocalizationKey: tech_inventory_capacity2
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_inventory_lvl2
     tier: 2
     unlockCost:
     - type: 2
@@ -191,7 +191,7 @@ MonoBehaviour:
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: inventory_200
     nameLocalizationKey: tech_inventory_capacity3
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_inventory_lvl3
     tier: 3
     unlockCost:
     - type: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
     icon: {fileID: -1312810968, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_1
     nameLocalizationKey: tech_mining_speed1
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_speed_lvl1
     tier: 1
     unlockCost:
     - type: 2
@@ -234,7 +234,7 @@ MonoBehaviour:
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_2
     nameLocalizationKey: tech_mining_speed2
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_speed_lvl2
     tier: 2
     unlockCost:
     - type: 3
@@ -257,7 +257,7 @@ MonoBehaviour:
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: mining_speed_3
     nameLocalizationKey: tech_mining_speed3
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_speed_lvl3
     tier: 3
     unlockCost:
     - type: 0
@@ -282,7 +282,7 @@ MonoBehaviour:
     icon: {fileID: -2067313754, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection1
     nameLocalizationKey: tech_resource_per_deposit1
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_yield_lvl1
     tier: 1
     unlockCost:
     - type: 2
@@ -300,7 +300,7 @@ MonoBehaviour:
     icon: {fileID: -999874107, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection2
     nameLocalizationKey: tech_resource_per_deposit2
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_yield_lvl2
     tier: 2
     unlockCost:
     - type: 2
@@ -323,7 +323,7 @@ MonoBehaviour:
     icon: {fileID: -999874107, guid: abe4d2fa630869b48a753a08dfa13fb0, type: 3}
   - nodeId: resource_collection3
     nameLocalizationKey: tech_resource_per_deposit3
-    descriptionLocalizationKey: 
+    descriptionLocalizationKey: upgrade_blacksmith_yield_lvl3
     tier: 3
     unlockCost:
     - type: 0

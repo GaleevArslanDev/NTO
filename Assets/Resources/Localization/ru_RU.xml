@@ -92,6 +92,86 @@
 	<string name="tech-node-detail-panel_unlock-upgrade-tier-label">Открывает тир улучшений: {0}</string>
 	<string name="tech-tree_upgrade-mode">Режим прокачки - {0}</string>
 
+	<string name="tech-tree_upgrade-description">Описание:</string>
+	<string name="tech-tree_upgrade-requirements">Требования:</string>
+	<string name="tech-tree_upgrade-required-resources">Требуемые ресурсы:</string>
+	<string name="tech-tree_upgrade-effects">Эффекты от улучшения:</string>
+
+	<string name="PauseMenuPanel_resume">Продолжить</string>
+	<string name="PauseMenuPanel_savegame">Сохранить игру</string>
+	<string name="PauseMenuPanel_loadgame">Загрузить игру</string>
+	<string name="PauseMenuPanel_settings">Настройки</string>
+	<string name="PauseMenuPanel_exitmainMenu">Выйти в меню</string>
+	<string name="PauseMenuPanel_exit">Выйти из игры</string>
+	
+	<!-- ============================================== -->
+	<!--           ПРОКАЧКА ФЕРМЕРА (ШАХТЫ)             -->
+	<!-- ============================================== -->
+
+	<!-- Дерево -->
+	<string name="upgrade_farmer_wood_title">Добыча дерева</string>
+	<string name="upgrade_farmer_wood_lvl1">Это улучшение приносит вам небольшое количество дерева.</string>
+	<string name="upgrade_farmer_wood_lvl2">Это улучшение будет приносить вам большое количество дерева.</string>
+	<string name="upgrade_farmer_wood_lvl3">Это улучшение будет приносить вам невероятное количество дерева.</string>
+
+	<!-- Камень -->
+	<string name="upgrade_farmer_stone_title">Добыча камня</string>
+	<string name="upgrade_farmer_stone_lvl1">Это улучшение приносит вам небольшое количество камня.</string>
+	<string name="upgrade_farmer_stone_lvl2">Это улучшение будет приносить вам большое количество камня.</string>
+	<string name="upgrade_farmer_stone_lvl3">Это улучшение будет приносить вам невероятное количество камня.</string>
+
+	<!-- Железо -->
+	<string name="upgrade_farmer_iron_title">Добыча железа</string>
+	<string name="upgrade_farmer_iron_lvl1">Это улучшение приносит вам небольшое количество железа.</string>
+	<string name="upgrade_farmer_iron_lvl2">Это улучшение будет приносить вам большое количество железа.</string>
+	<string name="upgrade_farmer_iron_lvl3">Это улучшение будет приносить вам невероятное количество железа.</string>
+
+	<!-- Золото -->
+	<string name="upgrade_farmer_gold_title">Добыча золота</string>
+	<string name="upgrade_farmer_gold_lvl1">Это улучшение приносит вам небольшое количество золота.</string>
+	<string name="upgrade_farmer_gold_lvl2">Это улучшение будет приносить вам большое количество золота.</string>
+	<string name="upgrade_farmer_gold_lvl3">Это улучшение будет приносить вам невероятное количество золота.</string>
+
+	<!-- Кристаллы -->
+	<string name="upgrade_farmer_crystals_title">Добыча кристаллов</string>
+	<string name="upgrade_farmer_crystals_lvl1">Это улучшение приносит вам небольшое количество кристаллов.</string>
+	<string name="upgrade_farmer_crystals_lvl2">Это улучшение будет приносить вам большое количество кристаллов.</string>
+	<string name="upgrade_farmer_crystals_lvl3">Это улучшение будет приносить вам невероятное количество кристаллов.</string>
+
+	<!-- ============================================== -->
+	<!--           ПРОКАЧКА КУЗНЕЦА (ПУШКИ)            -->
+	<!-- ============================================== -->
+
+	<!-- Урон пушки -->
+	<string name="upgrade_blacksmith_damage_title">Мощность орудия</string>
+	<string name="upgrade_blacksmith_damage_lvl1">Небольшое увеличение урона пушки. Эффективно против крепких залежей.</string>
+	<string name="upgrade_blacksmith_damage_lvl2">Значительное увеличение урона пушки. Позволяет быстрее разрушать препятствия.</string>
+	<string name="upgrade_blacksmith_damage_lvl3">Максимальное увеличение урона пушки. Ваше орудие становится неудержимым.</string>
+
+	<!-- Скорость добычи (скорострельность) -->
+	<string name="upgrade_blacksmith_speed_title">Скорострельность</string>
+	<string name="upgrade_blacksmith_speed_lvl1">Небольшое увеличение скорости добычи. Выстрелы происходят чаще.</string>
+	<string name="upgrade_blacksmith_speed_lvl2">Значительное увеличение скорости добычи. Ресурсы сыплются градом.</string>
+	<string name="upgrade_blacksmith_speed_lvl3">Максимальное увеличение скорости добычи. Орудие работает на пределе возможностей.</string>
+
+	<!-- Дальность добычи -->
+	<string name="upgrade_blacksmith_range_title">Дальность стрельбы</string>
+	<string name="upgrade_blacksmith_range_lvl1">Небольшое увеличение дальности добычи. Позволяет достигать отдалённых целей.</string>
+	<string name="upgrade_blacksmith_range_lvl2">Значительное увеличение дальности добычи. Контролируйте большую территорию шахты.</string>
+	<string name="upgrade_blacksmith_range_lvl3">Максимальное увеличение дальности добычи. Никакая залежь не скроется от вас.</string>
+
+	<!-- Ёмкость инвентаря -->
+	<string name="upgrade_blacksmith_inventory_title">Вместимость склада</string>
+	<string name="upgrade_blacksmith_inventory_lvl1">Небольшое увеличение вместимости инвентаря. Можно дольше работать без остановки.</string>
+	<string name="upgrade_blacksmith_inventory_lvl2">Значительное увеличение вместимости инвентаря. Редко потребуется разгрузка.</string>
+	<string name="upgrade_blacksmith_inventory_lvl3">Максимальное увеличение вместимости инвентаря. Ваш склад практически бездонный.</string>
+
+	<!-- Количество ресурсов с залежи (мультипликатор добычи) -->
+	<string name="upgrade_blacksmith_yield_title">Эффективность добычи</string>
+	<string name="upgrade_blacksmith_yield_lvl1">Небольшое увеличение количества ресурсов с залежи. Ценные жилы становятся ещё богаче.</string>
+	<string name="upgrade_blacksmith_yield_lvl2">Значительное увеличение количества ресурсов с залежи. Каждый выстрел приносит больше прибыли.</string>
+	<string name="upgrade_blacksmith_yield_lvl3">Максимальное увеличение количества ресурсов с залежи. Извлекайте максимум из каждого месторождения.</string>
+
 	<!-- 7.3 Tech Actions -->
 	<string name="researched">Изучено</string>
 	<string name="unavailable">Недоступно</string>
@@ -402,7 +482,7 @@
 	<!-- 16. UI -->
 	<!-- 16.1 Main Menu -->
 	<string name="main-menu_new-game">Новая игра</string>
-	<string name="main-menu_load-existing-game">Загрузить существующую игру</string>
+	<string name="main-menu_load-existing-game">Загрузить игру</string>
 	<string name="main-menu_settings">Настройки</string>
 	<string name="main-menu_exit">Выйти из игры</string>
 

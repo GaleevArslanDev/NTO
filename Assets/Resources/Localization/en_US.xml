@@ -56,7 +56,76 @@
 	<string name="tech_mining_speed3">Mining Speed III</string>
 	<string name="tech_resource_per_deposit1">Resources per Deposit I</string>
 	<string name="tech_resource_per_deposit2">Resources per Deposit II</string>
-	<string name="tech_resource_per_deposit3">Resources per Deposit III</string>
+	<string name="tech_resource_per_deposit3">Resources per Deposit III</string> 
+	
+	<!-- ============================================== -->
+	<!--           FARMER UPGRADES (MINE)               -->
+	<!-- ============================================== -->
+
+	<!-- Wood -->
+	<string name="upgrade_farmer_wood_title">Wood Production</string>
+	<string name="upgrade_farmer_wood_lvl1">This upgrade provides you with a small amount of wood.</string>
+	<string name="upgrade_farmer_wood_lvl2">This upgrade will provide you with a large amount of wood.</string>
+	<string name="upgrade_farmer_wood_lvl3">This upgrade will provide you with an incredible amount of wood.</string>
+
+	<!-- Stone -->
+	<string name="upgrade_farmer_stone_title">Stone Production</string>
+	<string name="upgrade_farmer_stone_lvl1">This upgrade provides you with a small amount of stone.</string>
+	<string name="upgrade_farmer_stone_lvl2">This upgrade will provide you with a large amount of stone.</string>
+	<string name="upgrade_farmer_stone_lvl3">This upgrade will provide you with an incredible amount of stone.</string>
+
+	<!-- Iron -->
+	<string name="upgrade_farmer_iron_title">Iron Production</string>
+	<string name="upgrade_farmer_iron_lvl1">This upgrade provides you with a small amount of iron.</string>
+	<string name="upgrade_farmer_iron_lvl2">This upgrade will provide you with a large amount of iron.</string>
+	<string name="upgrade_farmer_iron_lvl3">This upgrade will provide you with an incredible amount of iron.</string>
+
+	<!-- Gold -->
+	<string name="upgrade_farmer_gold_title">Gold Production</string>
+	<string name="upgrade_farmer_gold_lvl1">This upgrade provides you with a small amount of gold.</string>
+	<string name="upgrade_farmer_gold_lvl2">This upgrade will provide you with a large amount of gold.</string>
+	<string name="upgrade_farmer_gold_lvl3">This upgrade will provide you with an incredible amount of gold.</string>
+
+	<!-- Crystals -->
+	<string name="upgrade_farmer_crystals_title">Crystal Production</string>
+	<string name="upgrade_farmer_crystals_lvl1">This upgrade provides you with a small amount of crystals.</string>
+	<string name="upgrade_farmer_crystals_lvl2">This upgrade will provide you with a large amount of crystals.</string>
+	<string name="upgrade_farmer_crystals_lvl3">This upgrade will provide you with an incredible amount of crystals.</string>
+
+	<!-- ============================================== -->
+	<!--           BLACKSMITH UPGRADES (CANNON)         -->
+	<!-- ============================================== -->
+
+	<!-- Cannon damage -->
+	<string name="upgrade_blacksmith_damage_title">Cannon Power</string>
+	<string name="upgrade_blacksmith_damage_lvl1">Slightly increases cannon damage. Effective against hard deposits.</string>
+	<string name="upgrade_blacksmith_damage_lvl2">Significantly increases cannon damage. Allows faster destruction of obstacles.</string>
+	<string name="upgrade_blacksmith_damage_lvl3">Maximally increases cannon damage. Your cannon becomes unstoppable.</string>
+
+	<!-- Mining speed (rate of fire) -->
+	<string name="upgrade_blacksmith_speed_title">Rate of Fire</string>
+	<string name="upgrade_blacksmith_speed_lvl1">Slightly increases mining speed. Shots occur more frequently.</string>
+	<string name="upgrade_blacksmith_speed_lvl2">Significantly increases mining speed. Resources pour down like rain.</string>
+	<string name="upgrade_blacksmith_speed_lvl3">Maximally increases mining speed. The cannon operates at its maximum capacity.</string>
+
+	<!-- Mining range -->
+	<string name="upgrade_blacksmith_range_title">Firing Range</string>
+	<string name="upgrade_blacksmith_range_lvl1">Slightly increases mining range. Allows reaching distant targets.</string>
+	<string name="upgrade_blacksmith_range_lvl2">Significantly increases mining range. Control a larger area of the mine.</string>
+	<string name="upgrade_blacksmith_range_lvl3">Maximally increases mining range. No deposit will be hidden from you.</string>
+
+	<!-- Inventory capacity -->
+	<string name="upgrade_blacksmith_inventory_title">Storage Capacity</string>
+	<string name="upgrade_blacksmith_inventory_lvl1">Slightly increases inventory capacity. You can work longer without stopping.</string>
+	<string name="upgrade_blacksmith_inventory_lvl2">Significantly increases inventory capacity. Rarely requires unloading.</string>
+	<string name="upgrade_blacksmith_inventory_lvl3">Maximally increases inventory capacity. Your warehouse is practically bottomless.</string>
+
+	<!-- Resource yield from deposits (mining multiplier) -->
+	<string name="upgrade_blacksmith_yield_title">Mining Efficiency</string>
+	<string name="upgrade_blacksmith_yield_lvl1">Slightly increases the amount of resources obtained from a single deposit. Valuable veins become even richer.</string>
+	<string name="upgrade_blacksmith_yield_lvl2">Significantly increases the amount of resources from deposits. Every shot brings more profit.</string>
+	<string name="upgrade_blacksmith_yield_lvl3">Maximally increases the amount of resources from deposits. Extract the maximum from every deposit.</string>
+
 
 	<!-- 7.1.1 Farmer Passive Mining Upgrades -->
 	<string name="farmer_passive_wood1">Passive Wood Mining I</string>
@@ -78,6 +147,19 @@
 	<string name="farmer_passive_crystals1">Passive Crystal Mining I</string>
 	<string name="farmer_passive_crystals2">Passive Crystal Mining II</string>
 	<string name="farmer_passive_crystals3">Passive Crystal Mining III</string>
+
+	<string name="tech-tree_upgrade-description">Description:</string>
+	<string name="tech-tree_upgrade-requirements">Requirements:</string>
+	<string name="tech-tree_upgrade-required-resources">Required resources:</string>
+	<string name="tech-tree_upgrade-effects">Upgrade effects:</string>
+
+	<string name="PauseMenuPanel_resume">Continue</string>
+	<string name="PauseMenuPanel_savegame">Save game</string>
+	<string name="PauseMenuPanel_loadgame">Load game</string>
+	<string name="PauseMenuPanel_settings">Settings</string>
+	<string name="PauseMenuPanel_exitmainMenu">Exit to menu</string>
+	<string name="PauseMenuPanel_exit">Exit game</string>
+	
 	<!-- 7.2 Tech UI Labels -->
 	<string name="tech-node_available">&lt;color=green&gt;✓ Available for Research&lt;/color&gt;</string>
 	<string name="tech-node_available_in_town">Available only at NPC</string>
@@ -406,7 +488,7 @@
 	<!-- 16. UI -->
 	<!-- 16.1 Main Menu -->
 	<string name="main-menu_new-game">New Game</string>
-	<string name="main-menu_load-existing-game">Load Existing Game</string>
+	<string name="main-menu_load-existing-game">Load Game</string>
 	<string name="main-menu_settings">Settings</string>
 	<string name="main-menu_exit">Exit Game</string>
 
