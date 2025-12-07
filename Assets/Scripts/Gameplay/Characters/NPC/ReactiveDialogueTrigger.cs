@@ -47,7 +47,10 @@ namespace Gameplay.Characters.NPC
         // Новые поля для отслеживания игрока в зоне
         private bool _playerInCallZone = false;
         private Collider _callZoneCollider;
-
+        
+        [Header("Animation References")]
+        [SerializeField] private NpcAnimator npcAnimator;
+        
         // События
         public System.Action<string> OnStartCalling;
         public System.Action OnStopCalling;
@@ -56,6 +59,15 @@ namespace Gameplay.Characters.NPC
 
         private void Start()
         {
+            if (npcAnimator == null)
+            {
+                npcAnimator = GetComponent<NpcAnimator>();
+                if (npcAnimator == null)
+                {
+                    Debug.LogWarning($"NpcAnimator not found on {gameObject.name}");
+                }
+            }
+            
             _npcInteraction = GetComponent<NpcInteraction>();
             _audioSource = GetComponent<AudioSource>();
             _player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -213,11 +225,22 @@ namespace Gameplay.Characters.NPC
 
             _callRoutine = StartCoroutine(CallRoutine());
         }
+        
+        private void PlayCallingAnimation(bool isCalling)
+        {
+            if (npcAnimator != null)
+            {
+                npcAnimator.PlayCallingAnimation(isCalling);
+            }
+        }
 
         private IEnumerator CallRoutine()
         {
             // Активируем визуальные элементы
             ShowCallIndicator();
+            
+            // Проигрываем анимацию зова
+            PlayCallingAnimation(true);
 
             // Воспроизводим звук
             PlayCallSound();
@@ -286,6 +309,7 @@ namespace Gameplay.Characters.NPC
         private void StartDialogue()
         {
             if (_npcInteraction == null) return;
+            PlayCallingAnimation(false);
 
             var dialogueTree = GetCurrentDialogue();
             if (!string.IsNullOrEmpty(dialogueTree))
@@ -333,8 +357,18 @@ namespace Gameplay.Characters.NPC
                     Debug.Log($"{npcData.npcName} обиделся на игнор! Отношения: {relationshipPenalty}");
                 }
             }
+            PlayCallingAnimation(false);
+            PlaySadAnimation();
 
             AdvanceToNextDialogue();
+        }
+        
+        private void PlaySadAnimation()
+        {
+            if (npcAnimator != null)
+            {
+                npcAnimator.PlaySadAnimation();
+            }
         }
 
         public void EndCalling()

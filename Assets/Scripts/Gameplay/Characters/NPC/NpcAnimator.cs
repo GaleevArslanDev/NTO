@@ -17,6 +17,7 @@ namespace Gameplay.Characters.NPC
         [SerializeField] private string isWorkingParam = "IsWorking";
         [SerializeField] private string isTalkingParam = "IsTalking";
         [SerializeField] private string isWaitingParam = "IsWaiting"; // Новый параметр
+        [SerializeField] private string isCallingParam = "IsZoving";
         [SerializeField] private string thinkTrigger = "Think";
         [SerializeField] private string happyTrigger = "Happy";
         [SerializeField] private string sadTrigger = "Sad";
@@ -43,6 +44,7 @@ namespace Gameplay.Characters.NPC
         private int _isMovingHash;
         private int _isWorkingHash;
         private int _isTalkingHash;
+        private int _callingHash;
         private int _isWaitingHash; // Новый хэш
         private int _thinkHash;
         private int _happyHash;
@@ -58,6 +60,7 @@ namespace Gameplay.Characters.NPC
             if (animator == null) animator = GetComponent<Animator>();
             if (navMeshAgent == null) navMeshAgent = GetComponent<NavMeshAgent>();
             _isMovingHash = Animator.StringToHash(isMovingParam);
+            _callingHash = Animator.StringToHash(isCallingParam);
             _isWorkingHash = Animator.StringToHash(isWorkingParam);
             _isTalkingHash = Animator.StringToHash(isTalkingParam);
             _isWaitingHash = Animator.StringToHash(isWaitingParam);
@@ -70,8 +73,6 @@ namespace Gameplay.Characters.NPC
         public void SetMoving(bool isMoving)
         {
             animator.SetBool(_isMovingHash, isMoving);
-
-            Debug.Log("jdnakn");
         }
 
         public void SetState(NpcState state, ActivityType activity = ActivityType.Home)
@@ -125,6 +126,14 @@ namespace Gameplay.Characters.NPC
                         _waitingAnimationCoroutine = null;
                     }
                 }
+            }
+        }
+        
+        public void PlayCallingAnimation(bool isCalling)
+        {
+            if (animator != null && CanPlayAnimation())
+            {
+                animator.SetBool(_callingHash, isCalling);
             }
         }
 

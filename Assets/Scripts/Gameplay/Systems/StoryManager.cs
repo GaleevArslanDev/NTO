@@ -184,31 +184,77 @@ namespace Gameplay.Systems
                 }
             }
     
+            // НАЧИНАЕМ ДВИЖЕНИЕ NPC СРАЗУ ПОСЛЕ СПАВНА
+            StartCoroutine(StartNPCsMovingToPlayerImmediately());
+            
             // Запускаем сюжетную последовательность
             _currentStoryCoroutine = StartCoroutine(StorySequence());
         }
         
+        private IEnumerator StartNPCsMovingToPlayerImmediately()
+        {
+            Debug.Log("NPC начинают движение к игроку сразу после спавна");
+            
+            // Даем небольшую задержку, чтобы игрок успел появиться
+            yield return new WaitForSeconds(1f);
+            
+            // Начинаем движение NPC к игроку
+            List<Coroutine> moveCoroutines = new List<Coroutine>();
+            
+            foreach (var npc in storyNpcs)
+            {
+                if (npc != null)
+                {
+                    var coroutine = StartCoroutine(MoveNPCToPlayer(npc, true)); // true - флаг для немедленного движения
+                    moveCoroutines.Add(coroutine);
+                }
+            }
+            
+            // Запускаем ожидание, но не блокируем основной поток
+            StartCoroutine(WaitForNPCsApproach(moveCoroutines));
+        }
+        
+        private IEnumerator WaitForNPCsApproach(List<Coroutine> moveCoroutines)
+        {
+            // Ждем завершения всех корутин движения
+            foreach (var coroutine in moveCoroutines)
+            {
+                yield return coroutine;
+            }
+            
+            Debug.Log("Все NPC подошли к игроку");
+            
+            // Если мы все еще на этапе Introduction, показываем сообщение о подходе NPC
+            if (_currentState == StoryState.Introduction && _aiAssistant != null)
+            {
+                _aiAssistant.SpeakStoryLine("npc_approach");
+            }
+        }
+        
         private IEnumerator StorySequence()
         {
-            // 1. Введение AI Assistant
+            // 1. Введение AI Assistant (NPC уже двигаются к игроку)
             yield return StartCoroutine(IntroductionSequence());
             
-            // 2. Обучение движению
+            // 2. Ждем, пока NPC подойдут (если еще не подошли)
+            yield return new WaitForSeconds(2f);
+            
+            // 3. Обучение движению (NPC уже рядом)
             yield return StartCoroutine(MovementTutorialSequence());
             
-            // 3. Подход NPC
-            yield return StartCoroutine(NPCApproachSequence());
+            // 4. Вместо подхода NPC - сразу их представление
+            yield return StartCoroutine(NPCIntroduction());
             
-            // 4. Прогулка с NPC
+            // 5. Прогулка с NPC
             yield return StartCoroutine(NPCWalkSequence());
             
-            // 5. Черный экран и перемещение
+            // 6. Черный экран и перемещение
             yield return StartCoroutine(BlackScreenSequence());
             
-            // 6. Показ деревни
+            // 7. Показ деревни
             yield return StartCoroutine(VillageShowSequence());
             
-            // 7. Завершение сюжета
+            // 8. Завершение сюжета
             EndStory();
         }
         
@@ -219,8 +265,11 @@ namespace Gameplay.Systems
             // AI Assistant представляется
             if (_aiAssistant != null)
             {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_intro_ai"));
                 _aiAssistant.SpeakStoryLine("intro");
+                yield return new WaitForSeconds(messageDuration);
+                
+                // Сразу говорим о приближении NPC
+                _aiAssistant.SpeakStoryLine("npc_approaching");
                 yield return new WaitForSeconds(messageDuration);
             }
             
@@ -229,14 +278,13 @@ namespace Gameplay.Systems
         
         private IEnumerator MovementTutorialSequence()
         {
-            Debug.Log("Этап 2: Обучение движению");
+            Debug.Log("Этап 2: Обучение движению (NPC уже рядом)");
             _currentState = StoryState.MovementTutorial;
             
-            // AI Assistant объясняет управление
+            // AI Assistant объясняет управление, упоминая, что NPC уже здесь
             if (_aiAssistant != null)
             {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_tutorial_movement"));
-                _aiAssistant.SpeakStoryLine("movement_tutorial");
+                _aiAssistant.SpeakStoryLine("movement_tutorial_with_npc");
                 yield return new WaitForSeconds(messageDuration);
             }
             
@@ -246,8 +294,7 @@ namespace Gameplay.Systems
             // AI Assistant хвалит игрока
             if (_aiAssistant != null)
             {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_tutorial_success"));
-                _aiAssistant.SpeakStoryLine("movement_success");
+                _aiAssistant.SpeakStoryLine("movement_success_with_npc");
                 yield return new WaitForSeconds(messageDuration);
             }
             
@@ -266,7 +313,6 @@ namespace Gameplay.Systems
                 // Если игрок не двигается слишком долго, подсказываем
                 if (waitTime > 10f && _aiAssistant != null)
                 {
-                    ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_tutorial_reminder"));
                     _aiAssistant.SpeakStoryLine("movement_reminder");
                     yield return new WaitForSeconds(messageDuration);
                     HideSubtitle();
@@ -276,27 +322,6 @@ namespace Gameplay.Systems
             }
             
             _isMovementLearned = true;
-        }
-        
-        private IEnumerator NPCApproachSequence()
-        {
-            Debug.Log("Этап 3: Подход NPC");
-            _currentState = StoryState.NPCApproach;
-            
-            // AI Assistant предупреждает о приближении NPC
-            if (_aiAssistant != null)
-            {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_npc_approach"));
-                _aiAssistant.SpeakStoryLine("npc_approach");
-                yield return new WaitForSeconds(messageDuration);
-                HideSubtitle();
-            }
-            
-            // NPC подходят к игроку
-            yield return StartCoroutine(MoveNPCsToPlayer());
-            
-            // NPC представляются
-            yield return StartCoroutine(NPCIntroduction());
         }
         
         private IEnumerator MoveNPCsToPlayer()
@@ -319,7 +344,7 @@ namespace Gameplay.Systems
             }
         }
         
-        private IEnumerator MoveNPCToPlayer(NpcBehaviour npc)
+        private IEnumerator MoveNPCToPlayer(NpcBehaviour npc, bool immediate = false)
         {
             NavMeshAgent agent = npc.GetComponent<NavMeshAgent>();
             if (agent == null) yield break;
@@ -328,7 +353,19 @@ namespace Gameplay.Systems
             if (!agent.enabled) agent.enabled = true;
             if (agent.isStopped) agent.isStopped = false;
             
-            // Рассчитываем позицию вокруг игрока
+            // Если это немедленное движение, ставим более высокий приоритет
+            if (immediate)
+            {
+                agent.avoidancePriority = 50; // Высокий приоритет
+                agent.speed = 2f; // Медленная скорость для подхода
+                agent.stoppingDistance = 3f; // Останавливаемся на расстоянии 3 метров
+            }
+            else
+            {
+                agent.speed = 2f;
+                agent.stoppingDistance = 1.5f;
+            }
+            
             Vector3 playerPos = _playerController.transform.position;
             Vector3 randomOffset = Random.insideUnitCircle * npcFollowDistance;
             Vector3 targetPos = playerPos + new Vector3(randomOffset.x, 0, randomOffset.y);
@@ -340,60 +377,115 @@ namespace Gameplay.Systems
             }
             else
             {
-                // Если позиция недоступна, используем позицию игрока
                 targetPos = playerPos;
             }
-            
-            // Устанавливаем скорость движения для сюжета
-            agent.speed = 2f; // Медленная скорость для сюжета
-            agent.stoppingDistance = 1.5f; // Расстояние остановки
             
             // Двигаем NPC к игроку
             agent.SetDestination(targetPos);
             
-            while ((agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
+            // Для немедленного движения делаем более частое обновление пути
+            if (immediate)
             {
-                // Обновляем цель, если игрок переместился
-                if (Vector3.Distance(playerPos, _playerController.transform.position) > 2f)
+                float moveTimeout = 30f; // Максимальное время движения
+                float timer = 0f;
+                
+                while (timer < moveTimeout && 
+                       (agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
                 {
-                    playerPos = _playerController.transform.position;
-                    Vector3 newTargetPos = playerPos + new Vector3(randomOffset.x, 0, randomOffset.y);
+                    timer += Time.deltaTime;
                     
-                    if (NavMesh.SamplePosition(newTargetPos, out NavMeshHit newHit, 5f, NavMesh.AllAreas))
+                    // Чаще обновляем цель, если игрок переместился
+                    if (Vector3.Distance(playerPos, _playerController.transform.position) > 2f)
                     {
-                        agent.SetDestination(newHit.position);
+                        playerPos = _playerController.transform.position;
+                        Vector3 newTargetPos = playerPos + new Vector3(randomOffset.x, 0, randomOffset.y);
+                        
+                        if (NavMesh.SamplePosition(newTargetPos, out NavMeshHit newHit, 5f, NavMesh.AllAreas))
+                        {
+                            agent.SetDestination(newHit.position);
+                        }
                     }
-                }
-                
-                yield return null;
-            }
-            
-            // Останавливаем агента
-            agent.isStopped = true;
-            
-            // Поворачиваем NPC к игроку
-            Vector3 directionToPlayer = (_playerController.transform.position - npc.transform.position).normalized;
-            directionToPlayer.y = 0;
-            if (directionToPlayer != Vector3.zero)
-            {
-                float rotationTime = 1f;
-                float rotationTimer = 0f;
-                Quaternion startRotation = npc.transform.rotation;
-                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-                
-                while (rotationTimer < rotationTime)
-                {
-                    rotationTimer += Time.deltaTime;
-                    npc.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, rotationTimer / rotationTime);
+                    
                     yield return null;
                 }
+                
+                // Останавливаем агента по достижении
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    agent.isStopped = true;
+                    
+                    // Поворачиваем NPC к игроку
+                    Vector3 directionToPlayer = (_playerController.transform.position - npc.transform.position).normalized;
+                    directionToPlayer.y = 0;
+                    if (directionToPlayer != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                        npc.transform.rotation = Quaternion.Slerp(npc.transform.rotation, targetRotation, Time.deltaTime * 5f);
+                    }
+                }
+            }
+            else
+            {
+                // Стандартная логика (как было)
+                while ((agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
+                {
+                    if (Vector3.Distance(playerPos, _playerController.transform.position) > 2f)
+                    {
+                        playerPos = _playerController.transform.position;
+                        Vector3 newTargetPos = playerPos + new Vector3(randomOffset.x, 0, randomOffset.y);
+                        
+                        if (NavMesh.SamplePosition(newTargetPos, out NavMeshHit newHit, 5f, NavMesh.AllAreas))
+                        {
+                            agent.SetDestination(newHit.position);
+                        }
+                    }
+                    
+                    yield return null;
+                }
+                
+                agent.isStopped = true;
+                
+                Vector3 directionToPlayer = (_playerController.transform.position - npc.transform.position).normalized;
+                directionToPlayer.y = 0;
+                if (directionToPlayer != Vector3.zero)
+                {
+                    float rotationTime = 1f;
+                    float rotationTimer = 0f;
+                    Quaternion startRotation = npc.transform.rotation;
+                    Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                    
+                    while (rotationTimer < rotationTime)
+                    {
+                        rotationTimer += Time.deltaTime;
+                        npc.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, rotationTimer / rotationTime);
+                        yield return null;
+                    }
+                }
             }
             
-            Debug.Log($"NPC {npc.npcDataConfig.npcName} достиг игрока");
+            Debug.Log($"NPC {npc.npcDataConfig.npcName} достиг игрока (немедленное движение: {immediate})");
         }
+        
         
         private IEnumerator NPCIntroduction()
         {
+            Debug.Log("Этап: Представление NPC");
+            _currentState = StoryState.NPCApproach;
+            
+            // Убедимся, что NPC стоят лицом к игроку
+            foreach (var npc in storyNpcs)
+            {
+                if (npc != null)
+                {
+                    Vector3 directionToPlayer = (_playerController.transform.position - npc.transform.position).normalized;
+                    directionToPlayer.y = 0;
+                    if (directionToPlayer != Vector3.zero)
+                    {
+                        npc.transform.rotation = Quaternion.LookRotation(directionToPlayer);
+                    }
+                }
+            }
+            
             // Каждый NPC по очереди представляется
             foreach (var npc in storyNpcs)
             {
@@ -403,7 +495,7 @@ namespace Gameplay.Systems
                     if (interaction != null)
                     {
                         string npcName = interaction.GetNpcName();
-                        ShowSubtitle($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString($"story_npc_greeting_{npcName.ToLower()}")}");
+                        ShowSubtitle($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString($"story_npc_greeting_{interaction.GetNpcType().ToLower()}")}");
                         
                         // AI Assistant может добавлять реплики
                         if (_aiAssistant != null && Random.value < 0.3f)
@@ -429,6 +521,14 @@ namespace Gameplay.Systems
                     yield return new WaitForSeconds(messageDuration);
                     HideSubtitle();
                 }
+            }
+            
+            // AI Assistant комментирует
+            if (_aiAssistant != null)
+            {
+                _aiAssistant.SpeakStoryLine("npc_introduction_complete");
+                yield return new WaitForSeconds(messageDuration);
+                HideSubtitle();
             }
         }
         
@@ -526,8 +626,7 @@ namespace Gameplay.Systems
             // AI Assistant говорит во время затемнения
             if (_aiAssistant != null)
             {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_black_screen_ai"));
-                _aiAssistant.SpeakStoryLine("black_screen");
+                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_black_screen"));
                 yield return new WaitForSeconds(blackScreenDuration);
                 HideSubtitle();
             }
@@ -603,7 +702,7 @@ namespace Gameplay.Systems
                     if (interaction != null)
                     {
                         string npcName = interaction.GetNpcName();
-                        ShowSubtitle($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString($"story_village_show_{npcName.ToLower()}")}");
+                        ShowSubtitle($"{npcName}: {LocalizationManager.LocalizationManager.Instance.GetString($"story_village_show_{interaction.GetNpcType().ToLower()}")}");
                         
                         // AI Assistant добавляет комментарии
                         if (_aiAssistant != null && Random.value < 0.4f)
@@ -621,7 +720,6 @@ namespace Gameplay.Systems
             // AI Assistant завершает показ
             if (_aiAssistant != null)
             {
-                ShowSubtitle(LocalizationManager.LocalizationManager.Instance.GetString("story_village_end_ai"));
                 _aiAssistant.SpeakStoryLine("village_end");
                 yield return new WaitForSeconds(villageShowDuration);
                 HideSubtitle();

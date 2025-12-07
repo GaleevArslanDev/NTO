@@ -128,11 +128,13 @@ namespace Gameplay.Characters.NPC
             }
         }
 
+        public string GetNpcType()
+        {
+            return npcType.ToString();
+        }
+
         public string GetNpcName()
         {
-            if (npcData != null)
-                return npcData.npcName;
-        
             return npcType switch
             {
                 NpcType.Mayor => LocalizationManager.LocalizationManager.Instance.GetString("npc_mayor"),

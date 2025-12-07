@@ -194,13 +194,8 @@ namespace Gameplay.Characters.NPC
             _npcAnimator?.SetMoving(true);
             _agent.SetDestination(destination);
 
-            const float timeout = 10f;
-            var timer = 0f;
-
-            while (timer < timeout &&
-                   (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance))
+            while (_agent.pathPending || _agent.remainingDistance > _agent.stoppingDistance)
             {
-                timer += Time.deltaTime;
                 yield return null;
             }
             _npcAnimator?.SetMoving(false);
