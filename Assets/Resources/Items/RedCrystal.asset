@@ -15,8 +15,15 @@ MonoBehaviour:
   type: 0
   particleColor: {r: 1, g: 0, b: 0, a: 1}
   icon: {fileID: 974596517, guid: cd2fa64b6aa64a14cae01c216e8001a9, type: 3}
-  breakTime: 2
+  soundData:
+    breakingSound: {fileID: 0}
+    collectSound: {fileID: 0}
+    breakingVolume: 1
+    collectVolume: 1
+  breakTime: 8
   shakeIntensity: 0.3
   floatHeight: 0.5
+  vacuumTime: 1
+  amount: 1
   enemySpawnChance: 0.1
   maxSpawnCount: 1
