@@ -8,6 +8,7 @@
 	<string name="ui_no">Нет</string>
 	<string name="ui_ok">OK</string>
 	<string name="ui_yes">Да</string>
+	<string name="ui_upgrade2">Улучшить</string>
 
 	<!-- 3. SAVE/LOAD -->
 	<string name="save_autosave">Автосохранение</string>
