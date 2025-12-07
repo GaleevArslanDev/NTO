@@ -209,6 +209,8 @@ namespace Gameplay.Buildings
         {
             var resourceType = (ItemType)System.Enum.Parse(typeof(ItemType), resourceTypeStr);
             var plotId = $"passive_{resourceType}";
+            
+            Debug.Log(plotId);
         
             UnlockFarmPlot(plotId, resourceType, productionRate);
         }

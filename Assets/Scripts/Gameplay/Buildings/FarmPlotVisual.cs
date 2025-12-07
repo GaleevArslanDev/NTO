@@ -88,10 +88,10 @@ namespace Gameplay.Buildings
 
             switch (_currentEra)
             {
-                case 1: stoneAgeVisual?.SetActive(true); break;
-                case 2: medievalVisual?.SetActive(true); break;
-                case 3: modernVisual?.SetActive(true); break;
-                case 4: futureVisual?.SetActive(true); break;
+                case 0: stoneAgeVisual?.SetActive(true); break;
+                case 1: medievalVisual?.SetActive(true); break;
+                case 2: modernVisual?.SetActive(true); break;
+                case 3: futureVisual?.SetActive(true); break;
                 default: stoneAgeVisual?.SetActive(true); break;
             }
         }
