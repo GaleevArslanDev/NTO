@@ -17,6 +17,12 @@
 	<string name="save_quicksave">Быстрое сохранение</string>
 	<string name="save-entry_player-level-label">Уровень: {0}</string>
 
+	
+	
+		<string key="tutorial_controls">Эй, вставай! Нет времени объяснять. Валим отсюда, пока здесь всё не обвалилось. Видишь инструмент в твоей правой руке? Это МТБ — мультитул. Он добывает ресурсы, отстреливается и переводит речь инопланетян.WASD - передвижение CTRL - присесть SPACE - прыжок E - диалог с NPC F - прокачка закрыть меню-E</string>
+		
+	
+
 	<!-- 4. NPC NAMES -->
 	<string name="npc_blacksmith">Брук</string>
 	<string name="npc_farmer">Горк</string>

@@ -162,7 +162,7 @@
 	<string name="PauseMenuPanel_exitmainMenu">Exit to menu</string>
 	<string name="PauseMenuPanel_exit">Exit game</string>
 
-	<string name="assistant_story_intro">Hey, get up! No time to explain. We're getting out of here before this whole place comes down. See that device on your right hand? That's the MTB — a multi-tool. It mines resources, shoots back, and translates alien speech.</string>
+	<string name="assistant_story_intro">Hey, get up! No time to explain. We're getting out of here before this whole place comes down. See that device on your right hand? That's the MTB — a multi-tool. It mines resources, shoots back, and translates alien speech.WASD - movement CTRL - crouch SPACE - jump E - dialogue with NPC F - upgrade</string>
 
 	
 
