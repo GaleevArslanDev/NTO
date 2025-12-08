@@ -164,24 +164,7 @@
 
 	<string name="assistant_story_intro">Hey, get up! No time to explain. We're getting out of here before this whole place comes down. See that device on your right hand? That's the MTB — a multi-tool. It mines resources, shoots back, and translates alien speech.</string>
 
-	<string name="assistant_story_movement_tutorial">First, move around: WASD to walk, Space to jump, Ctrl to crouch.</string>
-
-	<string name="assistant_story_movement_success">Great, you're moving more confidently now.</string>
-
-	<string name="assistant_story_movement_reminder">Hey, pick up the pace. It's just WASD and a jump. Don't linger.</string>
-
-	<string name="assistant_story_npc_approach">Look, someone's approaching. Be ready.</string>
-
-	<string name="assistant_story_npc_comment">Hmm, %1$s? I like that name.</string>
-
-	<string name="assistant_story_walk_encouragement">Wonder where they're leading us? Alright, let's follow and see.</string>
-
-	<string name="assistant_story_village_comment">Wow, a whole village. Looks interesting.</string>
-
-	<string name="assistant_story_village_end">I like this village. Feels like a community.</string>
-
-	<string name="story_npc_greeting_farmer">Hey there! I'm Gork, farmer of these lands.</string>
-	<string name="story_npc_greeting_questgiver">Greetings, wanderer. I am Lip, the local guide.</string>
+	
 
 	<!-- NPC DIALOGUES - STONE TEST -->
 	<string name="story_npc_follow_mayor">We've decided to test you at the Sacred Stone. If it recognizes you as the Chosen One - the whole village will follow you.</string>
