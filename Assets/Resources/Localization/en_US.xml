@@ -15,6 +15,7 @@
 	<string name="ui_yes">Yes</string>
 	<string name="ui_apply">Apply</string>
 	<string name="ui_upgrade2">Upgrade</string>
+	<string name="ui_choose">Choose</string>
 
 	<!-- 3. SAVE/LOAD -->
 	<string name="save_autosave">Autosave</string>
@@ -160,6 +161,39 @@
 	<string name="PauseMenuPanel_settings">Settings</string>
 	<string name="PauseMenuPanel_exitmainMenu">Exit to menu</string>
 	<string name="PauseMenuPanel_exit">Exit game</string>
+
+	<string name="assistant_story_intro">Hey, get up! No time to explain. We're getting out of here before this whole place comes down. See that device on your right hand? That's the MTB — a multi-tool. It mines resources, shoots back, and translates alien speech.</string>
+
+	<string name="assistant_story_movement_tutorial">First, move around: WASD to walk, Space to jump, Ctrl to crouch.</string>
+
+	<string name="assistant_story_movement_success">Great, you're moving more confidently now.</string>
+
+	<string name="assistant_story_movement_reminder">Hey, pick up the pace. It's just WASD and a jump. Don't linger.</string>
+
+	<string name="assistant_story_npc_approach">Look, someone's approaching. Be ready.</string>
+
+	<string name="assistant_story_npc_comment">Hmm, %1$s? I like that name.</string>
+
+	<string name="assistant_story_walk_encouragement">Wonder where they're leading us? Alright, let's follow and see.</string>
+
+	<string name="assistant_story_village_comment">Wow, a whole village. Looks interesting.</string>
+
+	<string name="assistant_story_village_end">I like this village. Feels like a community.</string>
+
+	<string name="story_npc_greeting_farmer">Hey there! I'm Gork, farmer of these lands.</string>
+	<string name="story_npc_greeting_questgiver">Greetings, wanderer. I am Lip, the local guide.</string>
+
+	<!-- NPC DIALOGUES - STONE TEST -->
+	<string name="story_npc_follow_mayor">We've decided to test you at the Sacred Stone. If it recognizes you as the Chosen One - the whole village will follow you.</string>
+
+	<!-- BLACK SCREEN -->
+	<string name="story_black_screen">After 2 hours of ritual dances at the Stone...</string>
+
+	<!-- VILLAGE SHOWCASE -->
+	<string name="story_village_show_blacksmith">This is my forge. Bring resources - and I'll upgrade your MTB. Damage, fire rate, range - we'll improve everything!</string>
+	<string name="story_village_show_farmer">My fields. Help me - and you'll have a steady supply of resources and basic resources. The harvest won't let you down!</string>
+	<string name="story_village_show_questgiver">My corner. With me, you won't get bored - I'll show you abandoned mines, treasure caves, and places where strange creatures dwell!</string>
+	<string name="story_village_show_mayor">My residence. Come for wisdom and advice. I'll help you understand our people's history and reach a new level of understanding of this world.</string>
 	
 	<!-- 7.2 Tech UI Labels -->
 	<string name="tech-node_available">&lt;color=green&gt;✓ Available for Research&lt;/color&gt;</string>

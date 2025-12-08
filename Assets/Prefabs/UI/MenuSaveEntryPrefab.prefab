@@ -355,7 +355,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 198.41, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3373354234834265574
 CanvasRenderer:
@@ -578,6 +578,7 @@ GameObject:
   - component: {fileID: 7117448608411229663}
   - component: {fileID: 3254922543808412761}
   - component: {fileID: 4288703204447414173}
+  - component: {fileID: 358045541598185475}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -701,6 +702,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &358045541598185475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429547741678597860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f1c31747c374c340b77ced18a3e3a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: ui_choose
+  useRandomVariants: 0
+  updateOnLanguageChange: 1
+  hasDynamicValues: 0
 --- !u!1 &5811990853241006308
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +754,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 238.41, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 120.52, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &360711124322295895
 CanvasRenderer:

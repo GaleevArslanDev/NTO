@@ -9,6 +9,7 @@
 	<string name="ui_ok">OK</string>
 	<string name="ui_yes">Да</string>
 	<string name="ui_upgrade2">Улучшить</string>
+	<string name="ui_choose">Выбрать</string>
 
 	<!-- 3. SAVE/LOAD -->
 	<string name="save_autosave">Автосохранение</string>
@@ -21,6 +22,24 @@
 	<string name="npc_farmer">Горк</string>
 	<string name="npc_mayor">Зол</string>
 	<string name="npc_questgiver">Лип</string>
+
+	<string name="assistant_story_intro">Эй, вставай! Нет времени объяснять. Валим отсюда, пока здесь всё не обвалилось. Видишь инструмент в твоей правой руке? Это МТБ — мультитул. Он добывает ресурсы, отстреливается и переводит речь инопланетян.</string>
+
+	<string name="assistant_story_movement_tutorial">Для начала подвигайся: WASD для ходьбы, Пробел для прыжка, Ctrl для приседания.</string>
+
+	<string name="assistant_story_movement_success">Отлично, двигаешься уже увереннее.</string>
+
+	<string name="assistant_story_movement_reminder">Эй, давай быстрее, это же просто WASD и прыжок. Не задерживайся.</string>
+
+	<string name="assistant_story_npc_approach">Смотри, кто-то приближается. Будь готов.</string>
+
+	<string name="assistant_story_npc_comment">Хм, %1$s? Мне нравится это имя.</string>
+
+	<string name="assistant_story_walk_encouragement">Интересно, куда они нас ведут? Ладно, пойдём посмотрим.</string>
+
+	<string name="assistant_story_village_comment">Вау, целая деревня. Выглядит интересно.</string>
+
+	<string name="assistant_story_village_end">Мне нравится эта деревня. Чувствуется общность.</string>
 
 	<!-- 5. BUILDINGS -->
 	<string name="building_farm">Ферма</string>
